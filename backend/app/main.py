@@ -1,0 +1,146 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from typing import Dict, List
+import os
+from pathlib import Path
+
+from app.models import SimulationParams, SimulationResponse, VehicleResult
+from app.vehicles import list_vehicles, get_vehicle
+from app.physics import PhysicsEngine, calculate_performance_metrics
+
+app = FastAPI(
+    title="Hypercar Performance Simulation API",
+    description="Physics-based vehicle dynamics simulation",
+    version="1.0.0"
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def root():
+    """Root endpoint - serves frontend"""
+    frontend_path = Path(__file__).parent.parent.parent / "frontend" / "index.html"
+    if frontend_path.exists():
+        return FileResponse(str(frontend_path))
+    return {
+        "message": "Hypercar Performance Simulation API",
+        "version": "1.0.0",
+        "note": "Frontend not found. Access API at /api/"
+    }
+
+
+@app.get("/api")
+async def api_root():
+    """API root endpoint"""
+    return {
+        "message": "Hypercar Performance Simulation API",
+        "version": "1.0.0",
+        "endpoints": {
+            "vehicles": "/api/vehicles",
+            "simulate": "/api/simulate/drag",
+            "health": "/api/health",
+            "docs": "/docs"
+        }
+    }
+
+
+@app.get("/api/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "message": "Backend is running"}
+
+
+@app.get("/api/vehicles")
+async def get_vehicles() -> Dict[str, str]:
+    """List all available vehicles"""
+    return list_vehicles()
+
+
+@app.post("/api/simulate/drag")
+async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
+    """
+    Run drag race simulation for specified vehicles
+    
+    Returns complete simulation data including:
+    - Time-series snapshots (velocity, acceleration, RPM, gear, etc.)
+    - Performance metrics (0-100, 0-200, quarter mile)
+    """
+    results: List[VehicleResult] = []
+    
+    for vehicle_id in params.vehicle_ids:
+        try:
+            # Get vehicle definition
+            vehicle = get_vehicle(vehicle_id)
+            
+            # Create physics engine
+            engine = PhysicsEngine(vehicle, params.environment)
+            
+            # Run simulation
+            snapshots = engine.run_simulation(
+                timestep=params.timestep,
+                max_time=params.max_time
+            )
+            
+            # Calculate metrics
+            metrics = calculate_performance_metrics(snapshots)
+            
+            # Create result
+            result = VehicleResult(
+                vehicle_name=vehicle.name,
+                snapshots=snapshots,
+                time_to_100kmh=metrics['time_to_100kmh'],
+                time_to_200kmh=metrics['time_to_200kmh'],
+                quarter_mile_time=metrics['quarter_mile_time'],
+                quarter_mile_speed=metrics['quarter_mile_speed']
+            )
+            
+            results.append(result)
+            
+        except ValueError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Simulation error: {str(e)}")
+    
+    return SimulationResponse(
+        results=results,
+        environment=params.environment
+    )
+
+
+# Serve frontend static files
+frontend_path = Path(__file__).parent.parent.parent / "frontend"
+if frontend_path.exists():
+    # Mount static files for CSS, JS, etc.
+    app.mount("/static", StaticFiles(directory=str(frontend_path), html=True), name="static")
+    
+    # Serve main HTML files
+    @app.get("/index.html")
+    async def serve_index():
+        return FileResponse(str(frontend_path / "index.html"))
+    
+    @app.get("/sim.js")
+    async def serve_sim_js():
+        return FileResponse(str(frontend_path / "sim.js"))
+    
+    @app.get("/render.js")
+    async def serve_render_js():
+        return FileResponse(str(frontend_path / "render.js"))
+    
+    @app.get("/style.css")
+    async def serve_style_css():
+        return FileResponse(str(frontend_path / "style.css"))
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

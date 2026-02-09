@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypercar Performance Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🚗 HYPERCAR SIMULATOR</h1>
+            <p class="subtitle">Physics-Based Performance Analysis</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="section">
+                    <h3>Select Vehicles</h3>
+                    <div class="vehicle-select" id="vehicleSelect">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Environment</h3>
+                    <div class="input-group">
+                        <label>Temperature (°C)</label>
+                        <input type="number" id="temperature" value="20" min="-20" max="50">
+                    </div>
+                    <div class="input-group">
+                        <label>Altitude (m)</label>
+                        <input type="number" id="altitude" value="0" min="0" max="3000">
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="startBtn">START SIMULATION</button>
+                <button class="btn-secondary" id="resetBtn">RESET</button>
+
+                <!-- Performance Metrics -->
+                <div class="section metrics" id="metricsSection" style="display: none;">
+                    <h3>Performance Metrics</h3>
+                    <div id="metricsContent"></div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="visualization">
+                <canvas id="raceCanvas"></canvas>
+
+                <!-- Speedometer HUD -->
+                <div class="hud" id="hud">
+                    <div class="speedometer">
+                        <svg viewBox="0 0 200 200" class="speedo-svg">
+                            <!-- Background arc -->
+                            <path d="M 30 170 A 85 85 0 1 1 170 170" fill="none" stroke="rgba(255,255,255,0.1)"
+                                stroke-width="20" />
+                            <!-- Speed arc -->
+                            <path id="speedArc" d="M 30 170 A 85 85 0 0 1 30 170" fill="none"
+                                stroke="url(#speedGradient)" stroke-width="20" stroke-linecap="round" />
+
+                            <!-- Gradient definition -->
+                            <defs>
+                                <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00ff88;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ff0080;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <div class="speedo-center">
+                            <div class="speed-value" id="speedValue">0</div>
+                            <div class="speed-unit">KM/H</div>
+                        </div>
+                    </div>
+
+                    <div class="hud-bottom">
+                        <div class="hud-item">
+                            <div class="hud-label">GEAR</div>
+                            <div class="hud-value" id="gearValue">N</div>
+                        </div>
+                        <div class="hud-item">
+                            <div class="hud-label">RPM</div>
+                            <div class="hud-value" id="rpmValue">0</div>
+                        </div>
+                        <div class="hud-item">
+                            <div class="hud-label">DISTANCE</div>
+                            <div class="hud-value" id="distanceValue">0m</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="sim.js"></script>
+</body>
+
+</html>

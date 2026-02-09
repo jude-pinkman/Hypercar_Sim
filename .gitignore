@@ -1,0 +1,18 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# OS
+.DS_Store
+
+# Node / frontend (if you add later)
+node_modules/
+
+# Docker
+*.log
+
+notex.txt
