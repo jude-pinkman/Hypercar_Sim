@@ -896,3 +896,64 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
 }
+
+/* ==========================================
+   SMOOTH REAL-TIME ANIMATIONS
+   Add these rules to your style.css
+   ========================================== */
+
+/* Smooth speedometer arc transitions */
+.speed-arc {
+    transition: stroke-dashoffset 0.05s linear !important;
+}
+
+/* Smooth number updates for speed display */
+.speed-value {
+    transition: transform 0.1s ease-out;
+}
+
+/* Smooth stat updates */
+.stat-value {
+    transition: color 0.15s ease;
+}
+
+/* Pulse effect when gear changes */
+.stat-gear {
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Smooth RPM counter */
+.stat-rpm {
+    font-variant-numeric: tabular-nums;
+    transition: color 0.1s ease;
+}
+
+/* Power indicator smooth transition */
+.stat-power {
+    transition: transform 0.1s ease;
+}
+
+/* Add smooth motion to speedometer center */
+.speedo-center {
+    transition: transform 0.15s ease-out;
+}
+
+/* Brand logo pulse on high speed */
+.brand-logo {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .speed-arc,
+    .speed-value,
+    .stat-value,
+    .stat-gear,
+    .stat-rpm,
+    .stat-power,
+    .speedo-center,
+    .brand-logo {
+        transition: none !important;
+    }
+}
+

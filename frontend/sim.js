@@ -9,23 +9,19 @@ class SimulationController {
         this.selectedVehicles = new Set();
         this.isRunning = false;
         this.animationFrame = null;
+        this.simulationStartTime = 0;
+        this.simulationResults = null;
     }
 
     async init() {
-        // Wait for DOM to be ready
         if (document.readyState === 'loading') {
             await new Promise(resolve => {
                 document.addEventListener('DOMContentLoaded', resolve);
             });
         }
 
-        // Initialize renderer
         this.renderer = new RaceRenderer('raceCanvas');
-
-        // Load vehicles
         await this.loadVehicles();
-
-        // Setup event listeners
         this.setupEventListeners();
     }
 
@@ -67,7 +63,6 @@ class SimulationController {
                 }
             });
 
-            // Make entire card clickable
             item.addEventListener('click', (e) => {
                 if (e.target !== checkbox) {
                     checkbox.click();
@@ -139,14 +134,62 @@ class SimulationController {
     }
 
     animateSimulation(results) {
-        // Create speedometer displays
+        this.simulationResults = results;
         this.createSpeedometers(results);
+        
+        // Reset the start time for real-time playback
+        this.simulationStartTime = null;
+        
+        const animate = (currentTimestamp) => {
+            if (!this.isRunning) return;
 
-        const maxFrames = Math.max(...results.map(r => r.snapshots.length));
-        let currentFrame = 0;
+            // Initialize start time on first frame
+            if (this.simulationStartTime === null) {
+                this.simulationStartTime = currentTimestamp;
+            }
 
-        const animate = () => {
-            if (currentFrame >= maxFrames) {
+            // Calculate elapsed time in REAL SECONDS since animation started
+            const elapsedRealTime = (currentTimestamp - this.simulationStartTime) / 1000;
+
+            // Update race stats timer
+            const raceStats = document.getElementById('raceStats');
+            if (raceStats) {
+                raceStats.innerHTML = `<span class="stat-item">Time: <strong>${elapsedRealTime.toFixed(1)}s</strong></span>`;
+            }
+
+            // Find the simulation data that matches current real time
+            const vehicleStates = results.map(result => {
+                // Find the snapshot closest to current elapsed time
+                const snapshot = this.findSnapshotAtTime(result.snapshots, elapsedRealTime);
+                
+                return {
+                    name: result.vehicle_name,
+                    distance: snapshot.distance,
+                    velocity: snapshot.velocity,
+                    gear: snapshot.gear,
+                    rpm: snapshot.rpm,
+                    acceleration: snapshot.acceleration,
+                    power_kw: snapshot.power_kw,
+                    time: snapshot.time
+                };
+            });
+
+            // Update race visualization
+            if (this.renderer) {
+                this.renderer.render(vehicleStates);
+            }
+
+            // Update speedometers with smooth transitions
+            this.updateSpeedometers(vehicleStates);
+
+            // Check if race is finished (all vehicles crossed quarter mile or max time reached)
+            const maxSimTime = Math.max(...results.map(r => 
+                r.snapshots[r.snapshots.length - 1].time
+            ));
+            
+            const allFinished = vehicleStates.every(state => state.distance >= 402.336);
+            
+            if (elapsedRealTime >= maxSimTime || allFinished) {
                 this.showMetrics(results);
                 this.isRunning = false;
 
@@ -158,32 +201,54 @@ class SimulationController {
                 return;
             }
 
-            const vehicleStates = results.map(result => {
-                const snapshot = result.snapshots[Math.min(currentFrame, result.snapshots.length - 1)];
-                return {
-                    name: result.vehicle_name,
-                    distance: snapshot.distance,
-                    velocity: snapshot.velocity,
-                    gear: snapshot.gear,
-                    rpm: snapshot.rpm,
-                    acceleration: snapshot.acceleration,
-                    power_kw: snapshot.power_kw
-                };
-            });
-
-            // Update race visualization
-            if (this.renderer) {
-                this.renderer.render(vehicleStates);
-            }
-
-            // Update speedometers
-            this.updateSpeedometers(vehicleStates);
-
-            currentFrame++;
             this.animationFrame = requestAnimationFrame(animate);
         };
 
-        animate();
+        this.animationFrame = requestAnimationFrame(animate);
+    }
+
+    findSnapshotAtTime(snapshots, targetTime) {
+        // Find the snapshot at or just before the target time
+        // If target time is past all snapshots, return the last one
+        
+        if (targetTime <= 0) return snapshots[0];
+        if (targetTime >= snapshots[snapshots.length - 1].time) {
+            return snapshots[snapshots.length - 1];
+        }
+
+        // Binary search for efficiency with large datasets
+        let left = 0;
+        let right = snapshots.length - 1;
+        
+        while (left < right) {
+            const mid = Math.floor((left + right + 1) / 2);
+            if (snapshots[mid].time <= targetTime) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        // Interpolate between current and next snapshot for smooth animation
+        const current = snapshots[left];
+        const next = snapshots[Math.min(left + 1, snapshots.length - 1)];
+        
+        if (left === snapshots.length - 1 || current.time === next.time) {
+            return current;
+        }
+
+        // Linear interpolation
+        const t = (targetTime - current.time) / (next.time - current.time);
+        
+        return {
+            time: targetTime,
+            distance: current.distance + (next.distance - current.distance) * t,
+            velocity: current.velocity + (next.velocity - current.velocity) * t,
+            acceleration: current.acceleration + (next.acceleration - current.acceleration) * t,
+            gear: next.gear, // Use next gear (discrete value)
+            rpm: current.rpm + (next.rpm - current.rpm) * t,
+            power_kw: current.power_kw + (next.power_kw - current.power_kw) * t
+        };
     }
 
     createSpeedometers(results) {
@@ -195,7 +260,7 @@ class SimulationController {
 
         container.innerHTML = '';
 
-        results.forEach((result, index) => {
+        results.forEach((result) => {
             const vehicleId = this.getVehicleId(result.vehicle_name);
             const brandClass = this.getBrandClass(vehicleId);
             const logoUrl = this.getBrandLogoUrl(brandClass);
@@ -254,7 +319,6 @@ class SimulationController {
         const endAngle = 45;
         const totalAngle = endAngle - startAngle;
 
-        // Calculate arc path
         const startRad = (startAngle * Math.PI) / 180;
         const endRad = (endAngle * Math.PI) / 180;
 
@@ -266,11 +330,8 @@ class SimulationController {
         const largeArc = totalAngle > 180 ? 1 : 0;
 
         const arcPath = `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
-
-        // Calculate total arc length for animation
         const arcLength = (totalAngle / 360) * (2 * Math.PI * radius);
 
-        // Brand-specific colors
         const colors = {
             koenigsegg: '#FFD700',
             bugatti: '#0066FF',
@@ -279,7 +340,6 @@ class SimulationController {
 
         const color = colors[brandClass] || '#00FF9D';
 
-        // Speed markers
         const markers = [];
         const speeds = [0, 50, 100, 150, 200, 250, 300, 350, 400];
 
@@ -301,41 +361,33 @@ class SimulationController {
         });
 
         return `
-            <!-- Background arc -->
             <path d="${arcPath}" fill="none" class="gauge-bg" />
-            
-            <!-- Progress arc -->
             <path d="${arcPath}" 
                   fill="none" 
                   class="speed-arc gauge-progress" 
                   stroke-dasharray="${arcLength}" 
                   stroke-dashoffset="${arcLength}"
                   stroke-linecap="round" />
-            
-            <!-- Speed markers -->
             ${markers.join('')}
-            
-            <!-- Center dot -->
             <circle cx="${centerX}" cy="${centerY}" r="4" fill="${color}" opacity="0.8" />
         `;
     }
 
     updateSpeedometers(vehicleStates) {
-        vehicleStates.forEach((state, index) => {
+        vehicleStates.forEach((state) => {
             const vehicleId = this.getVehicleId(state.name);
             const card = document.querySelector(`[data-vehicle-id="${vehicleId}"]`);
             if (!card) return;
 
             const speedKmh = Math.round(state.velocity * 3.6);
-            const maxSpeed = 400; // km/h
+            const maxSpeed = 400;
 
-            // Update speed value
+            // Update speed value with smooth number changes
             const speedValue = card.querySelector('.speed-value');
             if (speedValue) {
                 speedValue.textContent = speedKmh;
             }
 
-            // Update stats
             const statGear = card.querySelector('.stat-gear');
             const statRpm = card.querySelector('.stat-rpm');
             const statPower = card.querySelector('.stat-power');
@@ -344,13 +396,13 @@ class SimulationController {
             if (statRpm) statRpm.textContent = Math.round(state.rpm).toLocaleString();
             if (statPower) statPower.textContent = `${Math.round(state.power_kw)} kW`;
 
-            // Update progress arc
+            // Update speedometer arc with smooth transitions
             const arc = card.querySelector('.speed-arc');
             if (arc) {
                 const totalLength = parseFloat(arc.getAttribute('stroke-dasharray'));
                 const progress = Math.min(speedKmh / maxSpeed, 1);
                 const offset = totalLength * (1 - progress);
-                arc.setAttribute('stroke-dashoffset', offset);
+                arc.style.strokeDashoffset = offset;
             }
         });
     }
@@ -414,6 +466,7 @@ class SimulationController {
         }
 
         this.isRunning = false;
+        this.simulationStartTime = 0;
 
         const startBtn = document.getElementById('startBtn');
         if (startBtn) {
@@ -431,6 +484,11 @@ class SimulationController {
             metricsPanel.style.display = 'none';
         }
 
+        const raceStats = document.getElementById('raceStats');
+        if (raceStats) {
+            raceStats.innerHTML = '<span class="stat-item">Time: <strong>0.0s</strong></span>';
+        }
+
         if (this.renderer) {
             this.renderer.clear();
             this.renderer.render([]);
@@ -438,6 +496,5 @@ class SimulationController {
     }
 }
 
-// Initialize the application
 const app = new SimulationController();
 app.init();
