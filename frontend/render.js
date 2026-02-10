@@ -6,13 +6,13 @@ export class RaceRenderer {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
 
-        // Colors for different vehicles
-        this.vehicleColors = [
-            '#00ff88',
-            '#00d4ff',
-            '#ff0080',
-            '#ffaa00'
-        ];
+        // Minimalistic brand colors
+        this.vehicleColors = {
+            'koenigsegg': '#FFD700',
+            'bugatti': '#0066FF',
+            'hennessey': '#FF0066',
+            'default': '#00FF9D'
+        };
     }
 
     resizeCanvas() {
@@ -22,7 +22,7 @@ export class RaceRenderer {
     }
 
     clear() {
-        this.ctx.fillStyle = '#0a0a0a';
+        this.ctx.fillStyle = '#0D0D0D';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -30,92 +30,82 @@ export class RaceRenderer {
         this.clear();
 
         if (!vehicleStates || vehicleStates.length === 0) {
-            this.drawStartingLine();
+            this.drawEmptyState();
             return;
         }
 
-        // Use quarter mile (402.336m) as the full track length for zoomed out view
-        const trackLength = 450; // Show slightly more than quarter mile
+        const trackLength = 450; // meters (quarter mile + buffer)
 
         // Draw track
-        this.drawTrack(trackLength);
-
-        // Draw vehicles
-        vehicleStates.forEach((state, index) => {
-            this.drawVehicle(state, index, trackLength);
-        });
+        this.drawMinimalistTrack(trackLength, vehicleStates.length);
 
         // Draw distance markers
         this.drawDistanceMarkers(trackLength);
+
+        // Draw vehicles
+        vehicleStates.forEach((state, index) => {
+            this.drawMinimalistVehicle(state, index, trackLength, vehicleStates.length);
+        });
     }
 
-    drawTrack(maxDistance) {
-        const trackY = this.canvas.height / 2;
-        const laneHeight = 60;
-        const numLanes = 4;
+    drawEmptyState() {
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.font = '14px Inter';
+        this.ctx.fillText('Select vehicles and start simulation', this.canvas.width / 2, this.canvas.height / 2);
+    }
 
-        // Draw lanes
-        for (let i = 0; i < numLanes; i++) {
-            const y = trackY - (laneHeight * (numLanes / 2)) + (i * laneHeight);
+    drawMinimalistTrack(maxDistance, numVehicles) {
+        const trackY = this.canvas.height / 2;
+        const laneHeight = 50;
+        const totalHeight = laneHeight * numVehicles;
+        const startY = trackY - (totalHeight / 2);
+
+        // Draw subtle lanes
+        for (let i = 0; i < numVehicles; i++) {
+            const y = startY + (i * laneHeight);
 
             // Lane background
-            this.ctx.fillStyle = 'rgba(255,255,255,0.02)';
+            this.ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 255, 255, 0.01)' : 'rgba(255, 255, 255, 0.02)';
             this.ctx.fillRect(0, y, this.canvas.width, laneHeight);
 
-            // Lane dividers
-            this.ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            this.ctx.lineWidth = 2;
-            this.ctx.setLineDash([20, 10]);
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, y + laneHeight);
-            this.ctx.lineTo(this.canvas.width, y + laneHeight);
-            this.ctx.stroke();
-            this.ctx.setLineDash([]);
-        }
-    }
-
-    drawStartingLine() {
-        const x = 50;
-        const startY = this.canvas.height / 2 - 120;
-        const endY = this.canvas.height / 2 + 120;
-
-        // Starting line
-        this.ctx.strokeStyle = '#00ff88';
-        this.ctx.lineWidth = 3;
-        this.ctx.beginPath();
-        this.ctx.moveTo(x, startY);
-        this.ctx.lineTo(x, endY);
-        this.ctx.stroke();
-
-        // Checkered pattern
-        const checkSize = 15;
-        for (let y = startY; y < endY; y += checkSize) {
-            for (let i = 0; i < 2; i++) {
-                if ((Math.floor((y - startY) / checkSize) + i) % 2 === 0) {
-                    this.ctx.fillStyle = '#ffffff';
-                } else {
-                    this.ctx.fillStyle = '#000000';
-                }
-                this.ctx.fillRect(x - checkSize * (i + 1), y, checkSize, checkSize);
+            // Lane separator
+            if (i > 0) {
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, y);
+                this.ctx.lineTo(this.canvas.width, y);
+                this.ctx.stroke();
             }
         }
 
-        // "START" label
-        this.ctx.fillStyle = '#00ff88';
-        this.ctx.font = 'bold 16px "Segoe UI"';
+        // Starting line
+        const startLineX = 60;
+        this.ctx.strokeStyle = '#00FF9D';
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(startLineX, startY);
+        this.ctx.lineTo(startLineX, startY + totalHeight);
+        this.ctx.stroke();
+
+        // Start label
+        this.ctx.fillStyle = '#00FF9D';
+        this.ctx.font = '600 11px Inter';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('START', x, startY - 10);
+        this.ctx.fillText('START', startLineX, startY - 15);
     }
 
     drawDistanceMarkers(maxDistance) {
         const markers = [
-            { distance: 100, label: '100m' },
-            { distance: 200, label: '200m' },
-            { distance: 300, label: '300m' },
-            { distance: 402.336, label: '1/4 Mile' }
+            { distance: 100, label: '100m', primary: false },
+            { distance: 200, label: '200m', primary: false },
+            { distance: 300, label: '300m', primary: false },
+            { distance: 402.336, label: '1/4 Mile', primary: true }
         ];
 
-        const padding = 50;
+        const padding = 60;
         const usableWidth = this.canvas.width - padding * 2;
         const scale = usableWidth / maxDistance;
 
@@ -123,102 +113,135 @@ export class RaceRenderer {
             if (marker.distance <= maxDistance) {
                 const x = padding + (marker.distance * scale);
                 const y = this.canvas.height / 2;
+                const height = 120;
 
                 // Marker line
-                this.ctx.strokeStyle = marker.distance === 402.336 ?
-                    'rgba(0,255,136,0.5)' : 'rgba(255,255,255,0.3)';
-                this.ctx.lineWidth = marker.distance === 402.336 ? 3 : 2;
-                this.ctx.setLineDash([5, 5]);
+                this.ctx.strokeStyle = marker.primary
+                    ? 'rgba(0, 255, 157, 0.3)'
+                    : 'rgba(255, 255, 255, 0.1)';
+                this.ctx.lineWidth = marker.primary ? 2 : 1;
+                this.ctx.setLineDash(marker.primary ? [] : [4, 4]);
                 this.ctx.beginPath();
-                this.ctx.moveTo(x, y - 150);
-                this.ctx.lineTo(x, y + 150);
+                this.ctx.moveTo(x, y - height);
+                this.ctx.lineTo(x, y + height);
                 this.ctx.stroke();
                 this.ctx.setLineDash([]);
 
                 // Label
-                this.ctx.fillStyle = marker.distance === 402.336 ?
-                    '#00ff88' : 'rgba(255,255,255,0.6)';
-                this.ctx.font = marker.distance === 402.336 ?
-                    'bold 14px "Segoe UI"' : '12px "Segoe UI"';
+                this.ctx.fillStyle = marker.primary
+                    ? '#00FF9D'
+                    : 'rgba(255, 255, 255, 0.4)';
+                this.ctx.font = marker.primary
+                    ? '600 11px Inter'
+                    : '500 10px Inter';
                 this.ctx.textAlign = 'center';
-                this.ctx.fillText(marker.label, x, y - 160);
+                this.ctx.fillText(marker.label, x, y - height - 10);
             }
         });
     }
 
-    drawVehicle(state, index, maxDistance) {
-        const padding = 50;
+    drawMinimalistVehicle(state, index, maxDistance, totalVehicles) {
+        const padding = 60;
         const usableWidth = this.canvas.width - padding * 2;
         const scale = usableWidth / maxDistance;
         const x = padding + (state.distance * scale);
 
-        const laneHeight = 60;
-        const numLanes = 4;
+        const laneHeight = 50;
+        const totalHeight = laneHeight * totalVehicles;
         const trackCenterY = this.canvas.height / 2;
-        const laneIndex = index % numLanes;
-        const y = trackCenterY - (laneHeight * (numLanes / 2)) + (laneIndex * laneHeight) + (laneHeight / 2);
+        const startY = trackCenterY - (totalHeight / 2);
+        const y = startY + (index * laneHeight) + (laneHeight / 2);
 
-        const color = this.vehicleColors[index % this.vehicleColors.length];
+        // Determine color based on vehicle name
+        const brandId = this.getBrandId(state.name);
+        const color = this.vehicleColors[brandId] || this.vehicleColors.default;
 
-        // Vehicle body
-        const carWidth = 50;
-        const carHeight = 28;
+        // Vehicle dimensions
+        const carWidth = 60;
+        const carHeight = 24;
 
         // Glow effect
-        this.ctx.shadowBlur = 20;
+        this.ctx.shadowBlur = 15;
         this.ctx.shadowColor = color;
 
-        // Car body
+        // Main body - rounded rectangle
         this.ctx.fillStyle = color;
-        this.ctx.fillRect(x - carWidth / 2, y - carHeight / 2, carWidth, carHeight);
+        this.roundRect(x - carWidth / 2, y - carHeight / 2, carWidth, carHeight, 4);
+        this.ctx.fill();
 
         // Reset shadow
         this.ctx.shadowBlur = 0;
 
-        // Car details
-        this.ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        this.ctx.fillRect(x - carWidth / 2 + 5, y - carHeight / 2 + 5, 18, 7); // Windshield
+        // Windshield
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        this.roundRect(x - carWidth / 2 + 8, y - carHeight / 2 + 4, 16, 8, 2);
+        this.ctx.fill();
 
-        // Wheels
-        this.ctx.fillStyle = 'rgba(0,0,0,0.8)';
-        this.ctx.fillRect(x - carWidth / 2 + 5, y - carHeight / 2 - 2, 8, 4);
-        this.ctx.fillRect(x + carWidth / 2 - 13, y - carHeight / 2 - 2, 8, 4);
-        this.ctx.fillRect(x - carWidth / 2 + 5, y + carHeight / 2 - 2, 8, 4);
-        this.ctx.fillRect(x + carWidth / 2 - 13, y + carHeight / 2 - 2, 8, 4);
+        // Wheels (simplified)
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        const wheelWidth = 6;
+        const wheelHeight = 3;
+        this.ctx.fillRect(x - carWidth / 2 + 8, y - carHeight / 2 - 1, wheelWidth, wheelHeight);
+        this.ctx.fillRect(x + carWidth / 2 - 14, y - carHeight / 2 - 1, wheelWidth, wheelHeight);
+        this.ctx.fillRect(x - carWidth / 2 + 8, y + carHeight / 2 - 2, wheelWidth, wheelHeight);
+        this.ctx.fillRect(x + carWidth / 2 - 14, y + carHeight / 2 - 2, wheelWidth, wheelHeight);
 
-        // Vehicle name label
-        this.ctx.fillStyle = color;
-        this.ctx.font = 'bold 11px "Segoe UI"';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText(state.name, x, y - carHeight / 2 - 10);
-
-        // Speed and gear label
+        // Speed indicator
         const speedKmh = Math.round(state.velocity * 3.6);
-        this.ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        this.ctx.font = 'bold 10px "Segoe UI"';
-        this.ctx.fillText(`${speedKmh} km/h | Gear ${state.gear}`, x, y + carHeight / 2 + 15);
 
-        // Motion lines (when moving fast)
+        // Speed label above car
+        this.ctx.fillStyle = color;
+        this.ctx.font = '600 12px Inter';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`${speedKmh} km/h`, x, y - carHeight / 2 - 12);
+
+        // Motion blur effect for high speeds
         if (speedKmh > 50) {
-            const numLines = Math.min(5, Math.floor(speedKmh / 50));
+            const intensity = Math.min(speedKmh / 300, 1);
+            const numLines = Math.floor(3 * intensity);
+
             this.ctx.strokeStyle = color;
-            this.ctx.lineWidth = 2;
-            this.ctx.globalAlpha = 0.3;
+            this.ctx.lineWidth = 1.5;
+            this.ctx.globalAlpha = 0.2 * intensity;
 
             for (let i = 0; i < numLines; i++) {
-                const lineX = x - carWidth / 2 - 10 - (i * 8);
+                const lineX = x - carWidth / 2 - 8 - (i * 6);
+                const lineLength = 10 + (i * 2);
+
                 this.ctx.beginPath();
-                this.ctx.moveTo(lineX, y - 10);
-                this.ctx.lineTo(lineX - 12, y - 10);
+                this.ctx.moveTo(lineX, y - 6);
+                this.ctx.lineTo(lineX - lineLength, y - 6);
                 this.ctx.stroke();
 
                 this.ctx.beginPath();
-                this.ctx.moveTo(lineX, y + 10);
-                this.ctx.lineTo(lineX - 12, y + 10);
+                this.ctx.moveTo(lineX, y + 6);
+                this.ctx.lineTo(lineX - lineLength, y + 6);
                 this.ctx.stroke();
             }
 
             this.ctx.globalAlpha = 1;
         }
+    }
+
+    roundRect(x, y, width, height, radius) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.lineTo(x + width - radius, y);
+        this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        this.ctx.lineTo(x + width, y + height - radius);
+        this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        this.ctx.lineTo(x + radius, y + height);
+        this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        this.ctx.lineTo(x, y + radius);
+        this.ctx.quadraticCurveTo(x, y, x + radius, y);
+        this.ctx.closePath();
+    }
+
+    getBrandId(vehicleName) {
+        const name = vehicleName.toLowerCase();
+        if (name.includes('koenigsegg')) return 'koenigsegg';
+        if (name.includes('bugatti')) return 'bugatti';
+        if (name.includes('hennessey')) return 'hennessey';
+        return 'default';
     }
 }
