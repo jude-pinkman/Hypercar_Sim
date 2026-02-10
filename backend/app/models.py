@@ -8,50 +8,67 @@ class TorquePoint(BaseModel):
     torque: float  # Nm
 
 
+class GearInfo(BaseModel):
+    """Complete information for a single gear"""
+    gear_number: int
+    ratio: float
+    top_speed_kmh: float
+    shift_speed_kmh: float
+
+
 class Vehicle(BaseModel):
     """Complete vehicle specification"""
+    vehicle_id: str
     name: str
-    mass: float = Field(..., description="Vehicle mass in kg")
-    power_kw: float = Field(..., description="Peak power in kW")
-    torque_nm: float = Field(..., description="Peak torque in Nm")
+    mass: float
+    power_kw: float
+    torque_nm: float
     
     # Aerodynamics
-    drag_coefficient: float = Field(..., description="Cd")
-    frontal_area: float = Field(..., description="Frontal area in m²")
+    drag_coefficient: float
+    frontal_area: float
     
     # Drivetrain
-    gear_ratios: List[float] = Field(..., description="Gear ratios (1st to top gear)")
-    final_drive: float = Field(..., description="Final drive ratio")
-    transmission_efficiency: float = Field(default=0.95, description="Drivetrain efficiency")
+    final_drive: float
+    transmission_efficiency: float
+    
+    # Gear database
+    gears: List[GearInfo]
     
     # Hybrid system (optional)
-    electric_power_kw: Optional[float] = Field(default=None, description="Electric motor power in kW")
-    electric_torque_nm: Optional[float] = Field(default=None, description="Electric motor torque in Nm")
-    electric_max_speed_kmh: Optional[float] = Field(default=None, description="Max speed for electric assist")
+    electric_power_kw: Optional[float] = None
+    electric_torque_nm: Optional[float] = None
+    electric_max_speed_kmh: Optional[float] = None
     
     # Engine characteristics
-    idle_rpm: float = Field(default=1000, description="Idle RPM")
-    redline_rpm: float = Field(default=8500, description="Redline RPM")
-    torque_curve: List[TorquePoint] = Field(..., description="Engine torque curve")
+    idle_rpm: float
+    redline_rpm: float
+    torque_curve: List[TorquePoint]
     
     # Tire specifications
-    tire_radius: float = Field(default=0.35, description="Effective tire radius in m")
-    rolling_resistance_coef: float = Field(default=0.012, description="Rolling resistance coefficient")
+    tire_radius: float
+    rolling_resistance_coef: float
+    
+    # Helper property
+    @property
+    def gear_ratios(self) -> List[float]:
+        """Extract gear ratios from gear database"""
+        return [gear.ratio for gear in self.gears]
 
 
 class EnvironmentConditions(BaseModel):
-    """Environmental parameters affecting performance"""
-    temperature_celsius: float = Field(default=20, description="Ambient temperature")
-    altitude_meters: float = Field(default=0, description="Altitude above sea level")
-    air_pressure_kpa: float = Field(default=101.325, description="Air pressure in kPa")
+    """Environmental parameters"""
+    temperature_celsius: float = 20
+    altitude_meters: float = 0
+    air_pressure_kpa: float = 101.325
 
 
 class SimulationParams(BaseModel):
     """Simulation configuration"""
-    vehicle_ids: List[str] = Field(..., description="List of vehicle IDs to simulate")
+    vehicle_ids: List[str]
     environment: EnvironmentConditions = Field(default_factory=EnvironmentConditions)
-    timestep: float = Field(default=0.01, description="Simulation timestep in seconds")
-    max_time: float = Field(default=30.0, description="Maximum simulation time in seconds")
+    timestep: float = 0.01
+    max_time: float = 30.0
 
 
 class TimeSnapshot(BaseModel):

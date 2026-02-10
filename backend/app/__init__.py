@@ -1,6 +1,7 @@
 """
 Hypercar Performance Simulation Platform - Backend
-Physics-based vehicle dynamics simulation
+CSV Database-driven vehicle dynamics simulation
+Reads from hypercar_data.csv
 """
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"

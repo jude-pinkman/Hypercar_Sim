@@ -3,17 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from typing import Dict, List
-import os
 from pathlib import Path
 
 from app.models import SimulationParams, SimulationResponse, VehicleResult
-from app.vehicles import list_vehicles, get_vehicle
+from app.database import get_database, reload_database
 from app.physics import PhysicsEngine, calculate_performance_metrics
 
 app = FastAPI(
     title="Hypercar Performance Simulation API",
-    description="Physics-based vehicle dynamics simulation",
-    version="1.0.0"
+    description="Physics-based vehicle dynamics simulation with CSV database",
+    version="2.0.0"
 )
 
 # CORS middleware
@@ -26,16 +25,25 @@ app.add_middleware(
 )
 
 
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database on startup"""
+    print("\n" + "="*60)
+    print("🚗 Hypercar Simulation API Starting...")
+    print("="*60)
+    # Database will be loaded on first access
+    db = get_database()
+    print("="*60 + "\n")
+
+
 @app.get("/")
 async def root():
-    """Root endpoint - serves frontend"""
-    frontend_path = Path(__file__).parent.parent.parent / "frontend" / "index.html"
-    if frontend_path.exists():
-        return FileResponse(str(frontend_path))
+    """Root endpoint"""
     return {
         "message": "Hypercar Performance Simulation API",
-        "version": "1.0.0",
-        "note": "Frontend not found. Access API at /api/"
+        "version": "2.0.0",
+        "database": "CSV-based (hypercar_data.csv)",
+        "note": "Use /api/ endpoints or visit /docs for API documentation"
     }
 
 
@@ -44,10 +52,11 @@ async def api_root():
     """API root endpoint"""
     return {
         "message": "Hypercar Performance Simulation API",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "endpoints": {
             "vehicles": "/api/vehicles",
             "simulate": "/api/simulate/drag",
+            "reload": "/api/reload",
             "health": "/api/health",
             "docs": "/docs"
         }
@@ -57,13 +66,40 @@ async def api_root():
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "message": "Backend is running"}
+    db = get_database()
+    return {
+        "status": "healthy",
+        "message": "Backend is running",
+        "vehicles_loaded": len(db.vehicles)
+    }
 
 
 @app.get("/api/vehicles")
 async def get_vehicles() -> Dict[str, str]:
-    """List all available vehicles"""
-    return list_vehicles()
+    """List all available vehicles from database"""
+    db = get_database()
+    return db.list_vehicles()
+
+
+@app.post("/api/reload")
+async def reload_db():
+    """
+    Reload database from CSV file
+    
+    Use this endpoint after updating the CSV file to refresh the database
+    without restarting the server
+    """
+    try:
+        reload_database()
+        db = get_database()
+        return {
+            "status": "success",
+            "message": "Database reloaded successfully",
+            "vehicles_loaded": len(db.vehicles),
+            "vehicles": db.list_vehicles()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to reload database: {str(e)}")
 
 
 @app.post("/api/simulate/drag")
@@ -75,12 +111,13 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
     - Time-series snapshots (velocity, acceleration, RPM, gear, etc.)
     - Performance metrics (0-100, 0-200, quarter mile)
     """
+    db = get_database()
     results: List[VehicleResult] = []
     
     for vehicle_id in params.vehicle_ids:
         try:
-            # Get vehicle definition
-            vehicle = get_vehicle(vehicle_id)
+            # Get vehicle from database
+            vehicle = db.get_vehicle(vehicle_id)
             
             # Create physics engine
             engine = PhysicsEngine(vehicle, params.environment)
@@ -120,10 +157,8 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
 # Serve frontend static files
 frontend_path = Path(__file__).parent.parent.parent / "frontend"
 if frontend_path.exists():
-    # Mount static files for CSS, JS, etc.
     app.mount("/static", StaticFiles(directory=str(frontend_path), html=True), name="static")
     
-    # Serve main HTML files
     @app.get("/index.html")
     async def serve_index():
         return FileResponse(str(frontend_path / "index.html"))

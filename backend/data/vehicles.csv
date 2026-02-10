@@ -1,0 +1,3 @@
+vehicle_id,name,mass,power_kw,torque_nm,drag_coefficient,frontal_area,final_drive,transmission_efficiency,electric_power_kw,electric_torque_nm,electric_max_speed_kmh,idle_rpm,redline_rpm,tire_radius,rolling_resistance_coef
+mclaren_p1,McLaren P1,1490,673,720,0.34,1.98,3.36,0.93,131,260,300,1200,8500,0.358,0.010
+ferrari_sf90,Ferrari SF90 Stradale,1600,735,800,0.36,2.02,3.36,0.94,162,315,290,1200,8000,0.362,0.0095
