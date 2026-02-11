@@ -1,500 +1,598 @@
 import { RaceRenderer } from './render.js';
 
-const API_BASE = 'http://localhost:8000';
+// ==================== CONFIGURATION ====================
+const API_URL = 'http://localhost:8000';
 
-class SimulationController {
-    constructor() {
-        this.renderer = null;
-        this.vehicles = {};
-        this.selectedVehicles = new Set();
-        this.isRunning = false;
-        this.animationFrame = null;
-        this.simulationStartTime = 0;
-        this.simulationResults = null;
+// Race mode configurations
+const RACE_MODES = {
+    'quarter-mile': {
+        title: '1/4 Mile Drag Race',
+        distance: 402.336, // meters
+        startSpeed: 0,
+        maxTime: 30,
+        metricsSubtitle: '0-100, 0-200 & quarter mile times'
+    },
+    'half-mile': {
+        title: '1/2 Mile Drag Race',
+        distance: 804.672, // meters
+        startSpeed: 0,
+        maxTime: 45,
+        metricsSubtitle: '0-100, 0-200 & half mile times'
+    },
+    'one-mile': {
+        title: '1 Mile Drag Race',
+        distance: 1609.344, // meters
+        startSpeed: 0,
+        maxTime: 60,
+        metricsSubtitle: '0-100, 0-200 & one mile times'
+    },
+    'roll-race': {
+        title: 'Roll Race (60-200 km/h)',
+        distance: 1000, // meters (sufficient for acceleration)
+        startSpeed: 60 / 3.6, // 60 km/h in m/s
+        maxTime: 40,
+        metricsSubtitle: '60-200 km/h acceleration time',
+        rollStart: true
+    },
+    'top-speed': {
+        title: 'Top Speed Challenge',
+        distance: 5000, // 5km for top speed
+        startSpeed: 0,
+        maxTime: 180, // 3 minutes
+        metricsSubtitle: 'Maximum velocity achieved',
+        topSpeedMode: true
     }
+};
 
-    async init() {
-        if (document.readyState === 'loading') {
-            await new Promise(resolve => {
-                document.addEventListener('DOMContentLoaded', resolve);
-            });
+// ==================== STATE ====================
+const state = {
+    vehicles: {},
+    selectedVehicles: new Set(),
+    environment: {
+        temperature_celsius: 20,
+        altitude_meters: 0
+    },
+    currentMode: 'quarter-mile',
+    isSimulating: false,
+    animationFrame: null,
+    simulationResults: null
+};
+
+// ==================== RENDERER ====================
+let renderer = null;
+
+// ==================== INITIALIZATION ====================
+async function init() {
+    console.log('🏁 Initializing Hypercar Simulator...');
+    
+    // Initialize renderer
+    renderer = new RaceRenderer('raceCanvas');
+    
+    // Load vehicles from backend
+    await loadVehicles();
+    
+    // Setup event listeners
+    setupEventListeners();
+    
+    // Initialize UI for default mode
+    updateModeUI();
+    
+    console.log('✅ Simulator ready!');
+}
+
+// ==================== VEHICLE LOADING ====================
+async function loadVehicles() {
+    try {
+        const response = await fetch(`${API_URL}/api/vehicles`);
+        if (!response.ok) {
+            throw new Error(`Failed to load vehicles: ${response.statusText}`);
         }
-
-        this.renderer = new RaceRenderer('raceCanvas');
-        await this.loadVehicles();
-        this.setupEventListeners();
+        
+        state.vehicles = await response.json();
+        console.log('Loaded vehicles:', state.vehicles);
+        
+        renderVehicleSelection();
+    } catch (error) {
+        console.error('Error loading vehicles:', error);
+        showError('Failed to load vehicle database. Make sure the backend server is running on port 8000.');
     }
+}
 
-    async loadVehicles() {
-        try {
-            const response = await fetch(`${API_BASE}/api/vehicles`);
-            this.vehicles = await response.json();
-            this.renderVehicleList();
-        } catch (error) {
-            console.error('Failed to load vehicles:', error);
-        }
+// ==================== UI RENDERING ====================
+function renderVehicleSelection() {
+    const container = document.getElementById('vehicleSelect');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (const [id, name] of Object.entries(state.vehicles)) {
+        const option = document.createElement('div');
+        option.className = 'vehicle-option';
+        option.dataset.vehicleId = id;
+        
+        option.innerHTML = `
+            <div class="vehicle-checkbox"></div>
+            <div class="vehicle-name">${name}</div>
+        `;
+        
+        option.addEventListener('click', () => toggleVehicle(id, option));
+        container.appendChild(option);
     }
+}
 
-    renderVehicleList() {
-        const container = document.getElementById('vehicleSelect');
-        if (!container) {
-            console.error('Vehicle select container not found');
+function toggleVehicle(vehicleId, element) {
+    if (state.isSimulating) return;
+    
+    if (state.selectedVehicles.has(vehicleId)) {
+        state.selectedVehicles.delete(vehicleId);
+        element.classList.remove('selected');
+    } else {
+        // Limit to 3 vehicles for performance
+        if (state.selectedVehicles.size >= 3) {
+            showError('Maximum 3 vehicles allowed');
             return;
         }
+        state.selectedVehicles.add(vehicleId);
+        element.classList.add('selected');
+    }
+    
+    console.log('Selected vehicles:', Array.from(state.selectedVehicles));
+}
 
-        container.innerHTML = '';
+// ==================== MODE SWITCHING ====================
+function updateModeUI() {
+    const mode = RACE_MODES[state.currentMode];
+    
+    // Update race title
+    const raceTitle = document.getElementById('raceTitle');
+    if (raceTitle) raceTitle.textContent = mode.title;
+    
+    // Update metrics subtitle
+    const metricsSubtitle = document.getElementById('metricsSubtitle');
+    if (metricsSubtitle) metricsSubtitle.textContent = mode.metricsSubtitle;
+    
+    // Update mode-specific settings
+    renderModeSettings();
+}
 
-        Object.entries(this.vehicles).forEach(([id, name]) => {
-            const item = document.createElement('div');
-            item.className = 'vehicle-item';
-            item.innerHTML = `
-                <input type="checkbox" id="vehicle-${id}" value="${id}">
-                <label for="vehicle-${id}">${name}</label>
-            `;
+function renderModeSettings() {
+    const container = document.getElementById('modeSettingsContent');
+    if (!container) return;
+    
+    const mode = RACE_MODES[state.currentMode];
+    
+    if (state.currentMode === 'roll-race') {
+        container.innerHTML = `
+            <div class="input-field">
+                <label>
+                    <span class="label-icon">🏁</span>
+                    Starting Speed
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="rollStartSpeed" value="60" min="0" max="200" step="10">
+                    <span class="unit">km/h</span>
+                </div>
+            </div>
+            <div class="input-field">
+                <label>
+                    <span class="label-icon">🎯</span>
+                    Target Speed
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="rollTargetSpeed" value="200" min="100" max="400" step="10">
+                    <span class="unit">km/h</span>
+                </div>
+            </div>
+        `;
+    } else if (state.currentMode === 'top-speed') {
+        container.innerHTML = `
+            <div class="input-field">
+                <label>
+                    <span class="label-icon">⏱️</span>
+                    Test Duration
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" id="topSpeedDuration" value="120" min="60" max="300" step="10">
+                    <span class="unit">seconds</span>
+                </div>
+            </div>
+        `;
+    } else {
+        // Drag race modes
+        container.innerHTML = `
+            <div class="input-field">
+                <label>
+                    <span class="label-icon">📏</span>
+                    Race Distance
+                </label>
+                <div class="input-with-unit">
+                    <input type="number" value="${Math.round(mode.distance)}" disabled>
+                    <span class="unit">meters</span>
+                </div>
+            </div>
+        `;
+    }
+}
 
-            const checkbox = item.querySelector('input');
-            checkbox.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    this.selectedVehicles.add(id);
-                    item.classList.add('selected');
-                } else {
-                    this.selectedVehicles.delete(id);
-                    item.classList.remove('selected');
-                }
-            });
-
-            item.addEventListener('click', (e) => {
-                if (e.target !== checkbox) {
-                    checkbox.click();
-                }
-            });
-
-            container.appendChild(item);
+// ==================== SIMULATION ====================
+async function startSimulation() {
+    if (state.isSimulating) return;
+    
+    if (state.selectedVehicles.size === 0) {
+        showError('Please select at least one vehicle');
+        return;
+    }
+    
+    state.isSimulating = true;
+    updateButtonStates();
+    updateStatusIndicator('Running', 'warning');
+    
+    // Hide previous results
+    const metricsPanel = document.getElementById('metricsPanel');
+    if (metricsPanel) metricsPanel.style.display = 'none';
+    
+    try {
+        const mode = RACE_MODES[state.currentMode];
+        
+        // Prepare simulation parameters
+        const params = {
+            vehicle_ids: Array.from(state.selectedVehicles),
+            environment: {
+                temperature_celsius: parseFloat(document.getElementById('temperature').value),
+                altitude_meters: parseFloat(document.getElementById('altitude').value)
+            },
+            timestep: 0.01,
+            max_time: mode.maxTime,
+            target_distance: mode.topSpeedMode ? null : mode.distance, // No distance limit for top speed
+            start_velocity: mode.startSpeed || 0
+        };
+        
+        console.log('Starting simulation with params:', params);
+        
+        const response = await fetch(`${API_URL}/api/simulate/drag`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
         });
-    }
-
-    setupEventListeners() {
-        const startBtn = document.getElementById('startBtn');
-        const resetBtn = document.getElementById('resetBtn');
-
-        if (startBtn) {
-            startBtn.addEventListener('click', () => this.startSimulation());
-        }
-
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.reset());
-        }
-    }
-
-    async startSimulation() {
-        if (this.selectedVehicles.size === 0) {
-            alert('Please select at least one vehicle');
-            return;
-        }
-
-        if (this.isRunning) return;
-
-        const startBtn = document.getElementById('startBtn');
-        if (startBtn) {
-            startBtn.disabled = true;
-            startBtn.classList.add('loading');
-        }
-
-        this.isRunning = true;
-
-        try {
-            const params = {
-                vehicle_ids: Array.from(this.selectedVehicles),
-                environment: {
-                    temperature_celsius: parseFloat(document.getElementById('temperature')?.value || 20),
-                    altitude_meters: parseFloat(document.getElementById('altitude')?.value || 0),
-                    air_pressure_kpa: 101.325
-                },
-                timestep: 0.01,
-                max_time: 30.0
-            };
-
-            const response = await fetch(`${API_BASE}/api/simulate/drag`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(params)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            this.animateSimulation(data.results);
-        } catch (error) {
-            console.error('Simulation failed:', error);
-            alert(`Simulation failed: ${error.message}`);
-            this.reset();
-        }
-    }
-
-    animateSimulation(results) {
-        this.simulationResults = results;
-        this.createSpeedometers(results);
         
-        // Reset the start time for real-time playback
-        this.simulationStartTime = null;
+        if (!response.ok) {
+            throw new Error(`Simulation failed: ${response.statusText}`);
+        }
         
-        const animate = (currentTimestamp) => {
-            if (!this.isRunning) return;
+        const results = await response.json();
+        state.simulationResults = results;
+        
+        console.log('Simulation complete:', results);
+        
+        // Animate the race
+        await animateRace(results, mode);
+        
+        // Show final results
+        displayResults(results, mode);
+        
+        updateStatusIndicator('Complete', 'success');
+    } catch (error) {
+        console.error('Simulation error:', error);
+        showError(`Simulation failed: ${error.message}`);
+        updateStatusIndicator('Error', 'error');
+    } finally {
+        state.isSimulating = false;
+        updateButtonStates();
+    }
+}
 
-            // Initialize start time on first frame
-            if (this.simulationStartTime === null) {
-                this.simulationStartTime = currentTimestamp;
+function animateRace(results, mode) {
+    return new Promise((resolve) => {
+        const allSnapshots = results.results.map(r => r.snapshots);
+        const maxFrames = Math.max(...allSnapshots.map(s => s.length));
+        let currentFrame = 0;
+        const frameDelay = 16; // ~60 FPS
+        const speedMultiplier = 2; // Animation speed
+        
+        function animate() {
+            if (currentFrame >= maxFrames) {
+                resolve();
+                return;
             }
-
-            // Calculate elapsed time in REAL SECONDS since animation started
-            const elapsedRealTime = (currentTimestamp - this.simulationStartTime) / 1000;
-
-            // Update race stats timer
-            const raceStats = document.getElementById('raceStats');
-            if (raceStats) {
-                raceStats.innerHTML = `<span class="stat-item">Time: <strong>${elapsedRealTime.toFixed(1)}s</strong></span>`;
-            }
-
-            // Find the simulation data that matches current real time
-            const vehicleStates = results.map(result => {
-                // Find the snapshot closest to current elapsed time
-                const snapshot = this.findSnapshotAtTime(result.snapshots, elapsedRealTime);
-                
+            
+            // Get current state for each vehicle
+            const vehicleStates = results.results.map((result, index) => {
+                const snapshot = allSnapshots[index][Math.min(currentFrame, allSnapshots[index].length - 1)];
                 return {
                     name: result.vehicle_name,
                     distance: snapshot.distance,
                     velocity: snapshot.velocity,
                     gear: snapshot.gear,
-                    rpm: snapshot.rpm,
-                    acceleration: snapshot.acceleration,
-                    power_kw: snapshot.power_kw,
-                    time: snapshot.time
+                    rpm: snapshot.rpm
                 };
             });
-
-            // Update race visualization
-            if (this.renderer) {
-                this.renderer.render(vehicleStates);
-            }
-
-            // Update speedometers with smooth transitions
-            this.updateSpeedometers(vehicleStates);
-
-            // Check if race is finished (all vehicles crossed quarter mile or max time reached)
-            const maxSimTime = Math.max(...results.map(r => 
-                r.snapshots[r.snapshots.length - 1].time
-            ));
             
-            const allFinished = vehicleStates.every(state => state.distance >= 402.336);
+            // Render race track
+            renderer.render(vehicleStates, mode.distance);
             
-            if (elapsedRealTime >= maxSimTime || allFinished) {
-                this.showMetrics(results);
-                this.isRunning = false;
-
-                const startBtn = document.getElementById('startBtn');
-                if (startBtn) {
-                    startBtn.disabled = false;
-                    startBtn.classList.remove('loading');
-                }
-                return;
+            // Update speedometers
+            updateSpeedometers(vehicleStates);
+            
+            // Update race stats
+            if (vehicleStates.length > 0) {
+                const leadSnapshot = allSnapshots[0][Math.min(currentFrame, allSnapshots[0].length - 1)];
+                updateRaceStats(leadSnapshot.time, mode);
             }
-
-            this.animationFrame = requestAnimationFrame(animate);
-        };
-
-        this.animationFrame = requestAnimationFrame(animate);
-    }
-
-    findSnapshotAtTime(snapshots, targetTime) {
-        // Find the snapshot at or just before the target time
-        // If target time is past all snapshots, return the last one
-        
-        if (targetTime <= 0) return snapshots[0];
-        if (targetTime >= snapshots[snapshots.length - 1].time) {
-            return snapshots[snapshots.length - 1];
+            
+            currentFrame += speedMultiplier;
+            state.animationFrame = setTimeout(animate, frameDelay);
         }
-
-        // Binary search for efficiency with large datasets
-        let left = 0;
-        let right = snapshots.length - 1;
         
-        while (left < right) {
-            const mid = Math.floor((left + right + 1) / 2);
-            if (snapshots[mid].time <= targetTime) {
-                left = mid;
-            } else {
-                right = mid - 1;
-            }
-        }
+        animate();
+    });
+}
 
-        // Interpolate between current and next snapshot for smooth animation
-        const current = snapshots[left];
-        const next = snapshots[Math.min(left + 1, snapshots.length - 1)];
-        
-        if (left === snapshots.length - 1 || current.time === next.time) {
-            return current;
-        }
-
-        // Linear interpolation
-        const t = (targetTime - current.time) / (next.time - current.time);
-        
-        return {
-            time: targetTime,
-            distance: current.distance + (next.distance - current.distance) * t,
-            velocity: current.velocity + (next.velocity - current.velocity) * t,
-            acceleration: current.acceleration + (next.acceleration - current.acceleration) * t,
-            gear: next.gear, // Use next gear (discrete value)
-            rpm: current.rpm + (next.rpm - current.rpm) * t,
-            power_kw: current.power_kw + (next.power_kw - current.power_kw) * t
-        };
-    }
-
-    createSpeedometers(results) {
-        const container = document.getElementById('speedometersContainer');
-        if (!container) {
-            console.error('Speedometers container not found');
-            return;
-        }
-
+function updateSpeedometers(vehicleStates) {
+    const container = document.getElementById('speedometersContainer');
+    if (!container) return;
+    
+    // Create speedometer cards if needed
+    if (container.children.length !== vehicleStates.length) {
         container.innerHTML = '';
-
-        results.forEach((result) => {
-            const vehicleId = this.getVehicleId(result.vehicle_name);
-            const brandClass = this.getBrandClass(vehicleId);
-            const logoUrl = this.getBrandLogoUrl(brandClass);
-
+        vehicleStates.forEach(state => {
             const card = document.createElement('div');
-            card.className = `speedometer-card speedometer-${brandClass}`;
-            card.dataset.vehicleId = vehicleId;
-
+            card.className = 'speedometer-card';
+            card.dataset.vehicleName = state.name;
             card.innerHTML = `
-                <div class="vehicle-name">${result.vehicle_name}</div>
-                <div class="speedometer">
-                    ${logoUrl ? `<img src="${logoUrl}" alt="${brandClass} logo" class="brand-logo">` : ''}
-                    <svg class="speedo-svg" viewBox="0 0 200 200">
-                        ${this.createSpeedoSVG(brandClass)}
-                    </svg>
-                    <div class="speedo-center ${brandClass}-center">
-                        <div class="speed-value">0</div>
-                        <div class="speed-unit">KM/H</div>
-                    </div>
-                </div>
-                <div class="vehicle-stats">
-                    <div class="stat-item">
-                        <div class="stat-label">Gear</div>
-                        <div class="stat-value stat-gear">1</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">RPM</div>
-                        <div class="stat-value stat-rpm">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Power</div>
-                        <div class="stat-value stat-power">0 kW</div>
-                    </div>
-                </div>
+                <div class="speedometer-name">${state.name}</div>
+                <div class="speedometer-value">0</div>
+                <div class="speedometer-unit">km/h</div>
+                <div class="speedometer-gear" style="margin-top: 8px; font-size: 12px; color: var(--text-tertiary);">Gear: <span>1</span></div>
             `;
-
             container.appendChild(card);
         });
     }
-
-    getBrandLogoUrl(brandClass) {
-        const logos = {
-            koenigsegg: 'https://www.carlogos.org/car-logos/koenigsegg-logo.png',
-            bugatti: 'https://www.carlogos.org/car-logos/bugatti-logo.png',
-            hennessey: 'https://www.carlogos.org/car-logos/hennessey-logo.png'
-        };
-
-        return logos[brandClass] || null;
-    }
-
-    createSpeedoSVG(brandClass) {
-        const centerX = 100;
-        const centerY = 100;
-        const radius = 80;
-        const startAngle = -225;
-        const endAngle = 45;
-        const totalAngle = endAngle - startAngle;
-
-        const startRad = (startAngle * Math.PI) / 180;
-        const endRad = (endAngle * Math.PI) / 180;
-
-        const x1 = centerX + radius * Math.cos(startRad);
-        const y1 = centerY + radius * Math.sin(startRad);
-        const x2 = centerX + radius * Math.cos(endRad);
-        const y2 = centerY + radius * Math.sin(endRad);
-
-        const largeArc = totalAngle > 180 ? 1 : 0;
-
-        const arcPath = `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
-        const arcLength = (totalAngle / 360) * (2 * Math.PI * radius);
-
-        const colors = {
-            koenigsegg: '#FFD700',
-            bugatti: '#0066FF',
-            hennessey: '#FF0066'
-        };
-
-        const color = colors[brandClass] || '#00FF9D';
-
-        const markers = [];
-        const speeds = [0, 50, 100, 150, 200, 250, 300, 350, 400];
-
-        speeds.forEach(speed => {
-            const angle = startAngle + (speed / 400) * totalAngle;
-            const rad = (angle * Math.PI) / 180;
-            const x = centerX + (radius - 5) * Math.cos(rad);
-            const y = centerY + (radius - 5) * Math.sin(rad);
-            const textX = centerX + (radius - 20) * Math.cos(rad);
-            const textY = centerY + (radius - 20) * Math.sin(rad);
-
-            markers.push(`
-                <line x1="${centerX + (radius - 10) * Math.cos(rad)}" 
-                      y1="${centerY + (radius - 10) * Math.sin(rad)}" 
-                      x2="${x}" y2="${y}" 
-                      class="gauge-marker" />
-                ${speed % 100 === 0 ? `<text x="${textX}" y="${textY}" class="gauge-text" text-anchor="middle">${speed}</text>` : ''}
-            `);
-        });
-
-        return `
-            <path d="${arcPath}" fill="none" class="gauge-bg" />
-            <path d="${arcPath}" 
-                  fill="none" 
-                  class="speed-arc gauge-progress" 
-                  stroke-dasharray="${arcLength}" 
-                  stroke-dashoffset="${arcLength}"
-                  stroke-linecap="round" />
-            ${markers.join('')}
-            <circle cx="${centerX}" cy="${centerY}" r="4" fill="${color}" opacity="0.8" />
-        `;
-    }
-
-    updateSpeedometers(vehicleStates) {
-        vehicleStates.forEach((state) => {
-            const vehicleId = this.getVehicleId(state.name);
-            const card = document.querySelector(`[data-vehicle-id="${vehicleId}"]`);
-            if (!card) return;
-
+    
+    // Update values
+    vehicleStates.forEach(state => {
+        const card = container.querySelector(`[data-vehicle-name="${state.name}"]`);
+        if (card) {
             const speedKmh = Math.round(state.velocity * 3.6);
-            const maxSpeed = 400;
-
-            // Update speed value with smooth number changes
-            const speedValue = card.querySelector('.speed-value');
-            if (speedValue) {
-                speedValue.textContent = speedKmh;
-            }
-
-            const statGear = card.querySelector('.stat-gear');
-            const statRpm = card.querySelector('.stat-rpm');
-            const statPower = card.querySelector('.stat-power');
-
-            if (statGear) statGear.textContent = state.gear;
-            if (statRpm) statRpm.textContent = Math.round(state.rpm).toLocaleString();
-            if (statPower) statPower.textContent = `${Math.round(state.power_kw)} kW`;
-
-            // Update speedometer arc with smooth transitions
-            const arc = card.querySelector('.speed-arc');
-            if (arc) {
-                const totalLength = parseFloat(arc.getAttribute('stroke-dasharray'));
-                const progress = Math.min(speedKmh / maxSpeed, 1);
-                const offset = totalLength * (1 - progress);
-                arc.style.strokeDashoffset = offset;
-            }
-        });
-    }
-
-    showMetrics(results) {
-        const panel = document.getElementById('metricsPanel');
-        const content = document.getElementById('metricsContent');
-
-        if (!panel || !content) {
-            console.warn('Metrics panel not found in DOM');
-            return;
+            card.querySelector('.speedometer-value').textContent = speedKmh;
+            card.querySelector('.speedometer-gear span').textContent = state.gear;
         }
+    });
+}
 
-        content.innerHTML = '';
+function updateRaceStats(time, mode) {
+    const statsContainer = document.getElementById('raceStats');
+    if (!statsContainer) return;
+    
+    statsContainer.innerHTML = `
+        <span class="stat-item">Time: <strong>${time.toFixed(2)}s</strong></span>
+    `;
+}
 
-        results.forEach(result => {
-            const card = document.createElement('div');
-            card.className = 'metric-card';
-
-            const metrics = [
-                { label: '0-100 km/h', value: result.time_to_100kmh ? `${result.time_to_100kmh}s` : 'N/A' },
-                { label: '0-200 km/h', value: result.time_to_200kmh ? `${result.time_to_200kmh}s` : 'N/A' },
-                { label: 'Quarter Mile', value: result.quarter_mile_time ? `${result.quarter_mile_time}s` : 'N/A' },
-                { label: 'Quarter Mile Speed', value: result.quarter_mile_speed ? `${result.quarter_mile_speed} km/h` : 'N/A' }
-            ];
-
-            card.innerHTML = `
-                <div class="metric-vehicle">${result.vehicle_name}</div>
-                ${metrics.map(m => `
-                    <div class="metric-row">
-                        <span class="metric-label">${m.label}</span>
-                        <span class="metric-value">${m.value}</span>
-                    </div>
-                `).join('')}
+function displayResults(results, mode) {
+    const metricsPanel = document.getElementById('metricsPanel');
+    const metricsContent = document.getElementById('metricsContent');
+    
+    if (!metricsPanel || !metricsContent) return;
+    
+    metricsContent.innerHTML = '';
+    
+    results.results.forEach(result => {
+        const vehicleDiv = document.createElement('div');
+        vehicleDiv.className = 'vehicle-metrics';
+        
+        let metricsHTML = `<div class="vehicle-metrics-header">${result.vehicle_name}</div><div class="metrics-grid">`;
+        
+        if (state.currentMode === 'roll-race') {
+            // Roll race metrics
+            const rollStart = parseFloat(document.getElementById('rollStartSpeed')?.value || 60);
+            const rollTarget = parseFloat(document.getElementById('rollTargetSpeed')?.value || 200);
+            
+            const rollTime = calculateRollTime(result.snapshots, rollStart, rollTarget);
+            
+            metricsHTML += `
+                <div class="metric-item">
+                    <div class="metric-label">${rollStart}-${rollTarget} km/h</div>
+                    <div class="metric-value">${rollTime ? rollTime.toFixed(2) : 'N/A'}s</div>
+                </div>
             `;
+        } else if (state.currentMode === 'top-speed') {
+            // Top speed metrics
+            const topSpeed = Math.max(...result.snapshots.map(s => s.velocity * 3.6));
+            
+            metricsHTML += `
+                <div class="metric-item">
+                    <div class="metric-label">Top Speed</div>
+                    <div class="metric-value">${topSpeed.toFixed(1)} km/h</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Time to Top Speed</div>
+                    <div class="metric-value">${result.snapshots[result.snapshots.length - 1].time.toFixed(2)}s</div>
+                </div>
+            `;
+        } else {
+            // Drag race metrics
+            metricsHTML += `
+                <div class="metric-item">
+                    <div class="metric-label">0-100 km/h</div>
+                    <div class="metric-value">${result.time_to_100kmh || 'N/A'}s</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">0-200 km/h</div>
+                    <div class="metric-value">${result.time_to_200kmh || 'N/A'}s</div>
+                </div>
+            `;
+            
+            if (state.currentMode === 'quarter-mile') {
+                metricsHTML += `
+                    <div class="metric-item">
+                        <div class="metric-label">1/4 Mile Time</div>
+                        <div class="metric-value">${result.quarter_mile_time || 'N/A'}s</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">1/4 Mile Speed</div>
+                        <div class="metric-value">${result.quarter_mile_speed || 'N/A'} km/h</div>
+                    </div>
+                `;
+            } else {
+                // For half-mile and one-mile, show final time and speed
+                const finalSnapshot = result.snapshots[result.snapshots.length - 1];
+                metricsHTML += `
+                    <div class="metric-item">
+                        <div class="metric-label">Finish Time</div>
+                        <div class="metric-value">${finalSnapshot.time.toFixed(2)}s</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">Finish Speed</div>
+                        <div class="metric-value">${(finalSnapshot.velocity * 3.6).toFixed(1)} km/h</div>
+                    </div>
+                `;
+            }
+        }
+        
+        metricsHTML += '</div>';
+        vehicleDiv.innerHTML = metricsHTML;
+        metricsContent.appendChild(vehicleDiv);
+    });
+    
+    metricsPanel.style.display = 'block';
+}
 
-            content.appendChild(card);
-        });
-
-        panel.style.display = 'block';
+function calculateRollTime(snapshots, startKmh, targetKmh) {
+    let startTime = null;
+    let endTime = null;
+    
+    for (const snapshot of snapshots) {
+        const speedKmh = snapshot.velocity * 3.6;
+        
+        if (startTime === null && speedKmh >= startKmh) {
+            startTime = snapshot.time;
+        }
+        
+        if (startTime !== null && speedKmh >= targetKmh) {
+            endTime = snapshot.time;
+            break;
+        }
     }
-
-    getVehicleId(vehicleName) {
-        for (const [id, name] of Object.entries(this.vehicles)) {
-            if (name === vehicleName) return id;
-        }
-        return '';
+    
+    if (startTime !== null && endTime !== null) {
+        return endTime - startTime;
     }
+    
+    return null;
+}
 
-    getBrandClass(vehicleId) {
-        if (vehicleId.includes('koenigsegg')) return 'koenigsegg';
-        if (vehicleId.includes('bugatti')) return 'bugatti';
-        if (vehicleId.includes('hennessey')) return 'hennessey';
-        return 'default';
+function resetSimulation() {
+    // Cancel any ongoing animation
+    if (state.animationFrame) {
+        clearTimeout(state.animationFrame);
+        state.animationFrame = null;
     }
+    
+    // Clear visualization
+    if (renderer) {
+        renderer.render([]);
+    }
+    
+    // Clear speedometers
+    const speedometersContainer = document.getElementById('speedometersContainer');
+    if (speedometersContainer) {
+        speedometersContainer.innerHTML = '';
+    }
+    
+    // Hide metrics
+    const metricsPanel = document.getElementById('metricsPanel');
+    if (metricsPanel) {
+        metricsPanel.style.display = 'none';
+    }
+    
+    // Reset race stats
+    const statsContainer = document.getElementById('raceStats');
+    if (statsContainer) {
+        statsContainer.innerHTML = '<span class="stat-item">Time: <strong>0.0s</strong></span>';
+    }
+    
+    state.isSimulating = false;
+    state.simulationResults = null;
+    updateButtonStates();
+    updateStatusIndicator('Ready', 'ready');
+}
 
-    reset() {
-        if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-            this.animationFrame = null;
-        }
-
-        this.isRunning = false;
-        this.simulationStartTime = 0;
-
-        const startBtn = document.getElementById('startBtn');
-        if (startBtn) {
-            startBtn.disabled = false;
-            startBtn.classList.remove('loading');
-        }
-
-        const speedometersContainer = document.getElementById('speedometersContainer');
-        if (speedometersContainer) {
-            speedometersContainer.innerHTML = '';
-        }
-
-        const metricsPanel = document.getElementById('metricsPanel');
-        if (metricsPanel) {
-            metricsPanel.style.display = 'none';
-        }
-
-        const raceStats = document.getElementById('raceStats');
-        if (raceStats) {
-            raceStats.innerHTML = '<span class="stat-item">Time: <strong>0.0s</strong></span>';
-        }
-
-        if (this.renderer) {
-            this.renderer.clear();
-            this.renderer.render([]);
-        }
+// ==================== UI HELPERS ====================
+function updateButtonStates() {
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (startBtn) {
+        startBtn.disabled = state.isSimulating;
+        startBtn.style.opacity = state.isSimulating ? '0.5' : '1';
+        startBtn.style.cursor = state.isSimulating ? 'not-allowed' : 'pointer';
+    }
+    
+    if (resetBtn) {
+        resetBtn.disabled = state.isSimulating;
+        resetBtn.style.opacity = state.isSimulating ? '0.5' : '1';
+        resetBtn.style.cursor = state.isSimulating ? 'not-allowed' : 'pointer';
     }
 }
 
-const app = new SimulationController();
-app.init();
+function updateStatusIndicator(text, status) {
+    const statusText = document.querySelector('.status-text');
+    const statusDot = document.querySelector('.status-dot');
+    
+    if (statusText) statusText.textContent = text;
+    
+    if (statusDot) {
+        statusDot.style.background = 
+            status === 'success' ? '#00FF9D' :
+            status === 'warning' ? '#FFD700' :
+            status === 'error' ? '#FF0066' :
+            '#00FF9D';
+    }
+}
+
+function showError(message) {
+    console.error(message);
+    alert(message);
+}
+
+// ==================== EVENT LISTENERS ====================
+function setupEventListeners() {
+    // Start button
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) {
+        startBtn.addEventListener('click', startSimulation);
+    }
+    
+    // Reset button
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetSimulation);
+    }
+    
+    // Mode tabs
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    modeTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const mode = tab.dataset.mode;
+            if (mode && !state.isSimulating) {
+                // Update active tab
+                modeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update state
+                state.currentMode = mode;
+                
+                // Update UI
+                updateModeUI();
+                
+                // Reset simulation
+                resetSimulation();
+            }
+        });
+    });
+}
+
+// ==================== START APP ====================
+document.addEventListener('DOMContentLoaded', init);

@@ -1,99 +1,78 @@
-/* ==========================================
-   PREMIUM HYPERCAR SIMULATOR UI
-   Modern Glassmorphism Design
-   ========================================== */
-
-:root {
-    /* Color Palette */
-    --color-bg-dark: #0A0E27;
-    --color-bg-darker: #060918;
-    --color-surface: rgba(255, 255, 255, 0.03);
-    --color-surface-hover: rgba(255, 255, 255, 0.06);
-
-    /* Glass Effect */
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-
-    /* Accent Colors */
-    --color-primary: #00FFA3;
-    --color-primary-glow: rgba(0, 255, 163, 0.3);
-    --color-secondary: #6366F1;
-    --color-danger: #FF3B77;
-
-    /* Brand Colors */
-    --koenigsegg: linear-gradient(135deg, #FFD700, #FFA500);
-    --bugatti: linear-gradient(135deg, #4F46E5, #06B6D4);
-    --hennessey: linear-gradient(135deg, #FF0066, #FF3399);
-
-    /* Text */
-    --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.7);
-    --text-tertiary: rgba(255, 255, 255, 0.4);
-
-    /* Spacing */
-    --space-xs: 0.5rem;
-    --space-sm: 0.75rem;
-    --space-md: 1rem;
-    --space-lg: 1.5rem;
-    --space-xl: 2rem;
-    --space-2xl: 3rem;
-
-    /* Border Radius */
-    --radius-sm: 0.5rem;
-    --radius-md: 1rem;
-    --radius-lg: 1.5rem;
-    --radius-xl: 2rem;
-}
-
-/* ==========================================
-   RESET & BASE
-   ========================================== */
-
+/* ==================== RESET & ROOT ==================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
-    height: 100%;
-    overflow-x: hidden;
+:root {
+    /* Primary Brand Colors */
+    --color-primary: #00FF9D;
+    --color-primary-glow: rgba(0, 255, 157, 0.3);
+    --color-secondary: #FF0066;
+    --color-accent: #FFD700;
+    
+    /* Dark Theme Base */
+    --bg-primary: #0A0A0A;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1A1A1A;
+    --bg-card: #141414;
+    
+    /* Text Colors */
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
+    
+    /* Borders & Dividers */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(0, 255, 157, 0.2);
+    
+    /* Shadows */
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 30px var(--color-primary-glow);
+    
+    /* Typography */
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
 }
 
+/* ==================== BODY & LAYOUT ==================== */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--color-bg-dark);
+    font-family: var(--font-body);
+    background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
     position: relative;
 }
 
-/* ==========================================
-   ANIMATED BACKGROUND
-   ========================================== */
-
+/* ==================== ANIMATED BACKGROUND ==================== */
 .background-grid {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image:
-        linear-gradient(rgba(0, 255, 163, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 163, 0.03) 1px, transparent 1px);
+    background-image: 
+        linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
-    animation: gridMove 20s linear infinite;
     z-index: 0;
+    pointer-events: none;
+    animation: gridMove 20s linear infinite;
 }
 
 @keyframes gridMove {
     0% {
         transform: translate(0, 0);
     }
-
     100% {
         transform: translate(50px, 50px);
     }
@@ -105,102 +84,192 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 255, 163, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(255, 59, 119, 0.1) 0%, transparent 50%);
+    background: radial-gradient(
+        ellipse at 30% 20%,
+        rgba(0, 255, 157, 0.08) 0%,
+        transparent 50%
+    ),
+    radial-gradient(
+        ellipse at 70% 80%,
+        rgba(255, 0, 102, 0.06) 0%,
+        transparent 50%
+    );
     z-index: 0;
+    pointer-events: none;
 }
 
-/* ==========================================
-   APP CONTAINER
-   ========================================== */
-
+/* ==================== APP CONTAINER ==================== */
 .app-container {
     position: relative;
     z-index: 1;
     max-width: 1920px;
     margin: 0 auto;
-    padding: var(--space-lg);
-    min-height: 100vh;
+    padding: var(--spacing-lg);
 }
 
-/* ==========================================
-   HEADER
-   ========================================== */
-
+/* ==================== HEADER WITH TABS ==================== */
 .app-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: var(--space-lg) var(--space-xl);
-    background: var(--glass-bg);
+    justify-content: space-between;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-md) var(--spacing-lg);
     backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-xl);
-    box-shadow: var(--glass-shadow);
+    box-shadow: var(--shadow-card);
+}
+
+.header-left {
+    flex-shrink: 0;
 }
 
 .logo-container {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--spacing-md);
 }
 
 .logo-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--color-primary);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 0 30px var(--color-primary-glow);
+    font-size: 48px;
+    line-height: 1;
+    filter: drop-shadow(0 0 20px var(--color-primary-glow));
     animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-
-    0%,
-    100% {
+    0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 30px var(--color-primary-glow);
+        filter: drop-shadow(0 0 20px var(--color-primary-glow));
     }
-
     50% {
         transform: scale(1.05);
-        box-shadow: 0 0 40px var(--color-primary-glow);
+        filter: drop-shadow(0 0 30px var(--color-primary-glow));
     }
 }
 
 .logo-text h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.75rem;
+    font-family: var(--font-display);
+    font-size: 28px;
     font-weight: 900;
-    letter-spacing: -0.02em;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--color-primary), #00CCFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .logo-text span {
-    display: block;
-    font-size: 0.75rem;
+    font-size: 12px;
+    font-weight: 500;
     color: var(--text-tertiary);
-    letter-spacing: 0.1em;
+    letter-spacing: 2px;
     text-transform: uppercase;
+}
+
+/* ==================== MODE TABS ==================== */
+.mode-tabs {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex: 1;
+    justify-content: center;
+    max-width: 900px;
+}
+
+.mode-tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.mode-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-primary), #00CCFF);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mode-tab:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.mode-tab:hover::before {
+    opacity: 0.1;
+}
+
+.mode-tab.active {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.15), rgba(0, 204, 255, 0.15));
+    border-color: var(--color-primary);
+    color: var(--text-primary);
+    box-shadow: 0 0 20px var(--color-primary-glow);
+}
+
+.mode-tab.active::before {
+    opacity: 0.2;
+}
+
+.tab-icon {
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.tab-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+.tab-distance {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.mode-tab.active .tab-distance {
+    color: var(--color-primary);
+}
+
+/* ==================== STATUS INDICATOR ==================== */
+.header-right {
+    flex-shrink: 0;
 }
 
 .status-indicator {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--glass-border);
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: rgba(0, 255, 157, 0.05);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
 }
 
 .status-dot {
@@ -208,148 +277,147 @@ body {
     height: 8px;
     background: var(--color-primary);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--color-primary);
-    animation: blink 2s ease-in-out infinite;
+    animation: statusPulse 2s ease-in-out infinite;
 }
 
-@keyframes blink {
-
-    0%,
-    100% {
+@keyframes statusPulse {
+    0%, 100% {
         opacity: 1;
+        box-shadow: 0 0 8px var(--color-primary);
     }
-
     50% {
-        opacity: 0.4;
+        opacity: 0.6;
+        box-shadow: 0 0 4px var(--color-primary);
     }
 }
 
 .status-text {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-/* ==========================================
-   MAIN GRID
-   ========================================== */
-
+/* ==================== MAIN GRID ==================== */
 .main-grid {
     display: grid;
     grid-template-columns: 380px 1fr;
-    gap: var(--space-xl);
+    gap: var(--spacing-lg);
 }
 
-/* ==========================================
-   CONTROL PANEL (LEFT)
-   ========================================== */
-
+/* ==================== CONTROL PANEL ==================== */
 .control-panel {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--spacing-md);
 }
 
+/* ==================== CARDS ==================== */
 .card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-card);
     transition: all 0.3s ease;
 }
 
 .card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 255, 157, 0.2);
 }
 
 .card-header {
-    padding: var(--space-lg);
-    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: var(--spacing-md);
 }
 
 .card-header h3 {
-    font-size: 1rem;
+    font-family: var(--font-display);
+    font-size: 18px;
     font-weight: 700;
-    margin-bottom: var(--space-xs);
-    color: var(--text-primary);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
 }
 
 .card-subtitle {
-    font-size: 0.75rem;
+    font-size: 12px;
     color: var(--text-tertiary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
-.card-content {
-    padding: var(--space-lg);
-}
-
-/* ==========================================
-   VEHICLE SELECTION
-   ========================================== */
-
+/* ==================== VEHICLE GRID ==================== */
 .vehicle-grid {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.vehicle-option {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-}
-
-.vehicle-item {
-    position: relative;
-    padding: var(--space-md);
-    background: var(--color-surface);
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
     border: 2px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-.vehicle-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
+.vehicle-option:hover {
+    background: var(--bg-tertiary);
+    border-color: rgba(0, 255, 157, 0.3);
+    transform: translateX(4px);
+}
+
+.vehicle-option.selected {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 204, 255, 0.1));
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+.vehicle-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
     transition: all 0.3s ease;
 }
 
-.vehicle-item:hover {
-    background: var(--color-surface-hover);
-    transform: translateX(4px);
-}
-
-.vehicle-item.selected {
-    border-color: var(--color-primary);
-    background: rgba(0, 255, 163, 0.1);
-}
-
-.vehicle-item.selected::before {
+.vehicle-option.selected .vehicle-checkbox {
     background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
-.vehicle-item input[type="checkbox"] {
-    display: none;
+.vehicle-checkbox::after {
+    content: '✓';
+    color: var(--bg-primary);
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
 }
 
-.vehicle-item label {
-    display: block;
-    font-size: 0.9rem;
+.vehicle-option.selected .vehicle-checkbox::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.vehicle-name {
+    flex: 1;
     font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 0.3px;
 }
 
-/* ==========================================
-   INPUT FIELDS
-   ========================================== */
-
+/* ==================== INPUT FIELDS ==================== */
 .input-field {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--spacing-md);
 }
 
 .input-field:last-child {
@@ -359,70 +427,70 @@ body {
 .input-field label {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    font-size: 0.875rem;
-    font-weight: 500;
+    gap: var(--spacing-xs);
+    font-size: 13px;
+    font-weight: 600;
     color: var(--text-secondary);
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--spacing-xs);
+    letter-spacing: 0.5px;
 }
 
 .label-icon {
-    font-size: 1rem;
+    font-size: 16px;
 }
 
 .input-with-unit {
     display: flex;
     align-items: center;
-    background: var(--color-surface);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
+    gap: var(--spacing-xs);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: var(--spacing-xs) var(--spacing-sm);
     transition: all 0.3s ease;
 }
 
 .input-with-unit:focus-within {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(0, 255, 163, 0.1);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
 }
 
 .input-with-unit input {
     flex: 1;
-    padding: var(--space-md);
     background: transparent;
     border: none;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    font-weight: 600;
     outline: none;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .input-with-unit .unit {
-    padding: 0 var(--space-md);
+    font-size: 12px;
     color: var(--text-tertiary);
-    font-size: 0.875rem;
     font-weight: 600;
 }
 
-/* ==========================================
-   BUTTONS
-   ========================================== */
-
+/* ==================== BUTTONS ==================== */
 .button-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
+    display: grid;
+    gap: var(--spacing-sm);
 }
 
 .btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 0.9rem;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-family: var(--font-body);
+    font-size: 16px;
     font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -436,19 +504,45 @@ body {
     left: 50%;
     width: 0;
     height: 0;
-    border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.6s, height 0.6s;
 }
 
-.btn:hover::before {
+.btn:active::before {
     width: 300px;
     height: 300px;
 }
 
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), #00CCFF);
+    color: var(--bg-primary);
+    box-shadow: 0 4px 15px var(--color-primary-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--color-primary-glow);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-secondary);
+    border-color: var(--color-primary);
+}
+
 .btn-icon {
-    font-size: 1rem;
+    font-size: 18px;
     position: relative;
     z-index: 1;
 }
@@ -458,90 +552,54 @@ body {
     z-index: 1;
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--color-primary), #00CC82);
-    color: var(--color-bg-dark);
-    box-shadow: 0 8px 24px var(--color-primary-glow);
-}
-
-.btn-primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px var(--color-primary-glow);
-}
-
-.btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-secondary {
-    background: var(--color-surface);
-    color: var(--text-primary);
-    border: 2px solid var(--glass-border);
-}
-
-.btn-secondary:hover {
-    background: var(--color-surface-hover);
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* ==========================================
-   CONTENT PANEL (RIGHT)
-   ========================================== */
-
-.content-panel {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-}
-
-/* ==========================================
-   RACE CARD
-   ========================================== */
-
+/* ==================== RACE CARD ==================== */
 .race-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: var(--spacing-lg);
 }
 
 .race-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-lg) var(--space-xl);
-    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: var(--spacing-md);
 }
 
 .race-header h3 {
-    font-size: 1rem;
+    font-family: var(--font-display);
+    font-size: 18px;
     font-weight: 700;
-    color: var(--text-primary);
+    letter-spacing: 1px;
 }
 
 .race-stats {
     display: flex;
-    gap: var(--space-lg);
+    gap: var(--spacing-lg);
 }
 
 .stat-item {
-    font-size: 0.875rem;
+    font-size: 13px;
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .stat-item strong {
     color: var(--color-primary);
-    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    margin-left: 4px;
 }
 
 .race-canvas-container {
-    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
     height: 400px;
-    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.2));
+    position: relative;
 }
 
 #raceCanvas {
@@ -550,410 +608,163 @@ body {
     display: block;
 }
 
-/* ==========================================
-   SPEEDOMETERS
-   ========================================== */
-
+/* ==================== SPEEDOMETERS ==================== */
 .speedometers-section {
-    width: 100%;
+    margin-bottom: var(--spacing-lg);
 }
 
 .speedometers-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
 }
 
 .speedometer-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    box-shadow: var(--glass-shadow);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.speedometer-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--brand-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.speedometer-card:hover::after {
-    opacity: 1;
-}
-
-.speedometer-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-}
-
-/* Brand-specific gradients */
-.speedometer-koenigsegg {
-    --brand-gradient: var(--koenigsegg);
-    --brand-color: #FFD700;
-}
-
-.speedometer-bugatti {
-    --brand-gradient: var(--bugatti);
-    --brand-color: #4F46E5;
-}
-
-.speedometer-hennessey {
-    --brand-gradient: var(--hennessey);
-    --brand-color: #FF0066;
-}
-
-.vehicle-name {
-    text-align: center;
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: var(--space-lg);
-}
-
-/* Speedometer */
-.speedometer {
-    position: relative;
-    width: 260px;
-    height: 260px;
-    margin: 0 auto var(--space-xl);
-}
-
-.brand-logo {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: auto;
-    opacity: 0.8;
-    z-index: 10;
-    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
-    transition: all 0.3s ease;
-}
-
-.speedometer-card:hover .brand-logo {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.1);
-}
-
-.speedo-svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 0 20px var(--brand-color));
-}
-
-.speedo-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-card);
     text-align: center;
 }
 
-.speed-value {
-    font-family: 'Orbitron', monospace;
-    font-size: 4.5rem;
-    font-weight: 900;
-    line-height: 1;
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 0 40px var(--brand-color);
-    letter-spacing: -0.05em;
-}
-
-.speed-unit {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-tertiary);
-    letter-spacing: 0.2em;
-    margin-top: var(--space-sm);
-}
-
-/* Vehicle Stats */
-.vehicle-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-md);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--glass-border);
-}
-
-.stat-item {
-    text-align: center;
-}
-
-.stat-label {
-    display: block;
-    font-size: 0.625rem;
+.speedometer-name {
+    font-size: 14px;
     font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.5px;
+}
+
+.speedometer-value {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary), #00CCFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+}
+
+.speedometer-unit {
+    font-size: 12px;
     color: var(--text-tertiary);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
-.stat-value {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    font-family: 'Orbitron', monospace;
-}
-
-/* ==========================================
-   METRICS CARD
-   ========================================== */
-
+/* ==================== METRICS CARD ==================== */
 .metrics-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-card);
 }
 
 .metrics-results {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-lg);
+    gap: var(--spacing-lg);
 }
 
-.metric-card {
-    background: var(--color-surface);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    transition: all 0.3s ease;
+.vehicle-metrics {
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
 }
 
-.metric-card:hover {
-    background: var(--color-surface-hover);
-    transform: translateY(-2px);
-}
-
-.metric-vehicle {
-    font-size: 1rem;
+.vehicle-metrics-header {
+    font-size: 16px;
     font-weight: 700;
     color: var(--color-primary);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.5px;
 }
 
-.metric-row {
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.metric-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-sm) 0;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.metric-row:last-child {
-    border-bottom: none;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .metric-label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .metric-value {
-    font-size: 1rem;
+    font-family: var(--font-display);
+    font-size: 20px;
     font-weight: 700;
     color: var(--text-primary);
-    font-family: 'Orbitron', monospace;
 }
 
-/* ==========================================
-   SVG GAUGE STYLING
-   ========================================== */
-
-.gauge-bg {
-    stroke: rgba(255, 255, 255, 0.05);
-    stroke-width: 10;
+/* ==================== MODE-SPECIFIC SETTINGS ==================== */
+.mode-settings-card {
+    animation: slideInUp 0.3s ease;
 }
 
-.gauge-progress {
-    stroke: var(--brand-color);
-    stroke-width: 10;
-    filter: drop-shadow(0 0 10px var(--brand-color));
-}
-
-.gauge-marker {
-    stroke: rgba(255, 255, 255, 0.2);
-    stroke-width: 2;
-}
-
-.gauge-text {
-    fill: var(--text-tertiary);
-    font-size: 9px;
-    font-weight: 600;
-}
-
-/* ==========================================
-   ANIMATIONS
-   ========================================== */
-
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
-
-    100% {
-        background-position: 1000px 0;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.loading .btn-primary {
-    background: linear-gradient(90deg, #00CC82 0%, var(--color-primary) 50%, #00CC82 100%);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
-}
-
-/* ==========================================
-   RESPONSIVE
-   ========================================== */
-
-@media (max-width: 1400px) {
-    .main-grid {
-        grid-template-columns: 340px 1fr;
-    }
-}
-
-@media (max-width: 1024px) {
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1200px) {
     .main-grid {
         grid-template-columns: 1fr;
     }
-
-    .control-panel {
-        order: 2;
+    
+    .mode-tabs {
+        flex-wrap: wrap;
     }
-
-    .content-panel {
-        order: 1;
+    
+    .app-header {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
 
 @media (max-width: 768px) {
-    .app-container {
-        padding: var(--space-md);
+    .mode-tab {
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
-
-    .app-header {
-        flex-direction: column;
-        gap: var(--space-md);
-        text-align: center;
+    
+    .tab-icon {
+        font-size: 16px;
     }
-
+    
+    .tab-label {
+        font-size: 11px;
+    }
+    
+    .tab-distance {
+        font-size: 9px;
+    }
+    
     .speedometers-wrapper {
         grid-template-columns: 1fr;
     }
-
-    .race-canvas-container {
-        height: 300px;
-    }
-
-    .speed-value {
-        font-size: 3.5rem;
+    
+    .metrics-grid {
+        grid-template-columns: 1fr;
     }
 }
-
-/* ==========================================
-   SCROLLBAR
-   ========================================== */
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-bg-darker);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--glass-border);
-    border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* ==========================================
-   SMOOTH REAL-TIME ANIMATIONS
-   Add these rules to your style.css
-   ========================================== */
-
-/* Smooth speedometer arc transitions */
-.speed-arc {
-    transition: stroke-dashoffset 0.05s linear !important;
-}
-
-/* Smooth number updates for speed display */
-.speed-value {
-    transition: transform 0.1s ease-out;
-}
-
-/* Smooth stat updates */
-.stat-value {
-    transition: color 0.15s ease;
-}
-
-/* Pulse effect when gear changes */
-.stat-gear {
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Smooth RPM counter */
-.stat-rpm {
-    font-variant-numeric: tabular-nums;
-    transition: color 0.1s ease;
-}
-
-/* Power indicator smooth transition */
-.stat-power {
-    transition: transform 0.1s ease;
-}
-
-/* Add smooth motion to speedometer center */
-.speedo-center {
-    transition: transform 0.15s ease-out;
-}
-
-/* Brand logo pulse on high speed */
-.brand-logo {
-    transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-    .speed-arc,
-    .speed-value,
-    .stat-value,
-    .stat-gear,
-    .stat-rpm,
-    .stat-power,
-    .speedo-center,
-    .brand-logo {
-        transition: none !important;
-    }
-}
-

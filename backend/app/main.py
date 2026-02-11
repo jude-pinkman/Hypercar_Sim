@@ -125,7 +125,9 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
             # Run simulation
             snapshots = engine.run_simulation(
                 timestep=params.timestep,
-                max_time=params.max_time
+                max_time=params.max_time,
+                target_distance=params.target_distance,
+                start_velocity=params.start_velocity
             )
             
             # Calculate metrics

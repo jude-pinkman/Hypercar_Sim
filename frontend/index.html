@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;600;700;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -21,7 +19,7 @@
     <!-- Main App Container -->
     <div class="app-container">
 
-        <!-- Header -->
+        <!-- Header with Mode Tabs -->
         <header class="app-header">
             <div class="header-left">
                 <div class="logo-container">
@@ -32,6 +30,36 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Mode Tabs -->
+            <nav class="mode-tabs">
+                <button class="mode-tab active" data-mode="quarter-mile">
+                    <span class="tab-icon">🏁</span>
+                    <span class="tab-label">1/4 Mile</span>
+                    <span class="tab-distance">402m</span>
+                </button>
+                <button class="mode-tab" data-mode="half-mile">
+                    <span class="tab-icon">🚀</span>
+                    <span class="tab-label">1/2 Mile</span>
+                    <span class="tab-distance">805m</span>
+                </button>
+                <button class="mode-tab" data-mode="one-mile">
+                    <span class="tab-icon">⚡</span>
+                    <span class="tab-label">1 Mile</span>
+                    <span class="tab-distance">1609m</span>
+                </button>
+                <button class="mode-tab" data-mode="roll-race">
+                    <span class="tab-icon">💨</span>
+                    <span class="tab-label">Roll Race</span>
+                    <span class="tab-distance">60-200</span>
+                </button>
+                <button class="mode-tab" data-mode="top-speed">
+                    <span class="tab-icon">🔥</span>
+                    <span class="tab-label">Top Speed</span>
+                    <span class="tab-distance">Vmax</span>
+                </button>
+            </nav>
+            
             <div class="header-right">
                 <div class="status-indicator">
                     <span class="status-dot"></span>
@@ -55,6 +83,19 @@
                     <div class="card-content">
                         <div id="vehicleSelect" class="vehicle-grid">
                             <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode-Specific Settings -->
+                <div class="card mode-settings-card">
+                    <div class="card-header">
+                        <h3 id="modeSettingsTitle">Race Settings</h3>
+                        <span class="card-subtitle" id="modeSettingsSubtitle">Configure race parameters</span>
+                    </div>
+                    <div class="card-content">
+                        <div id="modeSettingsContent">
+                            <!-- Dynamically populated based on mode -->
                         </div>
                     </div>
                 </div>
@@ -93,7 +134,7 @@
                 <div class="button-container">
                     <button class="btn btn-primary" id="startBtn">
                         <span class="btn-icon">▶</span>
-                        <span class="btn-text">Start Simulation</span>
+                        <span class="btn-text">Start Race</span>
                     </button>
                     <button class="btn btn-secondary" id="resetBtn">
                         <span class="btn-icon">↻</span>
@@ -109,7 +150,7 @@
                 <!-- Race Track -->
                 <div class="race-card">
                     <div class="race-header">
-                        <h3>Live Race Track</h3>
+                        <h3 id="raceTitle">Live Race Track</h3>
                         <div class="race-stats" id="raceStats">
                             <span class="stat-item">Time: <strong>0.0s</strong></span>
                         </div>
@@ -130,7 +171,7 @@
                 <div class="metrics-card" id="metricsPanel" style="display: none;">
                     <div class="card-header">
                         <h3>Performance Results</h3>
-                        <span class="card-subtitle">Acceleration & quarter mile times</span>
+                        <span class="card-subtitle" id="metricsSubtitle">Race performance metrics</span>
                     </div>
                     <div class="card-content">
                         <div id="metricsContent" class="metrics-results">

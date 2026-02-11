@@ -26,7 +26,7 @@ export class RaceRenderer {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    render(vehicleStates) {
+    render(vehicleStates, maxDistance = 450) {
         this.clear();
 
         if (!vehicleStates || vehicleStates.length === 0) {
@@ -34,7 +34,7 @@ export class RaceRenderer {
             return;
         }
 
-        const trackLength = 450; // meters (quarter mile + buffer)
+        const trackLength = maxDistance + 50; // Add buffer
 
         // Draw track
         this.drawMinimalistTrack(trackLength, vehicleStates.length);
@@ -98,12 +98,43 @@ export class RaceRenderer {
     }
 
     drawDistanceMarkers(maxDistance) {
-        const markers = [
-            { distance: 100, label: '100m', primary: false },
-            { distance: 200, label: '200m', primary: false },
-            { distance: 300, label: '300m', primary: false },
-            { distance: 402.336, label: '1/4 Mile', primary: true }
-        ];
+        // Dynamic markers based on race distance
+        let markers = [];
+        
+        if (maxDistance <= 500) {
+            // Quarter mile
+            markers = [
+                { distance: 100, label: '100m', primary: false },
+                { distance: 200, label: '200m', primary: false },
+                { distance: 300, label: '300m', primary: false },
+                { distance: 402.336, label: '1/4 Mile', primary: true }
+            ];
+        } else if (maxDistance <= 900) {
+            // Half mile
+            markers = [
+                { distance: 200, label: '200m', primary: false },
+                { distance: 402.336, label: '1/4 Mile', primary: false },
+                { distance: 600, label: '600m', primary: false },
+                { distance: 804.672, label: '1/2 Mile', primary: true }
+            ];
+        } else if (maxDistance <= 2000) {
+            // One mile
+            markers = [
+                { distance: 402.336, label: '1/4 Mile', primary: false },
+                { distance: 804.672, label: '1/2 Mile', primary: false },
+                { distance: 1207, label: '3/4 Mile', primary: false },
+                { distance: 1609.344, label: '1 Mile', primary: true }
+            ];
+        } else {
+            // Top speed (5km+)
+            markers = [
+                { distance: 1000, label: '1km', primary: false },
+                { distance: 2000, label: '2km', primary: false },
+                { distance: 3000, label: '3km', primary: false },
+                { distance: 4000, label: '4km', primary: false },
+                { distance: 5000, label: '5km', primary: true }
+            ];
+        }
 
         const padding = 60;
         const usableWidth = this.canvas.width - padding * 2;

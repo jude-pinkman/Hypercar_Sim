@@ -259,17 +259,24 @@ class PhysicsEngine:
         
         return new_velocity, acceleration, new_gear, rpm
     
-    def run_simulation(self, timestep: float = 0.01, max_time: float = 30.0) -> List[TimeSnapshot]:
+    def run_simulation(self, timestep: float = 0.01, max_time: float = 30.0, target_distance: float = None, start_velocity: float = 0.0) -> List[TimeSnapshot]:
         """
         Run complete drag race simulation
+        
+        Args:
+            timestep: Simulation time step in seconds
+            max_time: Maximum simulation time
+            target_distance: Target distance in meters (None = run until max_time)
+            start_velocity: Starting velocity in m/s (for roll races)
+        
         Returns list of snapshots over time
         """
         snapshots = []
         
         time = 0.0
         distance = 0.0
-        velocity = 0.0  # m/s
-        gear = 1
+        velocity = start_velocity  # Use start_velocity parameter
+        gear = 1 if start_velocity == 0.0 else self._get_gear_for_velocity(start_velocity)
         
         while time <= max_time:
             # Simulate one step
@@ -301,11 +308,26 @@ class PhysicsEngine:
             
             time += timestep
             
-            # Stop if we've completed quarter mile
-            if distance >= 402.336:
+            # Stop if we've reached target distance (if specified)
+            if target_distance is not None and distance >= target_distance:
                 break
         
         return snapshots
+    
+    def _get_gear_for_velocity(self, velocity_ms: float) -> int:
+        """Determine appropriate starting gear for a given velocity"""
+        if velocity_ms < 1.0:
+            return 1
+        
+        # Find the gear where this velocity is within the operating range
+        for gear_num in range(1, len(self.vehicle.gear_ratios) + 1):
+            rpm = self.calculate_rpm_from_velocity(velocity_ms, gear_num)
+            # Use gear if RPM is between 50% and 95% of redline
+            if self.vehicle.redline_rpm * 0.50 <= rpm <= self.vehicle.redline_rpm * 0.95:
+                return gear_num
+        
+        # Default to highest gear if velocity is very high
+        return len(self.vehicle.gear_ratios)
 
 
 def calculate_performance_metrics(snapshots: List[TimeSnapshot]) -> dict:

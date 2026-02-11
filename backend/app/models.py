@@ -69,6 +69,8 @@ class SimulationParams(BaseModel):
     environment: EnvironmentConditions = Field(default_factory=EnvironmentConditions)
     timestep: float = 0.01
     max_time: float = 30.0
+    target_distance: Optional[float] = None  # Target distance in meters (None = no distance limit)
+    start_velocity: float = 0.0  # Starting velocity in m/s (for roll races)
 
 
 class TimeSnapshot(BaseModel):
