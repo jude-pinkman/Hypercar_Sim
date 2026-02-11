@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - HYPERCAR Performance Simulator</title>
+    <link rel="stylesheet" href="about-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=Barlow:wght@100;300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">HYPERCAR</span>
+            </div>
+            <div class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="index.html" class="nav-link">SIMULATOR</a>
+                <a href="about.html" class="nav-link active">ABOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Background -->
+    <div class="page-background">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="hero-container">
+            <div class="hero-badge">TECHNICAL DOCUMENTATION</div>
+            <h1 class="hero-title">
+                <span class="title-line">PHYSICS-BASED</span>
+                <span class="title-line gradient-text">SIMULATION</span>
+            </h1>
+            <p class="hero-subtitle">
+                Real-world vehicle dynamics powered by accurate physics calculations,
+                gear ratio databases, and environmental modeling
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+
+        <!-- Overview Section -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">01</span>
+                    <span class="heading-text">Project Overview</span>
+                </h2>
+                
+                <div class="content-grid">
+                    <div class="text-block">
+                        <p class="lead-text">
+                            The Hypercar Performance Simulator is a web-based platform that accurately 
+                            models the acceleration and top speed performance of extreme hypercars using 
+                            physics-based calculations.
+                        </p>
+                        <p>
+                            Unlike simplified racing games, this simulator accounts for real-world factors 
+                            including aerodynamic drag, rolling resistance, torque curves, transmission 
+                            losses, and environmental conditions. Every calculation is grounded in physics 
+                            principles and validated against real-world performance data.
+                        </p>
+                    </div>
+                    
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <div class="spec-label">Version</div>
+                            <div class="spec-value">2.0.0</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Backend</div>
+                            <div class="spec-value">FastAPI + Python</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Frontend</div>
+                            <div class="spec-value">Vanilla JavaScript</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Database</div>
+                            <div class="spec-value">CSV-Based</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Timestep</div>
+                            <div class="spec-value">0.01s (100Hz)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Physics Engine Section -->
+        <section class="content-section dark-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">02</span>
+                    <span class="heading-text">Physics Engine</span>
+                </h2>
+                
+                <div class="physics-grid">
+                    <div class="physics-card">
+                        <h3 class="physics-title">Force Calculations</h3>
+                        <div class="formula-block">
+                            <div class="formula">F<sub>net</sub> = F<sub>drive</sub> - F<sub>drag</sub> - F<sub>roll</sub></div>
+                        </div>
+                        <ul class="physics-list">
+                            <li><strong>Drive Force:</strong> Wheel torque ÷ tire radius</li>
+                            <li><strong>Drag Force:</strong> 0.5 × ρ × C<sub>d</sub> × A × v²</li>
+                            <li><strong>Rolling Resistance:</strong> C<sub>rr</sub> × m × g</li>
+                        </ul>
+                    </div>
+
+                    <div class="physics-card">
+                        <h3 class="physics-title">Gear Selection</h3>
+                        <div class="formula-block">
+                            <div class="formula">RPM = (v × 60 × ratio) ÷ (2π × r)</div>
+                        </div>
+                        <ul class="physics-list">
+                            <li><strong>Shift Strategy:</strong> Database-driven shift points</li>
+                            <li><strong>Validation:</strong> Minimum RPM check (50% redline)</li>
+                            <li><strong>Optimization:</strong> Maintains optimal powerband</li>
+                        </ul>
+                    </div>
+
+                    <div class="physics-card">
+                        <h3 class="physics-title">Environmental Effects</h3>
+                        <div class="formula-block">
+                            <div class="formula">ρ = P ÷ (R × T)</div>
+                        </div>
+                        <ul class="physics-list">
+                            <li><strong>Air Density:</strong> Temperature & altitude dependent</li>
+                            <li><strong>Pressure Adjustment:</strong> Barometric formula</li>
+                            <li><strong>Performance Impact:</strong> Affects drag & power</li>
+                        </ul>
+                    </div>
+
+                    <div class="physics-card">
+                        <h3 class="physics-title">Torque Modeling</h3>
+                        <div class="formula-block">
+                            <div class="formula">T<sub>wheel</sub> = T<sub>engine</sub> × ratio × η</div>
+                        </div>
+                        <ul class="physics-list">
+                            <li><strong>Torque Curve:</strong> 10-point interpolation</li>
+                            <li><strong>Hybrid System:</strong> Electric motor contribution</li>
+                            <li><strong>Efficiency:</strong> Transmission losses included</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Race Modes Section -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">03</span>
+                    <span class="heading-text">Race Modes</span>
+                </h2>
+                
+                <div class="modes-grid">
+                    <div class="mode-card">
+                        <div class="mode-icon">🏁</div>
+                        <h3 class="mode-name">Quarter Mile</h3>
+                        <div class="mode-distance">402.336m</div>
+                        <p class="mode-description">
+                            Classic drag race distance. Tests acceleration and shift strategy.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">🚀</div>
+                        <h3 class="mode-name">Half Mile</h3>
+                        <div class="mode-distance">804.672m</div>
+                        <p class="mode-description">
+                            Extended acceleration test. Requires optimal gear progression.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">⚡</div>
+                        <h3 class="mode-name">One Mile</h3>
+                        <div class="mode-distance">1,609m</div>
+                        <p class="mode-description">
+                            High-speed endurance. Tests top-end power and aerodynamics.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">📏</div>
+                        <h3 class="mode-name">Custom Distance</h3>
+                        <div class="mode-distance">User Defined</div>
+                        <p class="mode-description">
+                            Set any distance. Perfect for testing specific scenarios.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">🔄</div>
+                        <h3 class="mode-name">Lap Race</h3>
+                        <div class="mode-distance">Circuit</div>
+                        <p class="mode-description">
+                            Multiple laps on defined circuit. Consistent performance testing.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">⏱️</div>
+                        <h3 class="mode-name">Acceleration Zone</h3>
+                        <div class="mode-distance">X to Y km/h</div>
+                        <p class="mode-description">
+                            Test acceleration between two speeds. Example: 100-200 km/h.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">💨</div>
+                        <h3 class="mode-name">Roll Race</h3>
+                        <div class="mode-distance">60-200 mph</div>
+                        <p class="mode-description">
+                            Rolling start race. Tests mid-range acceleration power.
+                        </p>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">🔥</div>
+                        <h3 class="mode-name">Top Speed</h3>
+                        <div class="mode-distance">V<sub>max</sub></div>
+                        <p class="mode-description">
+                            Maximum velocity test. Runs until drag equals drive force.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vehicle Database Section -->
+        <section class="content-section dark-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">04</span>
+                    <span class="heading-text">Vehicle Database</span>
+                </h2>
+                
+                <div class="database-content">
+                    <div class="text-block">
+                        <p class="lead-text">
+                            Vehicle specifications are stored in a CSV database, making it easy to add 
+                            new vehicles or modify existing ones without code changes.
+                        </p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-title">hypercar_data.csv</span>
+                            <span class="code-lang">CSV</span>
+                        </div>
+                        <pre class="code-content"><code>Car,Gear,Ratio,Redline_RPM,Top_Speed_Redline_mph,Shift_Point_mph,Speed_Range
+Koenigsegg Jesko Absolut,1,3.85,8500,61,61,0-61 mph
+Koenigsegg Jesko Absolut,2,2.67,8500,88,88,61-88 mph
+Koenigsegg Jesko Absolut,3,1.92,8500,122,122,88-122 mph
+...</code></pre>
+                    </div>
+
+                    <div class="vehicle-specs">
+                        <h3 class="specs-title">Included Hypercars</h3>
+                        
+                        <div class="vehicle-spec-card">
+                            <div class="spec-header">
+                                <h4>Koenigsegg Jesko Absolut</h4>
+                                <div class="spec-badge">1,195 kW</div>
+                            </div>
+                            <div class="spec-details">
+                                <div class="spec-row">
+                                    <span>Mass:</span>
+                                    <span>1,420 kg</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Drag Coefficient:</span>
+                                    <span>0.278 C<sub>d</sub></span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Gears:</span>
+                                    <span>9-speed LST</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Redline:</span>
+                                    <span>8,500 RPM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vehicle-spec-card">
+                            <div class="spec-header">
+                                <h4>Bugatti Chiron Super Sport 300+</h4>
+                                <div class="spec-badge">1,177 kW</div>
+                            </div>
+                            <div class="spec-details">
+                                <div class="spec-row">
+                                    <span>Mass:</span>
+                                    <span>1,978 kg</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Drag Coefficient:</span>
+                                    <span>0.35 C<sub>d</sub></span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Gears:</span>
+                                    <span>7-speed DCT</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Redline:</span>
+                                    <span>6,700 RPM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vehicle-spec-card">
+                            <div class="spec-header">
+                                <h4>Hennessey Venom F5</h4>
+                                <div class="spec-badge">1,355 kW</div>
+                            </div>
+                            <div class="spec-details">
+                                <div class="spec-row">
+                                    <span>Mass:</span>
+                                    <span>1,360 kg</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Drag Coefficient:</span>
+                                    <span>0.33 C<sub>d</sub></span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Gears:</span>
+                                    <span>3-speed auto</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span>Redline:</span>
+                                    <span>8,500 RPM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Stack Section -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">05</span>
+                    <span class="heading-text">Technical Stack</span>
+                </h2>
+                
+                <div class="stack-grid">
+                    <div class="stack-card">
+                        <h3 class="stack-title">Backend</h3>
+                        <ul class="stack-list">
+                            <li><strong>FastAPI</strong> — High-performance Python web framework</li>
+                            <li><strong>Pydantic</strong> — Data validation and serialization</li>
+                            <li><strong>Uvicorn</strong> — ASGI server for production</li>
+                            <li><strong>CSV Database</strong> — Simple, editable data storage</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-card">
+                        <h3 class="stack-title">Frontend</h3>
+                        <ul class="stack-list">
+                            <li><strong>Vanilla JavaScript</strong> — No framework dependencies</li>
+                            <li><strong>Canvas API</strong> — Real-time race visualization</li>
+                            <li><strong>CSS Animations</strong> — Smooth UI transitions</li>
+                            <li><strong>Responsive Design</strong> — Mobile-friendly layout</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-card">
+                        <h3 class="stack-title">Physics Engine</h3>
+                        <ul class="stack-list">
+                            <li><strong>Euler Integration</strong> — Timestep-based simulation</li>
+                            <li><strong>Torque Interpolation</strong> — Realistic power curves</li>
+                            <li><strong>Gear Management</strong> — CSV-driven shift logic</li>
+                            <li><strong>Environmental Modeling</strong> — Air density calculations</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-card">
+                        <h3 class="stack-title">API Endpoints</h3>
+                        <ul class="stack-list">
+                            <li><strong>GET /api/vehicles</strong> — List available hypercars</li>
+                            <li><strong>POST /api/simulate/drag</strong> — Run simulation</li>
+                            <li><strong>POST /api/reload</strong> — Reload CSV database</li>
+                            <li><strong>GET /api/health</strong> — System status check</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup Instructions Section -->
+        <section class="content-section dark-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">06</span>
+                    <span class="heading-text">Setup & Usage</span>
+                </h2>
+                
+                <div class="setup-content">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Install Dependencies</h3>
+                            <div class="code-block">
+                                <pre class="code-content"><code>pip install fastapi uvicorn pydantic</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Place CSV Database</h3>
+                            <div class="code-block">
+                                <pre class="code-content"><code>backend/data/hypercar_data.csv</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Start Server</h3>
+                            <div class="code-block">
+                                <pre class="code-content"><code>cd backend
+uvicorn app.main:app --reload --port 8000</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Access Simulator</h3>
+                            <div class="code-block">
+                                <pre class="code-content"><code>http://localhost:8000/index.html</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-container">
+                <h2 class="cta-title">Ready to Experience Hypercar Performance?</h2>
+                <p class="cta-description">
+                    Launch the simulator and witness physics-accurate acceleration modeling
+                </p>
+                <a href="index.html" class="btn-cta">
+                    <span>START SIMULATOR</span>
+                    <span class="cta-arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">HYPERCAR</span>
+                </div>
+                <p class="footer-tagline">Physics-Based Performance Simulator v2.0</p>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">NAVIGATION</h4>
+                <a href="home.html" class="footer-link">Home</a>
+                <a href="index.html" class="footer-link">Simulator</a>
+                <a href="about.html" class="footer-link">About</a>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">DOCUMENTATION</h4>
+                <div class="footer-text">Setup Guide</div>
+                <div class="footer-text">API Reference</div>
+                <div class="footer-text">Physics Engine</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Hypercar Simulator | CSV Database-Driven Vehicle Dynamics</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

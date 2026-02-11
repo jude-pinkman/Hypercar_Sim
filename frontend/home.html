@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYPERCAR - Ultimate Performance Simulator</title>
+    <link rel="stylesheet" href="home-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=Barlow:wght@100;300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">HYPERCAR</span>
+            </div>
+            <div class="nav-links">
+                <a href="home.html" class="nav-link active">HOME</a>
+                <a href="index.html" class="nav-link">SIMULATOR</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="hero-background">
+        <div class="grid-lines"></div>
+        <div class="speed-lines"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-text">PERFORMANCE SIMULATOR v2.0</span>
+            </div>
+            
+            <h1 class="hero-title">
+                <span class="title-line" data-reveal="1">PUSH THE</span>
+                <span class="title-line title-highlight" data-reveal="2">LIMITS</span>
+                <span class="title-line" data-reveal="3">OF SPEED</span>
+            </h1>
+            
+            <p class="hero-description">
+                Experience the raw power of the world's most extreme hypercars through 
+                physics-accurate simulation. Every acceleration curve. Every gear shift. 
+                Every millisecond matters.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="index.html" class="btn btn-primary-large">
+                    <span class="btn-text">LAUNCH SIMULATOR</span>
+                    <span class="btn-icon">→</span>
+                </a>
+                <a href="about.html" class="btn btn-secondary-large">
+                    <span class="btn-text">LEARN MORE</span>
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Race Modes</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Hypercars</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">km/h Top Speed</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">&lt;2s</div>
+                    <div class="stat-label">0-100 km/h</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicle Showcase -->
+        <div class="hero-visual">
+            <div class="vehicle-cards">
+                <div class="vehicle-card" data-vehicle="1">
+                    <div class="vehicle-name">KOENIGSEGG JESKO ABSOLUT</div>
+                    <div class="vehicle-stat">1,195 kW</div>
+                    <div class="vehicle-glow"></div>
+                </div>
+                <div class="vehicle-card" data-vehicle="2">
+                    <div class="vehicle-name">BUGATTI CHIRON SS 300+</div>
+                    <div class="vehicle-stat">1,177 kW</div>
+                    <div class="vehicle-glow"></div>
+                </div>
+                <div class="vehicle-card" data-vehicle="3">
+                    <div class="vehicle-name">HENNESSEY VENOM F5</div>
+                    <div class="vehicle-stat">1,355 kW</div>
+                    <div class="vehicle-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2 class="section-title">PRECISION ENGINEERING</h2>
+            <p class="section-subtitle">Physics-based simulation powered by real-world data</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏁</div>
+                <h3 class="feature-title">8 Race Modes</h3>
+                <p class="feature-description">
+                    Quarter mile, half mile, 1 mile, custom distance, lap races, 
+                    acceleration zones, roll races, and top speed challenges
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3 class="feature-title">Real Physics</h3>
+                <p class="feature-description">
+                    Aerodynamic drag, rolling resistance, torque curves, gear ratios,
+                    and transmission losses calculated in real-time
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌡️</div>
+                <h3 class="feature-title">Environment Control</h3>
+                <p class="feature-description">
+                    Adjust temperature and altitude to see how atmospheric conditions
+                    affect air density and vehicle performance
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Live Telemetry</h3>
+                <p class="feature-description">
+                    Real-time speedometers, distance tracking, RPM monitoring,
+                    and comprehensive performance metrics
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3 class="feature-title">CSV Database</h3>
+                <p class="feature-description">
+                    Easily modify vehicle specs, gear ratios, and shift points
+                    through simple CSV file editing
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Instant Comparison</h3>
+                <p class="feature-description">
+                    Race multiple hypercars simultaneously and compare their
+                    acceleration, top speed, and race times
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">READY TO RACE?</h2>
+            <p class="cta-description">
+                Select your hypercar, configure the race parameters, and experience
+                the most accurate drag race simulation on the web
+            </p>
+            <a href="index.html" class="btn btn-primary-large">
+                <span class="btn-text">START SIMULATION</span>
+                <span class="btn-icon">→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">HYPERCAR</span>
+                </div>
+                <p class="footer-tagline">Ultimate Performance Simulator</p>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">NAVIGATION</h4>
+                <a href="home.html" class="footer-link">Home</a>
+                <a href="index.html" class="footer-link">Simulator</a>
+                <a href="about.html" class="footer-link">About</a>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">TECHNOLOGY</h4>
+                <div class="footer-text">FastAPI Backend</div>
+                <div class="footer-text">Physics Engine</div>
+                <div class="footer-text">Real-time Rendering</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Hypercar Simulator v2.0 | Physics-Based Performance Analysis</p>
+        </div>
+    </footer>
+
+    <script src="home-script.js"></script>
+</body>
+
+</html>

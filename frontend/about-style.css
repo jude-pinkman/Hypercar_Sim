@@ -1,0 +1,816 @@
+/* ==========================================
+   HYPERCAR ABOUT PAGE STYLES
+   Technical Documentation Aesthetic
+   ========================================== */
+
+:root {
+    --primary: #00FF9D;
+    --primary-dim: #00CC7D;
+    --secondary: #FFD700;
+    --accent: #FF0066;
+    --bg-dark: #0A0A0A;
+    --bg-darker: #050505;
+    --surface: #151515;
+    --surface-light: #1F1F1F;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --text-tertiary: #606060;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-bright: rgba(0, 255, 157, 0.3);
+    
+    --font-display: 'Syncopate', sans-serif;
+    --font-title: 'Teko', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg-darker);
+    color: var(--text-primary);
+    line-height: 1.7;
+}
+
+/* ==========================================
+   NAVIGATION
+   ========================================== */
+
+.main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 10px var(--primary));
+}
+
+.logo-text {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* ==========================================
+   BACKGROUND
+   ========================================== */
+
+.page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.grid-overlay {
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 255, 157, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+
+.about-hero {
+    position: relative;
+    padding: 12rem 2rem 6rem;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0, 255, 157, 0.03) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    z-index: 1;
+}
+
+.hero-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(0, 255, 157, 0.1);
+    border: 1px solid var(--primary);
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+}
+
+.hero-title {
+    font-family: var(--font-title);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.title-line {
+    display: block;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* ==========================================
+   CONTENT SECTIONS
+   ========================================== */
+
+.content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.content-section {
+    padding: 6rem 2rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.dark-section {
+    background: var(--bg-dark);
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-bright);
+}
+
+.heading-number {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.heading-text {
+    font-family: var(--font-title);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* ==========================================
+   CONTENT GRID
+   ========================================== */
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.text-block {
+    color: var(--text-secondary);
+}
+
+.lead-text {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.text-block p {
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+}
+
+.spec-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.spec-item:last-child {
+    border-bottom: none;
+}
+
+.spec-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+}
+
+.spec-value {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--primary);
+}
+
+/* ==========================================
+   PHYSICS CARDS
+   ========================================== */
+
+.physics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.physics-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.physics-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 255, 157, 0.1);
+}
+
+.physics-title {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+}
+
+.formula-block {
+    background: rgba(0, 255, 157, 0.05);
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.formula {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.physics-list {
+    list-style: none;
+}
+
+.physics-list li {
+    padding: 0.75rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--text-secondary);
+}
+
+.physics-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+}
+
+.physics-list strong {
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   RACE MODES
+   ========================================== */
+
+.modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.mode-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.mode-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.mode-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px var(--primary));
+}
+
+.mode-name {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.mode-distance {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.mode-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   DATABASE CONTENT
+   ========================================== */
+
+.database-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.code-block {
+    background: var(--bg-darker);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.code-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--primary);
+}
+
+.code-lang {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+}
+
+.code-content {
+    padding: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    overflow-x: auto;
+}
+
+.code-content code {
+    color: var(--text-secondary);
+}
+
+/* ==========================================
+   VEHICLE SPECS
+   ========================================== */
+
+.vehicle-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.specs-title {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.vehicle-spec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.spec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.spec-header h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+}
+
+.spec-badge {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.spec-details {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.spec-row span:first-child {
+    font-size: 0.9rem;
+}
+
+.spec-row span:last-child {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   TECHNICAL STACK
+   ========================================== */
+
+.stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.stack-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.stack-title {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+}
+
+.stack-list {
+    list-style: none;
+}
+
+.stack-list li {
+    padding: 0.75rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.stack-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.stack-list strong {
+    color: var(--text-primary);
+}
+
+/* ==========================================
+   SETUP STEPS
+   ========================================== */
+
+.setup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.step-card {
+    display: flex;
+    gap: 2rem;
+    align-items: start;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 157, 0.1);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    font-family: var(--font-title);
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================
+   CTA SECTION
+   ========================================== */
+
+.cta-section {
+    padding: 8rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.05), rgba(255, 215, 0, 0.05));
+    border-top: 1px solid var(--border);
+}
+
+.cta-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-family: var(--font-title);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.cta-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+}
+
+.btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 3rem;
+    background: var(--primary);
+    color: var(--bg-dark);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+}
+
+.btn-cta:hover {
+    box-shadow: 0 0 50px rgba(0, 255, 157, 0.5);
+    transform: translateY(-3px);
+}
+
+.cta-arrow {
+    font-size: 1.5rem;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.main-footer {
+    padding: 4rem 2rem 2rem;
+    background: var(--bg-darker);
+    border-top: 1px solid var(--border);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-tagline {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer-heading {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+}
+
+.footer-link {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--primary);
+}
+
+.footer-text {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 968px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-heading {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .heading-number {
+        font-size: 2rem;
+    }
+    
+    .heading-text {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-hero {
+        padding: 8rem 1.5rem 4rem;
+    }
+    
+    .content-section {
+        padding: 4rem 1.5rem;
+    }
+    
+    .nav-container {
+        padding: 1rem;
+    }
+    
+    .nav-links {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        font-size: 0.65rem;
+    }
+    
+    .modes-grid,
+    .physics-grid,
+    .stack-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
