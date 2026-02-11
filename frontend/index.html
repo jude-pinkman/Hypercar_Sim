@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hypercar Performance Simulator</title>
+    <title>Hypercar Performance Simulator v2.0</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -26,12 +28,12 @@
                     <div class="logo-icon">⚡</div>
                     <div class="logo-text">
                         <h1>HYPERCAR</h1>
-                        <span>Performance Simulator</span>
+                        <span>Performance Simulator v2.0</span>
                     </div>
                 </div>
             </div>
-            
-            <!-- Mode Tabs -->
+
+            <!-- Mode Tabs (8 modes) -->
             <nav class="mode-tabs">
                 <button class="mode-tab active" data-mode="quarter-mile">
                     <span class="tab-icon">🏁</span>
@@ -48,6 +50,21 @@
                     <span class="tab-label">1 Mile</span>
                     <span class="tab-distance">1609m</span>
                 </button>
+                <button class="mode-tab" data-mode="custom-distance">
+                    <span class="tab-icon">📏</span>
+                    <span class="tab-label">Custom</span>
+                    <span class="tab-distance">Any</span>
+                </button>
+                <button class="mode-tab" data-mode="lap-race">
+                    <span class="tab-icon">🔄</span>
+                    <span class="tab-label">Laps</span>
+                    <span class="tab-distance">Circuit</span>
+                </button>
+                <button class="mode-tab" data-mode="acceleration-zone">
+                    <span class="tab-icon">⏱️</span>
+                    <span class="tab-label">Accel Zone</span>
+                    <span class="tab-distance">X-Y</span>
+                </button>
                 <button class="mode-tab" data-mode="roll-race">
                     <span class="tab-icon">💨</span>
                     <span class="tab-label">Roll Race</span>
@@ -59,7 +76,7 @@
                     <span class="tab-distance">Vmax</span>
                 </button>
             </nav>
-            
+
             <div class="header-right">
                 <div class="status-indicator">
                     <span class="status-dot"></span>
@@ -140,6 +157,27 @@
                         <span class="btn-icon">↻</span>
                         <span class="btn-text">Reset</span>
                     </button>
+                </div>
+
+                <!-- Keyboard Shortcuts Help -->
+                <div class="card help-card">
+                    <div class="card-header">
+                        <h3>Keyboard Shortcuts</h3>
+                    </div>
+                    <div class="card-content shortcuts-list">
+                        <div class="shortcut-item">
+                            <kbd>1-8</kbd>
+                            <span>Switch modes</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Space</kbd>
+                            <span>Start simulation</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>R</kbd>
+                            <span>Reset</span>
+                        </div>
+                    </div>
                 </div>
 
             </aside>

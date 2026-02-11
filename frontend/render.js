@@ -100,7 +100,7 @@ export class RaceRenderer {
     drawDistanceMarkers(maxDistance) {
         // Dynamic markers based on race distance
         let markers = [];
-        
+
         if (maxDistance <= 500) {
             // Quarter mile
             markers = [
