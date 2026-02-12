@@ -302,7 +302,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **GitHub**: [@jude-pinkman](https://github.com/jude-pinkman)
 - **Email**: judesahai0@gmail.com
-- **Issues**: [GitHub Issues](https://github.com/yourusername/Hypercar_Sim/issues)
+- **Issues**: [GitHub Issues](https://github.com/jude-pinkman/Hypercar_Sim/issues)
 
 ---
 
