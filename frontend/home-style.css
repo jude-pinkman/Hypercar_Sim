@@ -16,7 +16,7 @@
     --text-primary: #FFFFFF;
     --text-secondary: #A0A0A0;
     --border: rgba(255, 255, 255, 0.1);
-    
+
     /* Typography */
     --font-display: 'Syncopate', sans-serif;
     --font-title: 'Teko', sans-serif;
@@ -140,7 +140,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
         linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
@@ -151,6 +151,7 @@ body {
     0% {
         transform: translate(0, 0);
     }
+
     100% {
         transform: translate(50px, 50px);
     }
@@ -162,19 +163,22 @@ body {
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        var(--primary) 50%, 
-        transparent 100%);
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--primary) 50%,
+            transparent 100%);
     opacity: 0;
     animation: speedLinesPulse 3s ease-in-out infinite;
 }
 
 @keyframes speedLinesPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0;
         transform: translateX(-100%);
     }
+
     50% {
         opacity: 0.3;
         transform: translateX(100%);
@@ -216,12 +220,16 @@ body {
 }
 
 @keyframes orbFloat {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(0, 0) scale(1);
     }
+
     33% {
         transform: translate(50px, -50px) scale(1.1);
     }
+
     66% {
         transform: translate(-30px, 30px) scale(0.9);
     }
@@ -295,6 +303,7 @@ body {
         opacity: 0;
         transform: translateY(40px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -341,6 +350,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -505,6 +515,7 @@ body {
         opacity: 0;
         transform: translateX(50px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -729,26 +740,26 @@ body {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .hero-content {
         max-width: 100%;
     }
-    
+
     .hero-cta {
         justify-content: center;
         flex-wrap: wrap;
     }
-    
+
     .stats-bar {
         flex-wrap: wrap;
         gap: 1.5rem;
         justify-content: center;
     }
-    
+
     .vehicle-cards {
         margin-top: 3rem;
     }
-    
+
     .nav-links {
         gap: 1.5rem;
     }
@@ -758,38 +769,38 @@ body {
     .nav-container {
         padding: 1rem;
     }
-    
+
     .nav-links {
         gap: 1rem;
     }
-    
+
     .nav-link {
         font-size: 0.65rem;
     }
-    
+
     .hero {
         padding: 6rem 1.5rem 3rem;
     }
-    
+
     .hero-cta {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn {
         width: 100%;
         justify-content: center;
     }
-    
+
     .stats-bar {
         flex-direction: column;
         gap: 1.5rem;
     }
-    
+
     .stat-divider {
         display: none;
     }
-    
+
     .features,
     .cta-section {
         padding: 4rem 1.5rem;

@@ -21,9 +21,10 @@
     <!-- Main App Container -->
     <div class="app-container">
 
-        <!-- Header with Mode Tabs -->
-        <header class="app-header">
-            <div class="header-left">
+        <!-- NAVIGATION STRUCTURE -->
+        <header class="main-navigation">
+            <!-- Primary Navigation Bar -->
+            <nav class="primary-nav">
                 <div class="logo-container">
                     <div class="logo-icon">⚡</div>
                     <div class="logo-text">
@@ -31,10 +32,21 @@
                         <span>Performance Simulator v2.0</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Mode Tabs (8 modes) -->
-            <nav class="mode-tabs">
+                <div class="nav-menu">
+                    <a href="home.html" class="nav-link">HOME</a>
+                    <a href="index.html" class="nav-link active">SIMULATOR</a>
+                    <a href="about.html" class="nav-link">ABOUT</a>
+                </div>
+
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Ready</span>
+                </div>
+            </nav>
+
+            <!-- Mode Tabs Row (Second Row) -->
+            <nav class="mode-tabs-nav">
                 <button class="mode-tab active" data-mode="quarter-mile">
                     <span class="tab-icon">🏁</span>
                     <span class="tab-label">1/4 Mile</span>
@@ -76,18 +88,6 @@
                     <span class="tab-distance">Vmax</span>
                 </button>
             </nav>
-
-            <div class="header-right">
-                <nav class="header-nav">
-                    <a href="home.html" class="header-nav-link">HOME</a>
-                    <a href="index.html" class="header-nav-link active">SIMULATOR</a>
-                    <a href="about.html" class="header-nav-link">ABOUT</a>
-                </nav>
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Ready</span>
-                </div>
-            </div>
         </header>
 
         <!-- Main Content -->

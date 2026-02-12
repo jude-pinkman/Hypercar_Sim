@@ -104,25 +104,27 @@ body {
     padding: var(--spacing-lg);
 }
 
-/* ==================== HEADER WITH TABS ==================== */
-.app-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-xl);
+/* ==================== NEW NAVIGATION STRUCTURE ==================== */
+.main-navigation {
     margin-bottom: var(--spacing-xl);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: var(--spacing-md) var(--spacing-lg);
     backdrop-filter: blur(20px);
     box-shadow: var(--shadow-card);
+    overflow: hidden;
 }
 
-.header-left {
-    flex-shrink: 0;
+/* Primary Navigation Bar - First Row */
+.primary-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-bottom: 1px solid var(--border-color);
 }
 
+/* Logo Styles */
 .logo-container {
     display: flex;
     align-items: center;
@@ -130,7 +132,7 @@ body {
 }
 
 .logo-icon {
-    font-size: 48px;
+    font-size: 40px;
     line-height: 1;
     filter: drop-shadow(0 0 20px var(--color-primary-glow));
     animation: pulse 2s ease-in-out infinite;
@@ -152,39 +154,132 @@ body {
 
 .logo-text h1 {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 900;
     letter-spacing: 3px;
     background: linear-gradient(135deg, var(--color-primary), #00CCFF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0;
 }
 
 .logo-text span {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--text-tertiary);
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
 }
 
-/* ==================== MODE TABS ==================== */
-.mode-tabs {
+/* Navigation Menu */
+.nav-menu {
     display: flex;
-    gap: var(--spacing-xs);
-    flex: 1;
-    justify-content: center;
-    max-width: 900px;
+    gap: 3rem;
+    align-items: center;
 }
 
+.nav-link {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--color-primary);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Status Indicator */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: rgba(0, 255, 157, 0.05);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 8px var(--color-primary);
+    }
+
+    50% {
+        opacity: 0.6;
+        box-shadow: 0 0 4px var(--color-primary);
+    }
+}
+
+.status-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Mode Tabs Navigation - Second Row */
+.mode-tabs-nav {
+    display: flex;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-lg);
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    flex-wrap: wrap;
+}
+
+.mode-tabs-nav.hidden {
+    display: none;
+}
+
+
+
+
+
+/* ==================== MODE TABS ==================== */
 .mode-tab {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 10px 14px;
     background: transparent;
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -195,6 +290,8 @@ body {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    flex: 0 1 auto;
+    min-width: 90px;
 }
 
 .mode-tab::before {
@@ -257,50 +354,8 @@ body {
     color: var(--color-primary);
 }
 
-/* ==================== STATUS INDICATOR ==================== */
-.header-right {
-    flex-shrink: 0;
-}
 
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-md);
-    background: rgba(0, 255, 157, 0.05);
-    border: 1px solid var(--border-glow);
-    border-radius: 20px;
-}
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--color-primary);
-    border-radius: 50%;
-    animation: statusPulse 2s ease-in-out infinite;
-}
-
-@keyframes statusPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-        box-shadow: 0 0 8px var(--color-primary);
-    }
-
-    50% {
-        opacity: 0.6;
-        box-shadow: 0 0 4px var(--color-primary);
-    }
-}
-
-.status-text {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-primary);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
 
 /* ==================== MAIN GRID ==================== */
 .main-grid {

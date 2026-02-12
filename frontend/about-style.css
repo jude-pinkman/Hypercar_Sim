@@ -17,7 +17,7 @@
     --text-tertiary: #606060;
     --border: rgba(255, 255, 255, 0.1);
     --border-bright: rgba(0, 255, 157, 0.3);
-    
+
     --font-display: 'Syncopate', sans-serif;
     --font-title: 'Teko', sans-serif;
     --font-body: 'Barlow', sans-serif;
@@ -137,7 +137,7 @@ body {
 .grid-overlay {
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
         linear-gradient(rgba(0, 255, 157, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 157, 0.02) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -767,16 +767,16 @@ body {
     .content-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .section-heading {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .heading-number {
         font-size: 2rem;
     }
-    
+
     .heading-text {
         font-size: 2rem;
     }
@@ -786,29 +786,29 @@ body {
     .about-hero {
         padding: 8rem 1.5rem 4rem;
     }
-    
+
     .content-section {
         padding: 4rem 1.5rem;
     }
-    
+
     .nav-container {
         padding: 1rem;
     }
-    
+
     .nav-links {
         gap: 1rem;
     }
-    
+
     .nav-link {
         font-size: 0.65rem;
     }
-    
+
     .modes-grid,
     .physics-grid,
     .stack-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .step-card {
         flex-direction: column;
         gap: 1rem;
