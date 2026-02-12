@@ -37,14 +37,14 @@
     <!-- Hero Section -->
     <section class="about-hero">
         <div class="hero-container">
-            <div class="hero-badge">TECHNICAL DOCUMENTATION</div>
+            <div class="hero-badge">TECHNICAL DOCUMENTATION v2.0</div>
             <h1 class="hero-title">
                 <span class="title-line">PHYSICS-BASED</span>
                 <span class="title-line gradient-text">SIMULATION</span>
             </h1>
             <p class="hero-subtitle">
                 Real-world vehicle dynamics powered by accurate physics calculations,
-                gear ratio databases, and environmental modeling
+                gear ratio databases, environmental modeling, and advanced tuning system
             </p>
         </div>
     </section>
@@ -65,12 +65,13 @@
                         <p class="lead-text">
                             The Hypercar Performance Simulator is a web-based platform that accurately
                             models the acceleration and top speed performance of extreme hypercars using
-                            physics-based calculations.
+                            physics-based calculations. Version 2.0 features 30+ vehicles and an advanced tuning system.
                         </p>
                         <p>
                             Unlike simplified racing games, this simulator accounts for real-world factors
                             including aerodynamic drag, rolling resistance, torque curves, transmission
-                            losses, and environmental conditions. Every calculation is grounded in physics
+                            losses, environmental conditions, and hybrid/electric powertrains. Every calculation is
+                            grounded in physics
                             principles and validated against real-world performance data.
                         </p>
                     </div>
@@ -79,6 +80,10 @@
                         <div class="spec-item">
                             <div class="spec-label">Version</div>
                             <div class="spec-value">2.0.0</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Vehicles</div>
+                            <div class="spec-value">30+ Hypercars</div>
                         </div>
                         <div class="spec-item">
                             <div class="spec-label">Backend</div>
@@ -173,194 +178,220 @@
                 <div class="modes-grid">
                     <div class="mode-card">
                         <div class="mode-icon">🏁</div>
-                        <h3 class="mode-name">Quarter Mile</h3>
-                        <div class="mode-distance">402.336m</div>
-                        <p class="mode-description">
-                            Classic drag race distance. Tests acceleration and shift strategy.
-                        </p>
+                        <h3 class="mode-title">Quarter Mile</h3>
+                        <p class="mode-description">Classic 402.336m drag race</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">🚀</div>
-                        <h3 class="mode-name">Half Mile</h3>
-                        <div class="mode-distance">804.672m</div>
-                        <p class="mode-description">
-                            Extended acceleration test. Requires optimal gear progression.
-                        </p>
+                        <h3 class="mode-title">Half Mile</h3>
+                        <p class="mode-description">804.672m high-speed challenge</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">⚡</div>
-                        <h3 class="mode-name">One Mile</h3>
-                        <div class="mode-distance">1,609m</div>
-                        <p class="mode-description">
-                            High-speed endurance. Tests top-end power and aerodynamics.
-                        </p>
+                        <h3 class="mode-title">One Mile</h3>
+                        <p class="mode-description">1,609.344m ultimate test</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">📏</div>
-                        <h3 class="mode-name">Custom Distance</h3>
-                        <div class="mode-distance">User Defined</div>
-                        <p class="mode-description">
-                            Set any distance. Perfect for testing specific scenarios.
-                        </p>
+                        <h3 class="mode-title">Custom Distance</h3>
+                        <p class="mode-description">Set any distance you want</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">🔄</div>
-                        <h3 class="mode-name">Lap Race</h3>
-                        <div class="mode-distance">Circuit</div>
-                        <p class="mode-description">
-                            Multiple laps on defined circuit. Consistent performance testing.
-                        </p>
+                        <h3 class="mode-title">Lap Race</h3>
+                        <p class="mode-description">Multiple laps on circuit</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">⏱️</div>
-                        <h3 class="mode-name">Acceleration Zone</h3>
-                        <div class="mode-distance">X to Y km/h</div>
-                        <p class="mode-description">
-                            Test acceleration between two speeds. Example: 100-200 km/h.
-                        </p>
+                        <h3 class="mode-title">Acceleration Zone</h3>
+                        <p class="mode-description">0-100, 100-200, custom ranges</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">💨</div>
-                        <h3 class="mode-name">Roll Race</h3>
-                        <div class="mode-distance">60-200 mph</div>
-                        <p class="mode-description">
-                            Rolling start race. Tests mid-range acceleration power.
-                        </p>
+                        <h3 class="mode-title">Roll Race</h3>
+                        <p class="mode-description">60-200 km/h flying start</p>
                     </div>
 
                     <div class="mode-card">
                         <div class="mode-icon">🔥</div>
-                        <h3 class="mode-name">Top Speed</h3>
-                        <div class="mode-distance">V<sub>max</sub></div>
-                        <p class="mode-description">
-                            Maximum velocity test. Runs until drag equals drive force.
-                        </p>
+                        <h3 class="mode-title">Top Speed</h3>
+                        <p class="mode-description">Maximum velocity run</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Vehicle Database Section -->
+        <!-- Vehicle Fleet Section -->
         <section class="content-section dark-section">
             <div class="section-container">
                 <h2 class="section-heading">
                     <span class="heading-number">04</span>
-                    <span class="heading-text">Vehicle Database</span>
+                    <span class="heading-text">Vehicle Fleet (30+)</span>
                 </h2>
 
-                <div class="database-content">
-                    <div class="text-block">
-                        <p class="lead-text">
-                            Vehicle specifications are stored in a CSV database, making it easy to add
-                            new vehicles or modify existing ones without code changes.
-                        </p>
+                <div class="fleet-grid">
+                    <div class="fleet-category">
+                        <h3>Koenigsegg (4 vehicles)</h3>
+                        <ul>
+                            <li>Jesko Absolut</li>
+                            <li>Jesko Attack</li>
+                            <li>Regera (Hybrid)</li>
+                            <li>Agera RS</li>
+                        </ul>
                     </div>
 
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-title">hypercar_data.csv</span>
-                            <span class="code-lang">CSV</span>
-                        </div>
-                        <pre class="code-content"><code>Car,Gear,Ratio,Redline_RPM,Top_Speed_Redline_mph,Shift_Point_mph,Speed_Range
-Koenigsegg Jesko Absolut,1,3.85,8500,61,61,0-61 mph
-Koenigsegg Jesko Absolut,2,2.67,8500,88,88,61-88 mph
-Koenigsegg Jesko Absolut,3,1.92,8500,122,122,88-122 mph
-...</code></pre>
+                    <div class="fleet-category">
+                        <h3>Bugatti (3 vehicles)</h3>
+                        <ul>
+                            <li>Chiron Super Sport 300+</li>
+                            <li>Bolide</li>
+                            <li>Veyron Super Sport</li>
+                        </ul>
                     </div>
 
-                    <div class="vehicle-specs">
-                        <h3 class="specs-title">Included Hypercars</h3>
+                    <div class="fleet-category">
+                        <h3>McLaren (5 vehicles)</h3>
+                        <ul>
+                            <li>Speedtail (Hybrid)</li>
+                            <li>P1 (Hybrid)</li>
+                            <li>Senna</li>
+                            <li>765LT</li>
+                            <li>720S</li>
+                        </ul>
+                    </div>
 
-                        <div class="vehicle-spec-card">
-                            <div class="spec-header">
-                                <h4>Koenigsegg Jesko Absolut</h4>
-                                <div class="spec-badge">1,195 kW</div>
-                            </div>
-                            <div class="spec-details">
-                                <div class="spec-row">
-                                    <span>Mass:</span>
-                                    <span>1,420 kg</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Drag Coefficient:</span>
-                                    <span>0.278 C<sub>d</sub></span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Gears:</span>
-                                    <span>9-speed LST</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Redline:</span>
-                                    <span>8,500 RPM</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="fleet-category">
+                        <h3>Ferrari (4 vehicles)</h3>
+                        <ul>
+                            <li>SF90 Stradale (Hybrid)</li>
+                            <li>LaFerrari (Hybrid)</li>
+                            <li>F8 Tributo</li>
+                            <li>812 Superfast</li>
+                        </ul>
+                    </div>
 
-                        <div class="vehicle-spec-card">
-                            <div class="spec-header">
-                                <h4>Bugatti Chiron Super Sport 300+</h4>
-                                <div class="spec-badge">1,177 kW</div>
-                            </div>
-                            <div class="spec-details">
-                                <div class="spec-row">
-                                    <span>Mass:</span>
-                                    <span>1,978 kg</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Drag Coefficient:</span>
-                                    <span>0.35 C<sub>d</sub></span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Gears:</span>
-                                    <span>7-speed DCT</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Redline:</span>
-                                    <span>6,700 RPM</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="fleet-category">
+                        <h3>Lamborghini (4 vehicles)</h3>
+                        <ul>
+                            <li>Revuelto (Hybrid)</li>
+                            <li>Aventador SVJ</li>
+                            <li>Sian FKP 37 (Hybrid)</li>
+                            <li>Huracan STO</li>
+                        </ul>
+                    </div>
 
-                        <div class="vehicle-spec-card">
-                            <div class="spec-header">
-                                <h4>Hennessey Venom F5</h4>
-                                <div class="spec-badge">1,355 kW</div>
-                            </div>
-                            <div class="spec-details">
-                                <div class="spec-row">
-                                    <span>Mass:</span>
-                                    <span>1,360 kg</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Drag Coefficient:</span>
-                                    <span>0.33 C<sub>d</sub></span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Gears:</span>
-                                    <span>3-speed auto</span>
-                                </div>
-                                <div class="spec-row">
-                                    <span>Redline:</span>
-                                    <span>8,500 RPM</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="fleet-category">
+                        <h3>Electric Hypercars (4)</h3>
+                        <ul>
+                            <li>Rimac Nevera</li>
+                            <li>Lotus Evija</li>
+                            <li>Aspark Owl</li>
+                            <li>Pininfarina Battista</li>
+                        </ul>
+                    </div>
+
+                    <div class="fleet-category">
+                        <h3>Porsche (3 vehicles)</h3>
+                        <ul>
+                            <li>918 Spyder (Hybrid)</li>
+                            <li>911 GT2 RS</li>
+                            <li>911 Turbo S</li>
+                        </ul>
+                    </div>
+
+                    <div class="fleet-category">
+                        <h3>Others</h3>
+                        <ul>
+                            <li>Mercedes-AMG ONE (Hybrid)</li>
+                            <li>Gordon Murray T.50</li>
+                            <li>Czinger 21C (Hybrid)</li>
+                            <li>Aston Martin Valkyrie (Hybrid)</li>
+                            <li>Pagani Huayra R</li>
+                            <li>SSC Tuatara</li>
+                            <li>And more...</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tuning System Section -->
+        <section class="content-section">
+            <div class="section-container">
+                <h2 class="section-heading">
+                    <span class="heading-number">05</span>
+                    <span class="heading-text">Advanced Tuning System</span>
+                </h2>
+
+                <div class="tuning-grid">
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Engine Tuning</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Stock:</strong> Factory specifications</li>
+                            <li><strong>Stage 1:</strong> +15% power, +12% torque</li>
+                            <li><strong>Stage 2:</strong> +30% power, +25% torque</li>
+                            <li><strong>Stage 3:</strong> +50% power, +40% torque</li>
+                        </ul>
+                    </div>
+
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Tire Compounds</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Street:</strong> Standard grip</li>
+                            <li><strong>Sport:</strong> +15% grip, -5% rolling resistance</li>
+                            <li><strong>Slick:</strong> +35% grip, -10% rolling resistance</li>
+                        </ul>
+                    </div>
+
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Aerodynamics</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Stock:</strong> Factory aero package</li>
+                            <li><strong>Sport:</strong> -5% drag, +20% downforce</li>
+                            <li><strong>Race:</strong> -12% drag, +50% downforce</li>
+                        </ul>
+                    </div>
+
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Weight Reduction</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Stock:</strong> Factory weight</li>
+                            <li><strong>Lightweight:</strong> -5% mass</li>
+                            <li><strong>Race:</strong> -12% mass</li>
+                        </ul>
+                    </div>
+
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Transmission</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Stock:</strong> Factory efficiency</li>
+                            <li><strong>Sport:</strong> +5% efficiency</li>
+                            <li><strong>Race:</strong> +10% efficiency</li>
+                        </ul>
+                    </div>
+
+                    <div class="tuning-card">
+                        <h3 class="tuning-title">Boost & NOS</h3>
+                        <ul class="tuning-list">
+                            <li><strong>Boost Pressure:</strong> 0.5x to 2.0x multiplier</li>
+                            <li><strong>Nitrous Oxide:</strong> +25% power, +20% torque</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Technical Stack Section -->
-        <section class="content-section">
+        <section class="content-section dark-section">
             <div class="section-container">
                 <h2 class="section-heading">
-                    <span class="heading-number">05</span>
+                    <span class="heading-number">06</span>
                     <span class="heading-text">Technical Stack</span>
                 </h2>
 
@@ -392,6 +423,7 @@ Koenigsegg Jesko Absolut,3,1.92,8500,122,122,88-122 mph
                             <li><strong>Torque Interpolation</strong> — Realistic power curves</li>
                             <li><strong>Gear Management</strong> — CSV-driven shift logic</li>
                             <li><strong>Environmental Modeling</strong> — Air density calculations</li>
+                            <li><strong>Hybrid/EV Systems</strong> — Electric motor contribution</li>
                         </ul>
                     </div>
 
@@ -409,10 +441,10 @@ Koenigsegg Jesko Absolut,3,1.92,8500,122,122,88-122 mph
         </section>
 
         <!-- Setup Instructions Section -->
-        <section class="content-section dark-section">
+        <section class="content-section">
             <div class="section-container">
                 <h2 class="section-heading">
-                    <span class="heading-number">06</span>
+                    <span class="heading-number">07</span>
                     <span class="heading-text">Setup & Usage</span>
                 </h2>
 
@@ -466,7 +498,7 @@ uvicorn app.main:app --reload --port 8000</code></pre>
             <div class="cta-container">
                 <h2 class="cta-title">Ready to Experience Hypercar Performance?</h2>
                 <p class="cta-description">
-                    Launch the simulator and witness physics-accurate acceleration modeling
+                    Launch the simulator and witness physics-accurate acceleration modeling with 30+ vehicles
                 </p>
                 <a href="index.html" class="btn-cta">
                     <span>START SIMULATOR</span>
@@ -495,13 +527,13 @@ uvicorn app.main:app --reload --port 8000</code></pre>
             </div>
             <div class="footer-section">
                 <h4 class="footer-heading">DOCUMENTATION</h4>
-                <div class="footer-text">Setup Guide</div>
-                <div class="footer-text">API Reference</div>
+                <div class="footer-text">30+ Vehicles</div>
+                <div class="footer-text">Advanced Tuning</div>
                 <div class="footer-text">Physics Engine</div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Hypercar Simulator | CSV Database-Driven Vehicle Dynamics</p>
+            <p>&copy; 2026 Hypercar Simulator v2.0 | CSV Database-Driven Vehicle Dynamics</p>
         </div>
     </footer>
 
