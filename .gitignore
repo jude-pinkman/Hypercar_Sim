@@ -17,4 +17,4 @@ node_modules/
 
 notex.txt
 hypercar
-hypercar
+/backend/app/__pycache__
