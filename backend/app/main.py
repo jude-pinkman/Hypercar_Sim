@@ -8,6 +8,7 @@ from pathlib import Path
 from app.models import SimulationParams, SimulationResponse, VehicleResult
 from app.database import get_database, reload_database
 from app.physics import PhysicsEngine, calculate_performance_metrics
+from app.tuning import apply_tuning_to_vehicles, TuningSystem
 
 app = FastAPI(
     title="Hypercar Performance Simulation API",
@@ -112,12 +113,27 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
     - Performance metrics (0-100, 0-200, quarter mile)
     """
     db = get_database()
+    
+    # Get base vehicles from database
+    base_vehicles = {vid: db.get_vehicle(vid) for vid in params.vehicle_ids}
+    
+    # Apply tuning modifications if provided
+    if params.tuning_mods:
+        print(f"\n🔧 Applying tuning modifications to {len(params.tuning_mods)} vehicles")
+        tuned_vehicles = apply_tuning_to_vehicles(
+            params.vehicle_ids,
+            base_vehicles,
+            params.tuning_mods
+        )
+    else:
+        tuned_vehicles = base_vehicles
+    
     results: List[VehicleResult] = []
     
     for vehicle_id in params.vehicle_ids:
         try:
-            # Get vehicle from database
-            vehicle = db.get_vehicle(vehicle_id)
+            # Get vehicle (tuned or stock)
+            vehicle = tuned_vehicles[vehicle_id]
             
             # Create physics engine
             engine = PhysicsEngine(vehicle, params.environment)

@@ -1,0 +1,434 @@
+/* ==========================================
+   TUNING PANEL - ZERO BLUR CSS
+   Rebuilt from scratch for perfect clarity
+   ========================================== */
+
+/* PANEL CONTAINER */
+.tuning-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    margin: auto;
+
+    background: #0f0f0f;
+    border: 2px solid #00ff9d;
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(0, 255, 157, 0.3);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10000;
+
+    font-family: 'Rajdhani', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* HEADER */
+.tuning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: rgba(0, 255, 157, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.tuning-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #00ff9d;
+    letter-spacing: 1px;
+}
+
+.btn-close-tuning {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-close-tuning:hover {
+    border-color: #00ccff;
+    color: #00ccff;
+    transform: rotate(90deg);
+}
+
+/* TABS */
+.tuning-tabs {
+    display: flex;
+    background: #0a0a0a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    overflow-x: auto;
+    flex-shrink: 0;
+}
+
+.tuning-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 20px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.tuning-tab:hover {
+    background: rgba(0, 255, 157, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.tuning-tab.active {
+    color: #00ff9d;
+    background: rgba(0, 255, 157, 0.1);
+    border-bottom-color: #00ff9d;
+}
+
+/* CONTENT */
+.tuning-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+.tuning-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tuning-content::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.tuning-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 157, 0.3);
+    border-radius: 4px;
+}
+
+.tuning-tab-content {
+    display: none;
+}
+
+.tuning-tab-content.active {
+    display: block;
+}
+
+.tuning-tab-content h4 {
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+/* OPTIONS */
+.tuning-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tuning-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tuning-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(0, 255, 157, 0.3);
+}
+
+.tuning-option.checked {
+    background: rgba(0, 255, 157, 0.15);
+    border-color: #00ff9d;
+}
+
+.tuning-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #00ff9d;
+}
+
+.option-content {
+    flex: 1;
+}
+
+.option-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.option-details {
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.tuning-option.checked .option-name {
+    color: #00ff9d;
+}
+
+.tuning-option.checked .option-details {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* SLIDERS */
+.tuning-slider {
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.tuning-slider label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 12px;
+}
+
+.tuning-slider input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.tuning-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00ff9d;
+    cursor: pointer;
+}
+
+.tuning-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #00ff9d;
+    border: none;
+    cursor: pointer;
+}
+
+.slider-value {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #00ff9d;
+    text-align: right;
+}
+
+/* CHECKBOXES */
+.tuning-checkbox {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    margin: 16px 0;
+}
+
+.tuning-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}
+
+.tuning-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #00ff9d;
+}
+
+/* FOOTER */
+.tuning-footer {
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    background: #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.tuning-footer .btn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tuning-footer .btn-primary {
+    background: linear-gradient(135deg, #00ff9d, #00ccff);
+    color: #0a0a0a;
+    border: none;
+}
+
+.tuning-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 255, 157, 0.4);
+}
+
+.tuning-footer .btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tuning-footer .btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+}
+
+/* OVERLAY */
+.tuning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+}
+
+/* TUNE BUTTON */
+.vehicle-tune-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: #00ff9d;
+    color: #0a0a0a;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.vehicle-option:hover .vehicle-tune-btn {
+    opacity: 1;
+}
+
+.vehicle-tune-btn:hover {
+    transform: scale(1.1);
+}
+
+/* TUNE INDICATOR */
+.tune-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #00ff9d, #00ccff);
+    color: #0a0a0a;
+    border-radius: 50%;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* NOTIFICATIONS */
+.tuning-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 16px 24px;
+    background: #0f0f0f;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 20000;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s;
+}
+
+.tuning-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tuning-notification-success {
+    border-color: #00ff9d;
+}
+
+.tuning-notification-info {
+    border-color: #00ccff;
+}
+
+.tuning-notification-error {
+    border-color: #ff4444;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .tuning-panel {
+        width: 95%;
+        height: 90vh;
+    }
+
+    .tuning-tab {
+        min-width: 90px;
+        padding: 12px 16px;
+        font-size: 11px;
+    }
+
+    .tuning-footer {
+        flex-direction: column;
+    }
+}

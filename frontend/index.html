@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hypercar Performance Simulator v2.0</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tuning-style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -108,6 +109,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Tuning Panel Container -->
+                <div id="tuningPanelContainer"></div>
 
                 <!-- Mode-Specific Settings -->
                 <div class="card mode-settings-card">
@@ -229,6 +233,8 @@
 
     </div>
 
+    <script type="module" src="tuning.js"></script>
+    <script type="module" src="tuning-integration.js"></script>
     <script type="module" src="sim.js"></script>
 </body>
 

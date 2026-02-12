@@ -142,6 +142,12 @@ function renderVehicleSelection() {
         option.className = 'vehicle-option';
         option.dataset.vehicleId = id;
 
+        // Check if vehicle is tuned
+        const isTuned = window.tuningSystem?.vehicleTunes.has(id);
+        if (isTuned) {
+            option.classList.add('vehicle-tuned');
+        }
+
         option.innerHTML = `
             <div class="vehicle-checkbox"></div>
             <div class="vehicle-name">${name}</div>
@@ -150,6 +156,9 @@ function renderVehicleSelection() {
         option.addEventListener('click', () => toggleVehicle(id, option));
         container.appendChild(option);
     }
+
+    // Trigger event so tuning system can add tune buttons
+    window.dispatchEvent(new CustomEvent('vehiclesLoaded'));
 }
 
 function toggleVehicle(vehicleId, element) {
@@ -394,7 +403,8 @@ async function startSimulation() {
             timestep: 0.01,
             max_time: config.maxTime,
             target_distance: config.distance,
-            start_velocity: config.startSpeed
+            start_velocity: config.startSpeed,
+            tuning_mods: getTuningMods()
         };
 
         console.log('Starting simulation with params:', params);
@@ -574,6 +584,12 @@ function displayResults(results, config) {
         vehicleDiv.className = 'vehicle-metrics';
 
         let metricsHTML = `<div class="vehicle-metrics-header">${result.vehicle_name}</div>`;
+
+        // Add tuning stats if vehicle is tuned
+        const tuningStats = getTuningStatsHTML(result.vehicle_name);
+        if (tuningStats) {
+            metricsHTML += tuningStats;
+        }
 
         // Split times section
         if (config.showSplits) {
@@ -924,6 +940,105 @@ function setupEventListeners() {
         }
     });
 }
+
+// ==================== TUNING SYSTEM INTEGRATION ====================
+function applyVehicleTuning(vehicleIds) {
+    if (!window.tuningSystem) {
+        console.log('Tuning system not available, using stock specs');
+        return null;
+    }
+
+    const tunedVehicles = {};
+
+    vehicleIds.forEach(vehicleId => {
+        const tune = window.tuningSystem.vehicleTunes.get(vehicleId);
+        if (tune) {
+            tunedVehicles[vehicleId] = tune;
+            console.log(`Applied tuning for ${vehicleId}:`, tune);
+        }
+    });
+
+    return Object.keys(tunedVehicles).length > 0 ? tunedVehicles : null;
+}
+function getTuningMods() {
+    if (!window.tuningSystem) return null;
+
+    const selectedVehicles = Array.from(state.selectedVehicles || []);
+    const tuningMods = {};
+    let hasMods = false;
+
+    selectedVehicles.forEach(vehicleId => {
+        const tune = window.tuningSystem.getTune(vehicleId);
+        tuningMods[vehicleId] = tune;
+
+        // Check if actually modified
+        if (tune.engine !== 'stock' || tune.tires !== 'street' ||
+            tune.aero !== 'stock' || tune.weight !== 'stock' ||
+            tune.transmission !== 'stock' || tune.boostPressure !== 1.0 ||
+            tune.nitrousOxide) {
+            hasMods = true;
+        }
+    });
+
+    return hasMods ? tuningMods : null;
+}
+
+function getTuningStatsHTML(vehicleId) {
+    if (!window.tuningSystem) return '';
+
+    const tune = window.tuningSystem.vehicleTunes.get(vehicleId);
+    if (!tune) return '';
+
+    const presets = window.tuningSystem.defaultTunePresets;
+    const stats = [];
+
+    if (tune.engine !== 'stock') {
+        const enginePreset = presets.engine[tune.engine];
+        stats.push(`Engine: ${enginePreset.name} (+${Math.round((enginePreset.powerMultiplier - 1) * 100)}%)`);
+    }
+
+    if (tune.tires !== 'street') {
+        const tirePreset = presets.tires[tune.tires];
+        stats.push(`Tires: ${tirePreset.name}`);
+    }
+
+    if (tune.aero !== 'stock') {
+        const aeroPreset = presets.aero[tune.aero];
+        stats.push(`Aero: ${aeroPreset.name}`);
+    }
+
+    if (tune.weight !== 'stock') {
+        const weightPreset = presets.weight[tune.weight];
+        stats.push(`Weight: -${weightPreset.weightReduction}kg`);
+    }
+
+    if (tune.transmission !== 'stock') {
+        const transPreset = presets.transmission[tune.transmission];
+        stats.push(`Trans: ${transPreset.name}`);
+    }
+
+    if (tune.boostPressure !== 1.0) {
+        stats.push(`Boost: ${tune.boostPressure.toFixed(1)}x`);
+    }
+
+    if (tune.nitrousOxide && tune.nitrousHorsepower > 0) {
+        stats.push(`Nitrous: +${tune.nitrousHorsepower}HP`);
+    }
+
+    if (stats.length === 0) return '';
+
+    return `
+        <div class="tuning-stats">
+            <h5>⚡ Tuning Modifications:</h5>
+            <ul>
+                ${stats.map(stat => `<li>${stat}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+}
+
+window.applyVehicleTuning = applyVehicleTuning;
+window.getTuningStatsHTML = getTuningStatsHTML;
 
 // ==================== START APP ====================
 document.addEventListener('DOMContentLoaded', init);

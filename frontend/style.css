@@ -1175,3 +1175,520 @@ input[type="range"]::-moz-range-thumb:hover {
         display: none;
     }
 }
+
+/* ==========================================
+   VEHICLE TUNING PANEL STYLES
+   ========================================== */
+
+.tuning-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    background: var(--bg-card);
+    border: 2px solid var(--color-primary);
+    border-radius: 16px;
+    box-shadow: 0 20px 80px rgba(0, 255, 157, 0.3);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: tuningPanelSlideIn 0.3s ease-out;
+}
+
+@keyframes tuningPanelSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Header */
+.tuning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 204, 255, 0.1));
+}
+
+.tuning-header h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.btn-close-tuning {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-close-tuning:hover {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    transform: rotate(90deg);
+}
+
+/* Tabs */
+.tuning-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.tuning-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: var(--spacing-md);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tuning-tab:hover {
+    background: rgba(0, 255, 157, 0.05);
+    color: var(--text-primary);
+}
+
+.tuning-tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    background: rgba(0, 255, 157, 0.1);
+}
+
+/* Content Area */
+.tuning-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+}
+
+.tuning-tab-content {
+    display: none;
+}
+
+.tuning-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tuning-tab-content h4 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-md) 0;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Tuning Options (Radio Groups) */
+.tuning-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.tuning-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tuning-option:hover {
+    background: var(--bg-tertiary);
+    border-color: rgba(0, 255, 157, 0.3);
+    transform: translateX(4px);
+}
+
+.tuning-option.checked {
+    background: linear-gradient(135deg, rgba(0, 255, 157, 0.15), rgba(0, 204, 255, 0.15));
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+.tuning-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.option-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.option-details {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.tuning-option.checked .option-name {
+    color: var(--color-primary);
+}
+
+.tuning-option.checked .option-details {
+    color: var(--text-secondary);
+}
+
+/* Sliders */
+.tuning-slider {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.tuning-slider label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tuning-slider input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.tuning-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+.tuning-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+.slider-value {
+    display: block;
+    margin-top: var(--spacing-sm);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-align: right;
+}
+
+/* Checkboxes */
+.tuning-checkbox {
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    margin: var(--spacing-md) 0;
+}
+
+.tuning-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.tuning-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+/* Footer */
+.tuning-footer {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+.tuning-footer .btn {
+    flex: 1;
+}
+
+/* Overlay */
+.tuning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Tuning Button in Vehicle Selection */
+.vehicle-tune-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.vehicle-option:hover .vehicle-tune-btn {
+    opacity: 1;
+}
+
+.vehicle-tune-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+/* Tune Indicator */
+.tune-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: var(--bg-dark);
+    border-radius: 50%;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px var(--color-primary-glow);
+    animation: pulseIndicator 2s ease-in-out infinite;
+    z-index: 10;
+}
+
+@keyframes pulseIndicator {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Notifications */
+.tuning-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 20000;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.3s ease;
+}
+
+.tuning-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tuning-notification-success {
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 40px var(--color-primary-glow);
+}
+
+.tuning-notification-info {
+    border-color: var(--color-secondary);
+    box-shadow: 0 10px 40px rgba(0, 204, 255, 0.3);
+}
+
+.tuning-notification-error {
+    border-color: #ff4444;
+    box-shadow: 0 10px 40px rgba(255, 68, 68, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tuning-panel {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .tuning-tabs {
+        overflow-x: scroll;
+    }
+
+    .tuning-tab {
+        font-size: 11px;
+        padding: var(--spacing-sm);
+        min-width: 90px;
+    }
+
+    .tuning-footer {
+        flex-direction: column;
+    }
+
+    .tuning-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+
+/* ==========================================
+   TUNED VEHICLE INDICATORS
+   ========================================== */
+
+.vehicle-tuned {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px var(--color-primary-glow);
+}
+
+.vehicle-tuned::before {
+    content: '⚡';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 18px;
+    animation: tuneGlow 2s ease-in-out infinite;
+    z-index: 10;
+}
+
+@keyframes tuneGlow {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Tuning stats in metrics */
+.tuning-stats {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md);
+    background: rgba(0, 255, 157, 0.05);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 8px;
+}
+
+.tuning-stats h5 {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tuning-stats ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tuning-stats li {
+    font-size: 11px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tuning-stats li:last-child {
+    border-bottom: none;
+}

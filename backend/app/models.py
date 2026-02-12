@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Dict
 
 
 class TorquePoint(BaseModel):
@@ -71,6 +71,7 @@ class SimulationParams(BaseModel):
     max_time: float = 30.0
     target_distance: Optional[float] = None  # Target distance in meters (None = no distance limit)
     start_velocity: float = 0.0  # Starting velocity in m/s (for roll races)
+    tuning_mods: Optional[Dict[str, dict]] = None  # Tuning modifications per vehicle
 
 
 class TimeSnapshot(BaseModel):
