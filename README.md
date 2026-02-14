@@ -1,302 +1,326 @@
-# 🏎️ Hypercar Performance Simulator v2.0
+# 🏎️ Hypercar Performance Simulator v2.0 - FULLY CUSTOMIZABLE EDITION
 
 ![License](https://img.shields.io/badge/license-MIT-red.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-orange.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-red.svg)
+![Physics](https://img.shields.io/badge/Physics-Fully_Customizable-00ff9d.svg)
 
-A physics-based hypercar drag race simulator featuring 30+ vehicles, advanced tuning system, and real-time telemetry visualization. Experience the raw power of the world's most extreme hypercars through accurate simulation.
+A physics-based hypercar drag race simulator featuring 50+ vehicles, **advanced customizable physics engine**, comprehensive tuning system, and real-time telemetry visualization. Experience the raw power of the world's most extreme hypercars through accurate simulation with **complete control over every physics parameter**.
 
-![Hypercar Simulator](https://via.placeholder.com/1200x400/0D0D0D/FF3B30?text=Hypercar+Performance+Simulator)
+![Hypercar Simulator](https://via.placeholder.com/1200x400/0D0D0D/00ff9d?text=Hypercar+Performance+Simulator+v2.0)
 
-## ✨ Features
+## 🎉 NEW in v2.0: Complete Physics Customization
+
+### ⚙️ Advanced Physics Panel
+**NOW WITH FULL UI CONTROL** - No more editing code files!
+
+- **5 Quick Presets**: Arcade, Realistic, Maximum, Endurance Race, Wet Race
+- **50+ Parameters**: Complete control over every aspect of simulation physics
+- **Real-time Adjustment**: Sliders, toggles, and dropdowns with instant feedback
+- **Professional Interface**: Dark-themed UI matching the simulator aesthetic
+- **Visual Status**: Button shows "Physics: CUSTOM" when custom physics active
+
+### 🎯 Customizable Physics Categories
+
+1. **🔥 Tire Physics** - Temperature modeling, grip coefficient, wear rate
+2. **⚖️ Weight Transfer** - Distribution, coefficients, CG height
+3. **🚀 Launch Control** - RPM targeting, clutch slip, traction limits
+4. **💨 Turbo/Boost** - Boost pressure, spool rates, power multipliers
+5. **🪂 DRS / Active Aero** - Drag reduction, downforce trade-offs
+6. **⚙️ Gearbox** - Shift duration, power loss, per-gear settings
+7. **⛽ Fuel System** - Consumption rates, tank capacity, weight effects
+8. **🛑 Brake System** - Thermal modeling, fade coefficients
+9. **⚡ Hybrid System** - Battery SOC, discharge rates, regen efficiency
+10. **🎯 Traction Control** - Intervention levels, aggression modes
+11. **🌦️ Weather Conditions** - Track conditions, rain, temperature, wind
+
+## ✨ Core Features
 
 ### 🏁 8 Race Modes
 - **Quarter Mile (402m)** - Classic drag race
 - **Half Mile (805m)** - Extended acceleration test
 - **1 Mile (1609m)** - Top speed challenge
 - **Custom Distance** - Set your own distance
-- **Lap Race** - Circuit racing simulation
+- **Lap Race** - Circuit racing with multiple laps
 - **Acceleration Zone** - 0-100, 100-200 km/h tests
-- **Roll Race** - Rolling start competitions
+- **Roll Race** - Rolling start (60-200 km/h)
 - **Top Speed** - Maximum velocity runs
 
-### 🚗 30+ Hypercars
-Premium vehicle collection including:
-- **Koenigsegg**: Jesko Absolut, Agera RS, Regera, One:1
-- **Bugatti**: Chiron Super Sport 300+, Bolide, Veyron Super Sport
-- **McLaren**: Speedtail, P1, 720S, Senna
-- **Ferrari**: SF90 Stradale, LaFerrari, F8 Tributo
-- **Lamborghini**: Aventador SVJ, Huracán Performante, Revuelto
+### 🚗 50+ Hypercars
+- **Koenigsegg**: Jesko, Agera RS, Regera, One:1, Gemera
+- **Bugatti**: Chiron SS 300+, Bolide, Veyron SS, Divo
+- **McLaren**: Speedtail, P1, 720S, Senna, Elva
+- **Ferrari**: SF90, LaFerrari, F8 Tributo, 812 Superfast
+- **Lamborghini**: Aventador SVJ, Huracán, Revuelto
 - **Porsche**: 918 Spyder, 911 Turbo S, Taycan Turbo S
-- **Electric Hypercars**: Rimac Nevera, Lotus Evija, Aspark Owl, Pininfarina Battista
+- **Electric**: Rimac Nevera, Lotus Evija, Aspark Owl, Pininfarina Battista
+- **American**: Hennessey Venom F5, SSC Tuatara, Tesla Model S Plaid
 - And many more!
 
 ### 🔧 Advanced Tuning System
-- **Engine Tuning**: Stock, Stage 1, Stage 2, Stage 3
-- **Tire Compounds**: Street, Sport, Slick
-- **Aerodynamics**: Stock, Sport, Race packages
-- **Weight Reduction**: Stock, Lightweight, Race
-- **Transmission**: Stock, Sport, Race efficiency
-- **Boost Pressure**: Adjustable turbo/supercharger boost (0.5x - 2.0x)
-- **Nitrous Oxide**: NOS injection system
+- **Engine**: Stock → Extreme (+75% power)
+- **Tires**: Street → Drag Radials (+70% grip)
+- **Aero**: Multiple drag configurations
+- **Weight**: Up to -300kg reduction
+- **Transmission**: Stock → Instant shifts
+- **Boost Pressure**: 0.5x - 2.0x
+- **Launch RPM**: 2000-8000 RPM
+- **Nitrous**: 50-200 HP injection
 
 ### 📊 Real Physics Simulation
-- Accurate aerodynamic drag calculation
-- Rolling resistance modeling
+- Aerodynamic drag with altitude/temp effects
+- Rolling resistance with tire compounds
 - Engine torque curve interpolation
-- Gear ratio optimization
-- Hybrid system modeling (electric motor contribution)
-- Environmental factors (temperature, altitude)
+- Intelligent gear ratio optimization
+- Hybrid system modeling
+- Environmental factors
 - Traction limits and launch control
+- Weight transfer dynamics
+- **Tire thermal modeling**
+- **Fuel consumption**
+- **Brake fade**
+- **Weather effects**
 
 ### 📈 Live Telemetry
-- Real-time speedometers for each vehicle
-- Distance tracking
-- RPM monitoring
-- Gear indicator
+- Real-time speedometers with animated needles
+- Distance tracking with progress bars
+- RPM monitoring with redline indicators
+- Current gear display
 - Power output visualization
-- Performance metrics (0-100 km/h, 0-200 km/h, quarter-mile time/speed)
+- Comprehensive metrics (0-60, 0-100, 0-200, quarter-mile)
+- Split times at speed milestones
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8 or higher
-- Node.js (optional, for development)
-- Modern web browser (Chrome, Firefox, Safari, Edge)
+- **Python 3.8+** (3.10+ recommended)
+- Modern web browser
 
 ### Installation
 
-1. **Clone the repository**
+1. **Download and extract**
 ```bash
-git clone https://github.com/yourusername/hypercar-simulator.git
-cd hypercar-simulator
+unzip Hypercar_Sim.zip
+cd Hypercar_Sim
 ```
 
-2. **Install Python dependencies**
+2. **Install dependencies**
 ```bash
-pip install fastapi uvicorn pandas pydantic
+pip install -r requirements.txt
 ```
 
-3. **Start the backend server**
+3. **Start backend**
 ```bash
-cd backend
+cd app
 python main.py
 ```
+API runs at `http://localhost:8000`
 
-The API will be available at `http://localhost:8000`
-
-4. **Open the frontend**
+4. **Open frontend**
 ```bash
-# Simply open frontend/home.html in your browser
-# Or use a local server:
+# Open frontend/simulator.html directly
+# OR use local server:
 cd frontend
 python -m http.server 8080
 ```
+Visit `http://localhost:8080/simulator.html`
 
-Visit `http://localhost:8080/home.html`
+## 🎮 Usage Guide
+
+### 🏎️ Basic Racing
+1. Select vehicles from dropdown
+2. Choose race mode (top tabs)
+3. Set environment (temp, altitude)
+4. Click "Start Race" or press Space
+
+### 🔧 Vehicle Tuning
+1. Select vehicle → Click 🔧 button
+2. Adjust engine, tires, aero, weight
+3. Apply changes
+
+### ⚙️ Physics Customization ⭐ NEW!
+1. Click **"⚙️ Open Physics Settings"**
+2. Choose preset OR customize sliders
+3. Click **"Apply Physics Settings"**
+4. Button shows **"Physics: CUSTOM"**
+5. Run race to see dramatic effects!
+
+### Quick Preset Guide
+- **Arcade**: Max grip, simplified (beginners)
+- **Realistic**: Balanced simulation (comparisons)
+- **Maximum**: All features (enthusiasts)
+- **Endurance**: Fuel/tire management
+- **Wet Race**: Rain conditions
+
+### ⌨️ Keyboard Shortcuts
+- `1-8`: Switch race modes
+- `Space`: Start race
+- `R`: Reset
+
+## 🔬 Physics Engines
+
+### Three Engines Available
+1. **Basic** - Simple calculations
+2. **Improved** - Default, enhanced physics
+3. **Configurable** ⭐ - 50+ parameters, used when custom physics active
+
+### Core Equations
+```
+Drag = 0.5 × ρ × Cd × A × v²
+Rolling = Crr × m × g × friction
+Drive = (Torque × Gear × Final × η) / Radius
+Net Force = Drive - Drag - Rolling
+Acceleration = Net Force / Mass
+```
+
+## 🎯 Example Scenarios
+
+### Maximum Performance
+```
+Tuning: Stage 3, Racing Slicks, Top Speed aero
+Physics: Arcade preset (max grip)
+Result: ~6.5s quarter mile
+```
+
+### Endurance Race
+```
+Physics: Endurance preset
+Mode: 10 laps
+Result: Fuel/tire strategy required
+```
+
+### Wet Weather
+```
+Physics: Wet Race preset
+Result: ~2s slower, careful throttle
+```
+
+### Custom Extreme
+```
+Physics: Tire grip 2.0, Launch 2.0g, Boost 4.0 bar
+Result: Insane power!
+```
+
+## 📊 API Endpoints
+
+### `GET /api/vehicles`
+List all vehicles
+
+### `POST /api/simulate/drag`
+Run simulation with custom physics
+```json
+{
+  "vehicle_ids": ["koenigsegg_jesko"],
+  "physics_config": {...},
+  "preset_config": "arcade",
+  "tuning_mods": {...}
+}
+```
+
+### `GET /api/health`
+Health check
+
+Docs: `http://localhost:8000/docs`
+
+## 🧪 Testing Physics
+
+### Verify It Works
+
+**Backend logs:**
+```
+⚙️ Using ConfigurablePhysicsEngine
+   📋 Applying preset: arcade
+```
+
+**Browser console:**
+```
+✅ Custom physics detected:
+  - Tire grip: 1.5
+  - Turbo: true
+```
+
+### Quick Tests
+1. **Stock vs Arcade**: ~1s faster
+2. **Dry vs Wet**: ~2s slower
+3. **Max Grip**: Insane acceleration
+
+## 🛠️ Customization
+
+### Add Vehicles
+Edit `hypercar_data.csv`
+
+### Create Presets
+Edit `app/physics_config.py`
+
+### Modify Tuning
+Edit `app/tuning.py`
 
 ## 📁 Project Structure
 
 ```
-hypercar-simulator/
-│
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── main.py              # FastAPI application
-│   │   ├── models.py            # Pydantic data models
-│   │   ├── physics.py           # Physics simulation engine
-│   │   ├── database.py          # CSV database management
-│   │   ├── tuning.py            # Tuning system
-│   │   └── vehicles.py          # Vehicle specifications
-│   │
-│   └── data/
-│       └── hypercar_data.csv    # Vehicle database
-│
-├── frontend/
-│   ├── home.html                # Landing page
-│   ├── index.html               # Main simulator
-│   ├── about.html               # About page
-│   ├── style.css                # Main styles
-│   ├── home-style.css           # Landing page styles
-│   ├── tuning-style.css         # Tuning panel styles
-│   ├── vehicle-selector.css     # Vehicle selection styles
-│   ├── sim.js                   # Main simulation logic
-│   ├── render.js                # Canvas rendering
-│   ├── tuning.js                # Tuning system UI
-│   ├── tuning-integration.js    # Tuning integration
-│   ├── vehicle-selector.js      # Vehicle selection UI
-│   └── home-script.js           # Landing page interactions
-│
-└── README.md
+Hypercar_Sim/
+├── app/                           # Backend
+│   ├── main.py                   # API (UPDATED)
+│   ├── physics_customizable.py   # Custom engine (NEW)
+│   ├── physics_config.py         # Config classes (NEW)
+│   └── ...
+├── frontend/                      # Frontend
+│   ├── simulator.html            # Main page (UPDATED)
+│   ├── sim.js                    # Logic (UPDATED)
+│   ├── physics-customization-ui.js   # UI (NEW)
+│   ├── physics-customization-ui.css  # Styles (NEW)
+│   └── ...
+└── [documentation files]
 ```
 
-## 🎮 Usage
+## 📚 Documentation
 
-### Selecting Vehicles
-1. Choose the number of vehicles to race (1-3)
-2. Use the searchable dropdown to find vehicles by name or brand
-3. Vehicles are grouped by manufacturer for easy browsing
-4. Click the 🔧 icon to open the tuning panel for each vehicle
-
-### Tuning Your Vehicle
-1. Click the tuning button on any selected vehicle
-2. Navigate through tuning categories:
-   - **Engine**: Increase power and torque
-   - **Tires**: Improve grip and reduce rolling resistance
-   - **Aero**: Adjust drag coefficient
-   - **Weight**: Reduce vehicle mass
-   - **Transmission**: Improve efficiency
-   - **Advanced**: Boost pressure and NOS
-3. Apply or reset changes
-
-### Running a Race
-1. Select your race mode from the top navigation
-2. Configure environment settings (temperature, altitude)
-3. Adjust mode-specific parameters (distance, laps, etc.)
-4. Click "Start Race" or press `Space`
-5. Watch the real-time visualization and telemetry
-6. Review performance metrics after completion
-
-### Keyboard Shortcuts
-- `1-8`: Switch between race modes
-- `Space`: Start simulation
-- `R`: Reset simulation
-- `S`: Go to simulator (from home page)
-- `A`: Go to about page (from home page)
-
-## 🔬 Physics Engine
-
-The simulator uses real-world physics equations:
-
-### Force Calculations
-```
-Drag Force = 0.5 × ρ × Cd × A × v²
-Rolling Resistance = Crr × m × g
-Drive Force = (Engine Torque × Gear Ratio × Final Drive × η) / Tire Radius
-Net Force = Drive Force - Drag Force - Rolling Resistance
-Acceleration = Net Force / Mass
-```
-
-### Air Density
-```
-Air Density (ρ) = P / (R × T)
-Pressure adjusted for altitude: P × e^(-h/8400)
-```
-
-### Gear Shifting
-- Intelligent shift points based on RPM and velocity
-- Prevents engine bogging
-- Optimized for maximum acceleration
-
-## 🛠️ Customization
-
-### Adding New Vehicles
-Edit `backend/data/hypercar_data.csv` with vehicle specifications:
-- Basic specs (mass, power, torque, drag coefficient)
-- Gear ratios and shift points
-- Torque curve data
-- Hybrid/electric parameters (optional)
-
-### Modifying Tuning Options
-Edit `backend/app/tuning.py` to adjust:
-- Tuning multipliers
-- Available tuning stages
-- Custom modifications
-
-### Changing Environment
-Adjust default conditions in the UI:
-- Temperature (-20°C to 50°C)
-- Altitude (0m to 3000m)
-
-## 📊 API Documentation
-
-### Endpoints
-
-#### `GET /api/vehicles`
-Returns list of available vehicles
-```json
-{
-  "koenigsegg_jesko": "Koenigsegg Jesko Absolut",
-  "bugatti_chiron_ss": "Bugatti Chiron Super Sport 300+"
-}
-```
-
-#### `POST /api/simulate/drag`
-Run drag race simulation
-```json
-{
-  "vehicle_ids": ["koenigsegg_jesko", "bugatti_chiron_ss"],
-  "environment": {
-    "temperature_celsius": 20,
-    "altitude_meters": 0
-  },
-  "timestep": 0.01,
-  "max_time": 30.0,
-  "target_distance": 402.336,
-  "tuning_mods": {
-    "koenigsegg_jesko": {
-      "engine": "stage2",
-      "tires": "slick"
-    }
-  }
-}
-```
-
-#### `POST /api/reload`
-Reload vehicle database from CSV
-
-#### `GET /api/health`
-Health check endpoint
-
-Full API documentation available at `http://localhost:8000/docs`
+- **README.md** - This file
+- **QUICK_START.md** - 5-min setup
+- **CUSTOMIZATION_GUIDE.md** - All parameters
+- **PHYSICS_CONFIG_FIXED.md** - Technical details
+- **CHANGELOG.md** - Version history
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+1. Fork repo
+2. Create branch
+3. Commit changes
+4. Push and PR
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 📝 Version History
 
-### Development Guidelines
-- Follow PEP 8 for Python code
-- Use meaningful variable names
-- Add comments for complex physics calculations
-- Test with multiple vehicles before submitting
+### v2.0 - Physics Customization
+- ✅ Complete UI control
+- ✅ 5 presets + 50+ parameters
+- ✅ Visual indicators
+- ✅ Enhanced logging
 
-## 📝 To-Do List
+### v1.0 - Initial Release
+- Basic physics
+- 30+ vehicles
+- Tuning system
 
-- [ ] Add more vehicle brands (Audi, BMW, Mercedes)
-- [ ] Implement weather conditions (rain, wind)
-- [ ] Add track surface types
-- [ ] Export race data to CSV
-- [ ] Multiplayer race comparison
-- [ ] 3D visualization option
-- [ ] Mobile app version
-- [ ] Real-world track layouts
-- [ ] Tire wear simulation
-- [ ] Fuel consumption modeling
+## 📋 Roadmap
+
+- [ ] Save/load configs
+- [ ] Share configs via URL
+- [ ] More presets
+- [ ] Track selection
+- [ ] Championship mode
+- [ ] Multiplayer
+- [ ] 3D visualization
+- [ ] Mobile app
 
 ## 🐛 Known Issues
 
-- Some vehicles may have estimated specifications
-- Hybrid system modeling is simplified
-- Traction limits are approximations
-- Database requires manual CSV updates
+- Some specs are estimated
+- Hybrid modeling simplified
+- Extreme parameters may be unrealistic
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Vehicle specifications sourced from manufacturer data
-- Physics equations based on automotive engineering principles
-- Inspired by real-world drag racing and automotive simulation
-- Community feedback and testing
+MIT License
 
 ## 📞 Contact
 
@@ -306,6 +330,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ for automotive enthusiasts and racing fans**
+## 🎯 v2.0 Key Improvements
 
-⭐ Star this repo if you find it useful!
+| Feature | v1.0 | v2.0 |
+|---------|------|------|
+| Physics Control | ❌ Code | ✅ Full UI |
+| Presets | ❌ None | ✅ 5 presets |
+| Parameters | ❌ Fixed | ✅ 50+ adjustable |
+| Weather | ❌ None | ✅ 5 conditions |
+| Fuel System | ❌ None | ✅ Full sim |
+| Tire Thermal | ❌ Basic | ✅ Advanced |
+| Brake Fade | ❌ None | ✅ Modeled |
+| Battery SOC | ❌ Simple | ✅ Management |
+
+---
+
+**Made with ❤️ for automotive enthusiasts**
+
+⭐ **Star if useful!**
+
+🏁 **NOW with ACTUAL physics customization!**
