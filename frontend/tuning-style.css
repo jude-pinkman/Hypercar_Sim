@@ -1,19 +1,19 @@
 /* ==========================================
-   TUNING PANEL - ZERO BLUR CSS
-   Rebuilt from scratch for perfect clarity
+   TUNING PANEL - RESPONSIVE CENTERED
+   Works perfectly on mobile, tablet, and desktop
    ========================================== */
 
-/* PANEL CONTAINER */
+/* PANEL CONTAINER - FIXED CENTERING */
 .tuning-panel {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
     width: 90%;
     max-width: 900px;
     height: 85vh;
-    margin: auto;
+    max-height: 90vh;
 
     background: #0f0f0f;
     border: 2px solid #00ff9d;
@@ -415,20 +415,277 @@
     border-color: #ff4444;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
+/* ==========================================
+   RESPONSIVE DESIGN
+   Mobile, Tablet, Desktop optimizations
+   ========================================== */
+
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px) {
     .tuning-panel {
-        width: 95%;
-        height: 90vh;
+        max-width: 1000px;
+    }
+}
+
+/* Desktop (1200px - 1919px) */
+@media (min-width: 1200px) and (max-width: 1919px) {
+    .tuning-panel {
+        max-width: 900px;
+    }
+}
+
+/* Tablet Landscape (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .tuning-panel {
+        width: 85%;
+        max-width: 800px;
+        height: 80vh;
+    }
+
+    .tuning-tab {
+        min-width: 100px;
+        padding: 14px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Tablet Portrait (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .tuning-panel {
+        width: 90%;
+        max-width: 700px;
+        height: 85vh;
+    }
+
+    .tuning-header {
+        padding: 16px 20px;
+    }
+
+    .tuning-header h3 {
+        font-size: 18px;
     }
 
     .tuning-tab {
         min-width: 90px;
-        padding: 12px 16px;
+        padding: 12px 14px;
+        font-size: 11px;
+    }
+
+    .tuning-content {
+        padding: 20px;
+    }
+
+    .tuning-footer {
+        padding: 16px 20px;
+    }
+}
+
+/* Mobile Landscape (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .tuning-panel {
+        width: 95%;
+        height: 90vh;
+        border-radius: 12px;
+    }
+
+    .tuning-header {
+        padding: 14px 16px;
+    }
+
+    .tuning-header h3 {
+        font-size: 16px;
+    }
+
+    .btn-close-tuning {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    .tuning-tab {
+        min-width: 80px;
+        padding: 10px 12px;
+        font-size: 10px;
+    }
+
+    .tuning-content {
+        padding: 16px;
+    }
+
+    .tuning-option {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .option-name {
+        font-size: 13px;
+    }
+
+    .option-details {
         font-size: 11px;
     }
 
     .tuning-footer {
         flex-direction: column;
+        padding: 14px 16px;
+        gap: 12px;
+    }
+
+    .tuning-footer .btn {
+        padding: 12px 20px;
+    }
+}
+
+/* Mobile Portrait (< 576px) */
+@media (max-width: 575px) {
+    .tuning-panel {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+        top: 0;
+        left: 0;
+        transform: none;
+    }
+
+    .tuning-header {
+        padding: 12px 16px;
+    }
+
+    .tuning-header h3 {
+        font-size: 15px;
+    }
+
+    .btn-close-tuning {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .tuning-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tuning-tab {
+        min-width: 70px;
+        padding: 10px 8px;
+        font-size: 10px;
+    }
+
+    .tuning-content {
+        padding: 12px;
+    }
+
+    .tuning-tab-content h4 {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .tuning-option {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .tuning-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+    }
+
+    .option-name {
+        font-size: 12px;
+    }
+
+    .option-details {
+        font-size: 10px;
+    }
+
+    .tuning-slider {
+        padding: 12px;
+    }
+
+    .tuning-slider label {
+        font-size: 12px;
+    }
+
+    .tuning-checkbox {
+        padding: 12px;
+    }
+
+    .tuning-checkbox label {
+        font-size: 12px;
+    }
+
+    .tuning-footer {
+        flex-direction: column;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .tuning-footer .btn {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+
+    /* Notification positioning for mobile */
+    .tuning-notification {
+        top: auto;
+        bottom: 20px;
+        right: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+    }
+}
+
+/* Extra Small Mobile (< 375px) */
+@media (max-width: 374px) {
+    .tuning-header h3 {
+        font-size: 14px;
+    }
+
+    .tuning-tab {
+        min-width: 60px;
+        padding: 8px 6px;
+        font-size: 9px;
+    }
+
+    .option-name {
+        font-size: 11px;
+    }
+
+    .option-details {
+        font-size: 9px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+    .tuning-panel {
+        height: 95vh;
+    }
+
+    .tuning-header {
+        padding: 10px 16px;
+    }
+
+    .tuning-content {
+        padding: 12px;
+    }
+
+    .tuning-footer {
+        padding: 10px 16px;
+    }
+
+    .tuning-option {
+        padding: 8px;
+    }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .tuning-panel {
+        border-width: 1.5px;
     }
 }

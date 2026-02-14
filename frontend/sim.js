@@ -1,7 +1,8 @@
 import { RaceRenderer } from './render.js';
 
 // ==================== CONFIGURATION ====================
-const API_URL = 'http://localhost:8000';
+// Use CONFIG for API URL (defined in config.js)
+const API_URL = window.CONFIG ? window.CONFIG.API_BASE_URL : 'http://localhost:8000';
 
 // Race mode configurations
 const RACE_MODES = {

@@ -13,8 +13,8 @@ export class VehicleSelector {
 
     async initialize() {
         try {
-            // Fetch available vehicles from backend
-            const response = await fetch('http://localhost:8000/api/vehicles');
+            // Fetch available vehicles from backend using CONFIG
+            const response = await fetch(CONFIG.getEndpoint('vehicles'));
             this.availableVehicles = await response.json();
 
             this.render();

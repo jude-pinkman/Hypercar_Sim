@@ -37,8 +37,9 @@ class VehicleDatabase:
 
     def __init__(self, csv_path: str = None):
         if csv_path is None:
+            # CSV is at root level: hypercar-simulator/hypercar_data.csv
             base_path = Path(__file__).parent.parent
-            csv_path = base_path / "data" / "hypercar_data.csv"
+            csv_path = base_path / "hypercar_data.csv"
 
         self.csv_path = Path(csv_path)
         self.vehicles: Dict[str, Vehicle] = {}

@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from typing import Dict, List
 from pathlib import Path
+import os
 
 from app.models import SimulationParams, SimulationResponse, VehicleResult
 from app.database import get_database, reload_database
@@ -16,10 +17,17 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# CORS middleware
+# CORS middleware - Updated for production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+        "https://*.onrender.com",  # Allow all Render subdomains
+        "*"  # Allow all origins - you can restrict this later
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,6 +42,7 @@ async def startup_event():
     print("="*60)
     # Database will be loaded on first access
     db = get_database()
+    print(f"✅ Loaded {len(db.vehicles)} vehicles from database")
     print("="*60 + "\n")
 
 
@@ -172,8 +181,8 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
     )
 
 
-# Serve frontend static files
-frontend_path = Path(__file__).parent.parent.parent / "frontend"
+# Serve frontend static files (optional - only if frontend is in same repo)
+frontend_path = Path(__file__).parent.parent / "frontend"
 if frontend_path.exists():
     app.mount("/static", StaticFiles(directory=str(frontend_path), html=True), name="static")
     
@@ -181,19 +190,16 @@ if frontend_path.exists():
     async def serve_index():
         return FileResponse(str(frontend_path / "index.html"))
     
-    @app.get("/sim.js")
-    async def serve_sim_js():
-        return FileResponse(str(frontend_path / "sim.js"))
+    @app.get("/home.html")
+    async def serve_home():
+        return FileResponse(str(frontend_path / "home.html"))
     
-    @app.get("/render.js")
-    async def serve_render_js():
-        return FileResponse(str(frontend_path / "render.js"))
-    
-    @app.get("/style.css")
-    async def serve_style_css():
-        return FileResponse(str(frontend_path / "style.css"))
+    @app.get("/about.html")
+    async def serve_about():
+        return FileResponse(str(frontend_path / "about.html"))
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

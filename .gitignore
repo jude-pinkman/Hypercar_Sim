@@ -1,20 +1,23 @@
 # Python
-.venv/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Environment
 .env
 
-# OS
-.DS_Store
-
-# Node / frontend (if you add later)
-node_modules/
-
-# Docker
-*.log
-
-notex.txt
-hypercar
-/backend/app/__pycache__
+/hypercar
