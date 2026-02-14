@@ -423,10 +423,22 @@ async function startSimulation() {
             max_time: config.maxTime,
             target_distance: config.distance,
             start_velocity: config.startSpeed,
-            tuning_mods: getTuningMods()
+            tuning_mods: getTuningMods(),
+            physics_config: window.physicsCustomization?.getPhysicsConfig()
         };
 
         console.log('Starting simulation with params:', params);
+        
+        // Log physics config status
+        if (params.physics_config) {
+            console.log('✅ Custom physics config detected:');
+            console.log('  - Tire grip:', params.physics_config.tires?.base_friction_coefficient);
+            console.log('  - Turbo enabled:', params.physics_config.turbo?.enabled);
+            console.log('  - Fuel enabled:', params.physics_config.fuel?.enabled);
+            console.log('  - Weather:', params.physics_config.weather?.track_condition);
+        } else {
+            console.log('ℹ️ Using default physics (no custom config)');
+        }
 
         const response = await fetch(`${API_URL}/api/simulate/drag`, {
             method: 'POST',

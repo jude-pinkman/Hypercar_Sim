@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Dict
+from typing import List, Optional, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.physics_config import PhysicsConfig
 
 
 class TorquePoint(BaseModel):
@@ -72,6 +75,9 @@ class SimulationParams(BaseModel):
     target_distance: Optional[float] = None  # Target distance in meters (None = no distance limit)
     start_velocity: float = 0.0  # Starting velocity in m/s (for roll races)
     tuning_mods: Optional[Dict[str, dict]] = None  # Tuning modifications per vehicle
+    use_improved_physics: bool = True  # Toggle for improved physics engine
+    physics_config: Optional[Dict] = None  # Custom physics configuration (PhysicsConfig as dict)
+    preset_config: Optional[str] = None  # Preset: 'arcade', 'realistic', 'maximum', 'endurance_race', 'wet_race'
 
 
 class TimeSnapshot(BaseModel):

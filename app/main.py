@@ -9,6 +9,9 @@ import os
 from app.models import SimulationParams, SimulationResponse, VehicleResult
 from app.database import get_database, reload_database
 from app.physics import PhysicsEngine, calculate_performance_metrics
+from app.physics_improved import ImprovedPhysicsEngine
+from app.physics_customizable import ConfigurablePhysicsEngine
+from app.physics_config import PhysicsConfig, PRESET_CONFIGS
 from app.tuning import apply_tuning_to_vehicles, TuningSystem
 
 app = FastAPI(
@@ -144,8 +147,30 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
             # Get vehicle (tuned or stock)
             vehicle = tuned_vehicles[vehicle_id]
             
-            # Create physics engine
-            engine = PhysicsEngine(vehicle, params.environment)
+            # Determine which physics engine to use
+            if params.physics_config or params.preset_config:
+                # Use ConfigurablePhysicsEngine with custom physics
+                print(f"\n⚙️ Using ConfigurablePhysicsEngine for {vehicle.name}")
+                
+                # Get physics config
+                if params.preset_config:
+                    print(f"   📋 Applying preset: {params.preset_config}")
+                    physics_config = PRESET_CONFIGS.get(params.preset_config)
+                    if not physics_config:
+                        raise ValueError(f"Invalid preset: {params.preset_config}")
+                elif params.physics_config:
+                    print(f"   🔧 Applying custom physics configuration")
+                    # Convert dict to PhysicsConfig object
+                    physics_config = PhysicsConfig.parse_obj(params.physics_config)
+                
+                engine = ConfigurablePhysicsEngine(vehicle, params.environment, physics_config)
+                
+            elif params.use_improved_physics:
+                # Use ImprovedPhysicsEngine (default)
+                engine = ImprovedPhysicsEngine(vehicle, params.environment)
+            else:
+                # Use basic PhysicsEngine
+                engine = PhysicsEngine(vehicle, params.environment)
             
             # Run simulation
             snapshots = engine.run_simulation(
