@@ -1,4 +1,5 @@
 import { RaceRenderer } from './render.js';
+import { VehicleSelector } from './vehicle-selector.js';
 
 // ==================== CONFIGURATION ====================
 // Use CONFIG for API URL (defined in config.js)
@@ -100,13 +101,25 @@ const state = {
 
 // ==================== RENDERER ====================
 let renderer = null;
+let vehicleSelector = null;
 
 // ==================== INITIALIZATION ====================
 async function init() {
     console.log('🏁 Initializing Hypercar Simulator...');
 
     renderer = new RaceRenderer('raceCanvas');
-    await loadVehicles();
+
+    // Initialize vehicle selector (dropdown system)
+    vehicleSelector = new VehicleSelector('vehicleSelect');
+    await vehicleSelector.initialize();
+
+    // Listen for vehicle selection changes from dropdown
+    window.addEventListener('vehicleSelectionChanged', (e) => {
+        const selectedVehicleIds = e.detail.selectedVehicles;
+        state.selectedVehicles = new Set(selectedVehicleIds);
+        console.log('Selected vehicles:', Array.from(state.selectedVehicles));
+    });
+
     setupEventListeners();
     updateModeUI();
 
@@ -114,6 +127,10 @@ async function init() {
 }
 
 // ==================== VEHICLE LOADING ====================
+// NOTE: Vehicle loading is now handled by VehicleSelector class
+// The following functions are kept for backward compatibility but not used
+
+/*
 async function loadVehicles() {
     try {
         const response = await fetch(`${API_URL}/api/vehicles`);
@@ -179,6 +196,7 @@ function toggleVehicle(vehicleId, element) {
 
     console.log('Selected vehicles:', Array.from(state.selectedVehicles));
 }
+*/
 
 // ==================== MODE SWITCHING ====================
 function updateModeUI() {

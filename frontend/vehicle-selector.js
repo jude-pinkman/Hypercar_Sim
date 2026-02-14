@@ -196,6 +196,69 @@ export class VehicleSelector {
         const summary = document.getElementById('selection-count');
         const count = this.selectedVehicles.filter(v => v).length;
         summary.textContent = `${count} vehicle${count !== 1 ? 's' : ''} selected`;
+
+        // Update tuning buttons display
+        this.updateTuningButtons();
+    }
+
+    updateTuningButtons() {
+        const container = document.getElementById('vehicle-tuning-buttons');
+        if (!container) {
+            // Create tuning buttons container if it doesn't exist
+            this.createTuningButtonsContainer();
+            return;
+        }
+
+        container.innerHTML = '';
+
+        const selectedVehicles = this.getSelectedVehicles();
+        if (selectedVehicles.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+
+        selectedVehicles.forEach(vehicleId => {
+            const vehicleName = this.availableVehicles[vehicleId];
+
+            const tuneBtn = document.createElement('button');
+            tuneBtn.className = 'vehicle-tune-button';
+            tuneBtn.innerHTML = `
+                <span class="tune-icon">🔧</span>
+                <span class="tune-label">Tune ${vehicleName}</span>
+            `;
+
+            tuneBtn.onclick = () => {
+                if (window.tuningSystem) {
+                    window.tuningSystem.openTuningPanel(vehicleId, vehicleName);
+                } else {
+                    console.error('Tuning system not loaded');
+                }
+            };
+
+            container.appendChild(tuneBtn);
+        });
+    }
+
+    createTuningButtonsContainer() {
+        const selectionContainer = this.container.querySelector('.vehicle-selection-container');
+        if (!selectionContainer) return;
+
+        const tuningContainer = document.createElement('div');
+        tuningContainer.id = 'vehicle-tuning-buttons';
+        tuningContainer.className = 'vehicle-tuning-buttons';
+        tuningContainer.style.display = 'none';
+
+        // Insert after selection summary
+        const summary = selectionContainer.querySelector('.selection-summary');
+        if (summary) {
+            summary.after(tuningContainer);
+        } else {
+            selectionContainer.appendChild(tuningContainer);
+        }
+
+        this.updateTuningButtons();
     }
 
     dispatchChangeEvent() {

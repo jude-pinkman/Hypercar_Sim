@@ -151,6 +151,49 @@
     font-weight: 600;
 }
 
+/* Tuning Buttons Container */
+.vehicle-tuning-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.vehicle-tune-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(0, 255, 157, 0.1);
+    border: 2px solid rgba(0, 255, 157, 0.3);
+    border-radius: 8px;
+    color: #00ff9d;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.vehicle-tune-button:hover {
+    background: rgba(0, 255, 157, 0.2);
+    border-color: #00ff9d;
+    transform: translateX(4px);
+}
+
+.vehicle-tune-button .tune-icon {
+    font-size: 16px;
+}
+
+.vehicle-tune-button .tune-label {
+    flex: 1;
+    text-align: left;
+}
+
 /* Error message */
 .error-message {
     padding: 16px;
