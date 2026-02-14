@@ -7,18 +7,17 @@ const CONFIG = {
     // Determine API base URL based on environment
     API_BASE_URL: (() => {
         const hostname = window.location.hostname;
-        
+
         // Local development
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
             return 'http://localhost:8000';
         }
-        
+
         // Production on Render
-        // IMPORTANT: Replace this with your actual backend URL after deployment!
-        // Example: 'https://hypercar-backend.onrender.com'
-        return 'https://YOUR-BACKEND-NAME.onrender.com';
+        // Your actual backend URL
+        return 'https://hypercar-sim.onrender.com';
     })(),
-    
+
     // API endpoints
     endpoints: {
         vehicles: '/api/vehicles',
@@ -26,12 +25,12 @@ const CONFIG = {
         health: '/api/health',
         reload: '/api/reload'
     },
-    
+
     // Helper method to build full URL
     getEndpoint(endpoint) {
         return `${this.API_BASE_URL}${this.endpoints[endpoint]}`;
     },
-    
+
     // Helper to make API calls
     async fetchAPI(endpoint, options = {}) {
         const url = this.getEndpoint(endpoint);
@@ -43,11 +42,11 @@ const CONFIG = {
                     ...options.headers
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error(`API Error (${endpoint}):`, error);
