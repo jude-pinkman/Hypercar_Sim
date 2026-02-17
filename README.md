@@ -111,8 +111,7 @@ pip install -r requirements.txt
 
 3. **Start backend**
 ```bash
-cd app
-python main.py
+uvicorn app.main:app --reload --port 8000
 ```
 API runs at `http://localhost:8000`
 
