@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuits – Hypercar Performance Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="circuits.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="background-grid"></div>
+    <div class="background-gradient"></div>
+
+    <div class="app-container">
+
+        <!-- NAV -->
+        <header class="main-navigation">
+            <nav class="primary-nav">
+                <div class="logo-container">
+                    <div class="logo-icon">⚡</div>
+                    <div class="logo-text"><h1>HYPERCAR</h1><span>Performance Simulator v2.0</span></div>
+                </div>
+                <div class="nav-menu">
+                    <a href="home.html"      class="nav-link">HOME</a>
+                    <a href="simulator.html" class="nav-link">SIMULATOR</a>
+                    <a href="circuits.html"  class="nav-link active">CIRCUITS</a>
+                    <a href="about.html"     class="nav-link">ABOUT</a>
+                </div>
+                <div class="status-indicator"><span class="status-dot"></span><span class="status-text">Live</span></div>
+            </nav>
+        </header>
+
+        <main class="circuits-page">
+
+            <!-- Page Header -->
+            <div class="circuits-header">
+                <h2>REAL-WORLD <span>CIRCUITS</span></h2>
+                <p>Physics-accurate lap simulation — braking zones, sector times, full telemetry</p>
+            </div>
+
+            <!-- SIDEBAR -->
+            <aside class="circuits-sidebar">
+
+                <!-- Track Selection -->
+                <div class="panel-card">
+                    <div class="panel-title">Track Selection</div>
+                    <div class="track-grid">
+                        <div class="track-card active" data-track="monaco">
+                            <span class="track-flag">🇲🇨</span>
+                            <div class="track-info">
+                                <div class="track-name">Circuit de Monaco</div>
+                                <div class="track-meta">3.337 km · 19 corners · 1929–Present</div>
+                            </div>
+                            <span class="track-status-dot"></span>
+                        </div>
+                        <div class="track-card coming-soon">
+                            <span class="track-flag">🇧🇪</span>
+                            <div class="track-info"><div class="track-name">Spa-Francorchamps</div><div class="track-meta">7.004 km · 20 corners</div></div>
+                            <span class="track-badge">SOON</span>
+                        </div>
+                        <div class="track-card coming-soon">
+                            <span class="track-flag">🇮🇹</span>
+                            <div class="track-info"><div class="track-name">Autodromo di Monza</div><div class="track-meta">5.793 km · 11 corners</div></div>
+                            <span class="track-badge">SOON</span>
+                        </div>
+                        <div class="track-card coming-soon">
+                            <span class="track-flag">🇩🇪</span>
+                            <div class="track-info"><div class="track-name">Nürburgring Nordschleife</div><div class="track-meta">20.832 km · 154 corners</div></div>
+                            <span class="track-badge">SOON</span>
+                        </div>
+                        <div class="track-card coming-soon">
+                            <span class="track-flag">🇯🇵</span>
+                            <div class="track-info"><div class="track-name">Suzuka Circuit</div><div class="track-meta">5.807 km · 18 corners</div></div>
+                            <span class="track-badge">SOON</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Car Selection -->
+                <div class="panel-card">
+                    <div class="panel-title">Hypercar</div>
+                    <div class="car-select-wrap">
+                        <select id="car-select"><option value="">Loading vehicles…</option></select>
+                    </div>
+                    <div id="car-preview" class="car-preview"></div>
+                </div>
+
+                <!-- Simulate -->
+                <div class="panel-card">
+                    <div class="panel-title">Simulation</div>
+                    <div class="simulate-btn-wrap">
+                        <button id="simulate-btn">
+                            <span class="btn-icon">⚑</span> SIMULATE LAP
+                        </button>
+                    </div>
+                    <div id="sim-error"></div>
+                </div>
+
+            </aside>
+
+            <!-- MAIN -->
+            <div class="circuits-main">
+
+                <!-- MAP -->
+                <div class="panel-card" style="padding:0;height:520px;position:relative;">
+                    <div id="map-loading">
+                        <div class="map-loading-spinner"></div>
+                        <div class="map-loading-text">LOADING CIRCUIT DATA</div>
+                    </div>
+                    <div id="turn-info-bar"></div>
+                    <div class="circuit-info-badge">
+                        <div class="cib-row">Length  <span class="cib-val">3.337 km</span></div>
+                        <div class="cib-row">Corners <span class="cib-val">19</span></div>
+                        <div class="cib-row">Record  <span class="cib-val">1:10.166</span></div>
+                    </div>
+                    <div id="circuit-map" style="width:100%;height:100%;border-radius:12px;"></div>
+                </div>
+
+                <!-- RESULT PANEL -->
+                <div id="result-panel" class="panel-card" style="display:none;">
+
+                    <div class="result-header">
+                        <span id="res-car-name" class="result-car-name">—</span>
+                        <span class="result-track-tag">Circuit de Monaco</span>
+                    </div>
+
+                    <!-- Lap time + key metrics -->
+                    <div class="result-metrics">
+                        <div class="metric-card primary">
+                            <div class="metric-label">Lap Time</div>
+                            <div id="res-laptime" class="metric-value">—</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Avg Speed</div>
+                            <div id="res-avgspeed" class="metric-value">—</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Top Speed</div>
+                            <div id="res-topspeed" class="metric-value">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Sector times -->
+                    <div id="sector-times" class="sector-times-row"></div>
+
+                    <!-- Telemetry chart -->
+                    <div class="panel-title" style="margin:20px 0 10px;">Speed Telemetry</div>
+                    <div class="telemetry-wrap">
+                        <canvas id="telemetry-chart"></canvas>
+                    </div>
+                    <div class="telemetry-legend">
+                        <div class="legend-item"><div class="legend-dot" style="background:#00FF9D"></div>Acceleration</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#FF8C00"></div>Corner Apex</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#FF0066"></div>Braking</div>
+                    </div>
+
+                    <!-- Braking zone analysis -->
+                    <div id="brake-zone-section" class="brake-zone-section">
+                        <div class="panel-title" style="margin:24px 0 14px;">Braking Zone Analysis</div>
+                        <div class="bz-table-wrap">
+                            <table class="bz-table">
+                                <thead>
+                                    <tr>
+                                        <th>Corner</th>
+                                        <th>Entry</th>
+                                        <th>Apex</th>
+                                        <th>−Speed</th>
+                                        <th>Brake Dist</th>
+                                        <th>Brake Time</th>
+                                        <th>Peak g</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="brake-zone-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="main-footer" style="margin-top:40px;">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo"><span class="logo-icon">⚡</span><span class="logo-text">HYPERCAR</span></div>
+                    <p class="footer-tagline">Ultimate Performance Simulator v2.0</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">NAVIGATION</h4>
+                    <a href="home.html"      class="footer-link">Home</a>
+                    <a href="simulator.html" class="footer-link">Simulator</a>
+                    <a href="circuits.html"  class="footer-link">Circuits</a>
+                    <a href="about.html"     class="footer-link">About</a>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">CIRCUITS</h4>
+                    <div class="footer-text">Monaco</div>
+                    <div class="footer-text">Spa (Soon)</div>
+                    <div class="footer-text">Monza (Soon)</div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Hypercar Simulator v2.0 | Real-World Circuit Simulation</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Leaflet + Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script type="module" src="circuits.js"></script>
+</body>
+</html>

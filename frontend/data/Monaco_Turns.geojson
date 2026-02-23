@@ -1,0 +1,30 @@
+{
+"type": "FeatureCollection",
+"name": "Monaco_Turns",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"bbox": [ 7.42151462270362, 43.7323637919362, 7.43024976522686, 43.7410938386992 ],                                                
+"features": [
+{ "type": "Feature", "properties": { "Turn_No": 1, "Turn_Name": "Sainte-Dévote" }, "bbox": [ 7.421514622703617, 43.736984298753924, 7.421514622703617, 43.736984298753924 ], "geometry": { "type": "Point", "coordinates": [ 7.421514622703617, 43.736984298753924 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 2, "Turn_Name": "Beau Rivage" }, "bbox": [ 7.424821891678849, 43.737480029355893, 7.424821891678849, 43.737480029355893 ], "geometry": { "type": "Point", "coordinates": [ 7.424821891678849, 43.737480029355893 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 3, "Turn_Name": "Massenet" }, "bbox": [ 7.427603344521398, 43.738244299174688, 7.427603344521398, 43.738244299174688 ], "geometry": { "type": "Point", "coordinates": [ 7.427603344521398, 43.738244299174688 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 4, "Turn_Name": "Casino" }, "bbox": [ 7.427247515848698, 43.739490273517028, 7.427247515848698, 43.739490273517028 ], "geometry": { "type": "Point", "coordinates": [ 7.427247515848698, 43.739490273517028 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 5, "Turn_Name": "Mirabeau Haute" }, "bbox": [ 7.428824083482696, 43.741093838699214, 7.428824083482696, 43.741093838699214 ], "geometry": { "type": "Point", "coordinates": [ 7.428824083482696, 43.741093838699214 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 6, "Turn_Name": "Grand Hotel Hairpin" }, "bbox": [ 7.429714260689729, 43.740198878040509, 7.429714260689729, 43.740198878040509 ], "geometry": { "type": "Point", "coordinates": [ 7.429714260689729, 43.740198878040509 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 7, "Turn_Name": "Mirabeau Bas" }, "bbox": [ 7.429286209365637, 43.740884208399549, 7.429286209365637, 43.740884208399549 ], "geometry": { "type": "Point", "coordinates": [ 7.429286209365637, 43.740884208399549 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 8, "Turn_Name": "Portier" }, "bbox": [ 7.430249765226863, 43.74101020142804, 7.430249765226863, 43.74101020142804 ], "geometry": { "type": "Point", "coordinates": [ 7.430249765226863, 43.74101020142804 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 9, "Turn_Name": "Tunnel" }, "bbox": [ 7.429622661229426, 43.738524653616736, 7.429622661229426, 43.738524653616736 ], "geometry": { "type": "Point", "coordinates": [ 7.429622661229426, 43.738524653616736 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 10, "Turn_Name": "Nouvelle Chicane" }, "bbox": [ 7.425480427943006, 43.737184476728636, 7.425480427943006, 43.737184476728636 ], "geometry": { "type": "Point", "coordinates": [ 7.425480427943006, 43.737184476728636 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 11, "Turn_Name": "Nouvelle Chicane" }, "bbox": [ 7.425004374978662, 43.737024111672831, 7.425004374978662, 43.737024111672831 ], "geometry": { "type": "Point", "coordinates": [ 7.425004374978662, 43.737024111672831 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 12, "Turn_Name": "Tabac" }, "bbox": [ 7.422282814090917, 43.736761926608899, 7.422282814090917, 43.736761926608899 ], "geometry": { "type": "Point", "coordinates": [ 7.422282814090917, 43.736761926608899 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 13, "Turn_Name": "Louis" }, "bbox": [ 7.421851239710661, 43.735491076426847, 7.421851239710661, 43.735491076426847 ], "geometry": { "type": "Point", "coordinates": [ 7.421851239710661, 43.735491076426847 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 14, "Turn_Name": "Chiron" }, "bbox": [ 7.422229968248438, 43.735209156582066, 7.422229968248438, 43.735209156582066 ], "geometry": { "type": "Point", "coordinates": [ 7.422229968248438, 43.735209156582066 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "Piscine" }, "bbox": [ 7.422416690225203, 43.734628766628063, 7.422416690225203, 43.734628766628063 ], "geometry": { "type": "Point", "coordinates": [ 7.422416690225203, 43.734628766628063 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 15, "Turn_Name": "Piscine(Entry)" }, "bbox": [ 7.422557612471818, 43.734033097405089, 7.422557612471818, 43.734033097405089 ], "geometry": { "type": "Point", "coordinates": [ 7.422557612471818, 43.734033097405089 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 16, "Turn_Name": "Piscine(Exit)" }, "bbox": [ 7.422074953777161, 43.733865087065809, 7.422074953777161, 43.733865087065809 ], "geometry": { "type": "Point", "coordinates": [ 7.422074953777161, 43.733865087065809 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 17, "Turn_Name": "Rascasse Approach" }, "bbox": [ 7.422978617683575, 43.732993207659561, 7.422978617683575, 43.732993207659561 ], "geometry": { "type": "Point", "coordinates": [ 7.422978617683575, 43.732993207659561 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 18, "Turn_Name": "La Rascasse" }, "bbox": [ 7.423598675568679, 43.73252989723369, 7.423598675568679, 43.73252989723369 ], "geometry": { "type": "Point", "coordinates": [ 7.423598675568679, 43.73252989723369 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 19, "Turn_Name": "Anthony Noghes" }, "bbox": [ 7.422402157618521, 43.732363791936166, 7.422402157618521, 43.732363791936166 ], "geometry": { "type": "Point", "coordinates": [ 7.422402157618521, 43.732363791936166 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "PIT IN" }, "bbox": [ 7.422942946739902, 43.732459254807132, 7.422942946739902, 43.732459254807132 ], "geometry": { "type": "Point", "coordinates": [ 7.422942946739902, 43.732459254807132 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "PIT_OUT" }, "bbox": [ 7.421890433710501, 43.736911474055454, 7.421890433710501, 43.736911474055454 ], "geometry": { "type": "Point", "coordinates": [ 7.421890433710501, 43.736911474055454 ] } }
+]
+}
