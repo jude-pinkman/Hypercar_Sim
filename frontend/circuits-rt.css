@@ -1,0 +1,306 @@
+/* ==========================================
+   CIRCUITS-RT.CSS — Real-Time Simulation UI
+   ========================================== */
+
+/* ---- Car Setup Panel ---- */
+.custom-grid { display:flex; flex-direction:column; gap:12px; }
+.custom-row  { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.custom-label {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.55rem;
+    letter-spacing:0.15em;
+    color:rgba(255,255,255,0.45);
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+.custom-slider-wrap { display:flex; align-items:center; gap:8px; flex:1; }
+.custom-slider {
+    -webkit-appearance:none;
+    appearance:none;
+    flex:1;
+    height:4px;
+    border-radius:2px;
+    background:rgba(255,255,255,0.1);
+    outline:none;
+    cursor:pointer;
+}
+.custom-slider::-webkit-slider-thumb {
+    -webkit-appearance:none;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--color-primary,#00FF9D);
+    box-shadow:0 0 8px rgba(0,255,157,0.6);
+    cursor:pointer;
+}
+.custom-val {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.6rem;
+    color:var(--color-primary,#00FF9D);
+    min-width:52px;
+    text-align:right;
+}
+
+/* ---- Tire buttons ---- */
+.tire-buttons { display:flex; gap:6px; }
+.tire-btn {
+    width:32px; height:32px;
+    border-radius:6px;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.04);
+    color:rgba(255,255,255,0.6);
+    font-family:'Orbitron',sans-serif;
+    font-size:0.65rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.2s;
+}
+.tire-btn:hover { border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.1); }
+.tire-btn.active {
+    border-color:var(--color-primary,#00FF9D);
+    background:rgba(0,255,157,0.15);
+    color:var(--color-primary,#00FF9D);
+    box-shadow:0 0 10px rgba(0,255,157,0.3);
+}
+.tire-btn.wet-tire.active { border-color:#00AAFF; background:rgba(0,170,255,0.15); color:#00AAFF; }
+
+/* ---- Weather grid ---- */
+.weather-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+.weather-btn {
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:10px 6px;
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:8px;
+    background:rgba(255,255,255,0.03);
+    cursor:pointer;
+    transition:all 0.2s;
+    font-family:'Rajdhani',sans-serif;
+    font-size:0.75rem;
+    font-weight:600;
+    color:rgba(255,255,255,0.5);
+    letter-spacing:0.05em;
+}
+.weather-btn:hover { border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.07); color:white; }
+.weather-btn.active {
+    border-color:var(--color-primary,#00FF9D);
+    background:rgba(0,255,157,0.08);
+    color:var(--color-primary,#00FF9D);
+    box-shadow:0 0 12px rgba(0,255,157,0.2);
+}
+.wx-icon { font-size:1.2rem; }
+.weather-info {
+    font-family:'Rajdhani',sans-serif;
+    font-size:0.72rem;
+    color:rgba(255,255,255,0.35);
+    padding:6px 0;
+    letter-spacing:0.04em;
+}
+
+/* ---- Lap counter ---- */
+.lap-counter { display:flex; align-items:center; gap:12px; }
+.lap-btn {
+    width:28px; height:28px;
+    border-radius:50%;
+    border:1px solid rgba(0,255,157,0.4);
+    background:rgba(0,255,157,0.07);
+    color:var(--color-primary,#00FF9D);
+    font-size:1.1rem;
+    font-weight:700;
+    line-height:1;
+    cursor:pointer;
+    transition:all 0.15s;
+    display:flex; align-items:center; justify-content:center;
+}
+.lap-btn:hover { background:rgba(0,255,157,0.2); }
+.lap-num {
+    font-family:'Orbitron',sans-serif;
+    font-size:1.3rem;
+    font-weight:900;
+    color:white;
+    min-width:30px;
+    text-align:center;
+}
+
+/* ---- Sim speed buttons ---- */
+.speed-buttons { display:flex; gap:6px; }
+.speed-btn {
+    padding:4px 10px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,0.12);
+    background:transparent;
+    color:rgba(255,255,255,0.45);
+    font-family:'Orbitron',sans-serif;
+    font-size:0.55rem;
+    cursor:pointer;
+    transition:all 0.15s;
+}
+.speed-btn:hover { border-color:rgba(255,255,255,0.4); color:white; }
+.speed-btn.active {
+    border-color:var(--color-primary,#00FF9D);
+    background:rgba(0,255,157,0.12);
+    color:var(--color-primary,#00FF9D);
+}
+
+/* ---- Stop button ---- */
+#stop-btn {
+    background:rgba(255,0,102,0.12);
+    border:1px solid rgba(255,0,102,0.5);
+    color:#FF0066;
+    margin-top:8px;
+    padding:12px 20px;
+    width:100%;
+    border-radius:8px;
+    font-family:'Orbitron',sans-serif;
+    font-size:0.65rem;
+    letter-spacing:0.12em;
+    cursor:pointer;
+    transition:all 0.2s;
+}
+#stop-btn:hover { background:rgba(255,0,102,0.25); }
+
+/* ---- Live HUD overlay ---- */
+.live-hud {
+    position:absolute;
+    bottom:14px; left:50%;
+    transform:translateX(-50%);
+    z-index:1000;
+    background:rgba(0,0,0,0.82);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(0,255,157,0.35);
+    border-radius:12px;
+    padding:10px 16px;
+    min-width:480px;
+    max-width:90%;
+    box-shadow:0 4px 30px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,157,0.1);
+}
+.hud-row {
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-around;
+}
+.hud-block { text-align:center; min-width:60px; }
+.hud-label {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.42rem;
+    letter-spacing:0.2em;
+    color:rgba(255,255,255,0.35);
+    text-transform:uppercase;
+    margin-bottom:2px;
+}
+.hud-value {
+    font-family:'Orbitron',sans-serif;
+    font-size:1rem;
+    font-weight:900;
+    color:var(--color-primary,#00FF9D);
+    line-height:1.1;
+    white-space:nowrap;
+}
+.hud-unit {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.4rem;
+    letter-spacing:0.15em;
+    color:rgba(255,255,255,0.25);
+    text-transform:uppercase;
+}
+.hud-bar-row {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+}
+.hud-bar-label {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.42rem;
+    letter-spacing:0.12em;
+    color:rgba(255,255,255,0.35);
+    min-width:22px;
+}
+.hud-bar-track {
+    flex:1;
+    height:5px;
+    background:rgba(255,255,255,0.08);
+    border-radius:3px;
+    overflow:hidden;
+}
+.hud-bar {
+    height:100%;
+    border-radius:3px;
+    width:0%;
+    transition:width 0.05s linear;
+}
+.throttle-bar { background:linear-gradient(90deg,#00AA66,#00FF9D); }
+.brake-bar    { background:linear-gradient(90deg,#AA0022,#FF0066); }
+
+/* ---- Lap summary strip ---- */
+.lap-summary-strip {
+    display:flex;
+    gap:10px;
+    padding:12px 0;
+    overflow-x:auto;
+    flex-wrap:nowrap;
+}
+.lap-chip {
+    flex-shrink:0;
+    background:rgba(0,0,0,0.5);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:8px;
+    padding:8px 14px;
+    font-family:'Orbitron',sans-serif;
+    font-size:0.62rem;
+    color:rgba(255,255,255,0.7);
+    white-space:nowrap;
+}
+.lap-chip.best-lap { border-color:var(--color-primary,#00FF9D); color:var(--color-primary,#00FF9D); }
+.lap-chip .chip-lap { font-size:0.5rem; opacity:0.5; margin-bottom:2px; }
+
+/* ---- Car marker on map ---- */
+.car-marker-div {
+    width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+    filter:drop-shadow(0 0 6px rgba(0,255,157,0.9));
+    transition:transform 0.08s linear;
+}
+
+/* ---- Lap times table section ---- */
+.lap-times-section { margin-top:10px; }
+.lap-times-section .bz-table-wrap { max-height:260px; overflow-y:auto; }
+
+/* ---- Result weather tag ---- */
+.result-weather-tag {
+    font-family:'Orbitron',sans-serif;
+    font-size:0.55rem;
+    letter-spacing:0.15em;
+    padding:3px 10px;
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:20px;
+    color:rgba(255,255,255,0.5);
+}
+
+/* ---- Scrollbar for table-wrap ---- */
+.bz-table-wrap::-webkit-scrollbar { width:5px; height:5px; }
+.bz-table-wrap::-webkit-scrollbar-track { background:rgba(255,255,255,0.03); }
+.bz-table-wrap::-webkit-scrollbar-thumb { background:rgba(0,255,157,0.25); border-radius:3px; }
+
+/* ---- F1 lights overlay (already in circuits.css, ensure no conflict) ---- */
+#lights-overlay { z-index:9000; }
+
+/* ---- Rain overlay on map ---- */
+.rain-overlay {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:500;
+    border-radius:12px;
+    overflow:hidden;
+}
+.raindrop {
+    position:absolute;
+    top:-20px;
+    width:1px;
+    background:rgba(150,200,255,0.5);
+    animation:fall linear infinite;
+}
+@keyframes fall {
+    to { transform:translateY(600px); }
+}

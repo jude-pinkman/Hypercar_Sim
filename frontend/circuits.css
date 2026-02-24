@@ -1007,3 +1007,47 @@ select#car-select option {
     min-width: 2px;
 }
 
+
+/* ==========================================
+   ADDITIONAL FIXES – Bottom right raw styling
+   ========================================== */
+
+/* Ensure bz-bar-wrap shows bar on right with proper flex */
+.bz-dist { min-width:140px; }
+.bz-bar-wrap {
+    display:flex !important;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+}
+.bz-bar-wrap span {
+    min-width:42px;
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+}
+.bz-bar {
+    flex-shrink:0;
+    height:5px;
+    border-radius:3px;
+    box-shadow:0 0 5px currentColor;
+    min-width:2px;
+    max-width:80px;
+}
+
+/* Ensure table header columns align */
+.bz-table th:not(:first-child) { text-align:right; }
+.bz-table td:not(:first-child) { text-align:right; }
+.bz-dist td, .bz-dist { text-align:right !important; }
+
+/* Scrollbar for bz-table-wrap */
+.bz-table-wrap {
+    overflow-x:auto;
+    border-radius:8px;
+    border:1px solid var(--border-color);
+    scrollbar-width:thin;
+    scrollbar-color:rgba(0,255,157,0.25) rgba(0,0,0,0.2);
+}
+
+/* Map loading overlay */
+#map-loading.hidden { display:none !important; }

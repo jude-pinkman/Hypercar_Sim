@@ -1,0 +1,30 @@
+{
+"type": "FeatureCollection",
+"name": "Spa_Francorchamps_Turns",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Turn_No": 1, "Turn_Name": "La Source" }, "geometry": { "type": "Point", "coordinates": [ 5.963316390718602, 50.446232679973839 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 2, "Turn_Name": "Eau Rouge" }, "geometry": { "type": "Point", "coordinates": [ 5.97052636541163, 50.442562221516624 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 3, "Turn_Name": null }, "geometry": { "type": "Point", "coordinates": [ 5.971569602407573, 50.442106482798565 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 4, "Turn_Name": "Raidilon" }, "geometry": { "type": "Point", "coordinates": [ 5.972164506149061, 50.441024772127442 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "Kemmel Straight" }, "geometry": { "type": "Point", "coordinates": [ 5.976734056627155, 50.434701486474971 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 5, "Turn_Name": "Les Combes" }, "geometry": { "type": "Point", "coordinates": [ 5.977803159003162, 50.431356914865091 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 6, "Turn_Name": "Les Combes" }, "geometry": { "type": "Point", "coordinates": [ 5.976423672066379, 50.430785732874909 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 7, "Turn_Name": "Malmedy" }, "geometry": { "type": "Point", "coordinates": [ 5.977143591811512, 50.429453863487922 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 8, "Turn_Name": "Rivage" }, "geometry": { "type": "Point", "coordinates": [ 5.972142951665674, 50.427811630689824 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 9, "Turn_Name": "Speaker's Corner" }, "geometry": { "type": "Point", "coordinates": [ 5.9745656755984, 50.429305570557915 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 10, "Turn_Name": "Pouhon" }, "geometry": { "type": "Point", "coordinates": [ 5.972634393886903, 50.43401227142396 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 11, "Turn_Name": "Double Gauche" }, "geometry": { "type": "Point", "coordinates": [ 5.969418464965528, 50.434193500258296 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 12, "Turn_Name": "Fagnes" }, "geometry": { "type": "Point", "coordinates": [ 5.966900901305896, 50.430316150212349 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 13, "Turn_Name": "Fagnes" }, "geometry": { "type": "Point", "coordinates": [ 5.964273409780992, 50.430726692035904 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 14, "Turn_Name": "Campus" }, "geometry": { "type": "Point", "coordinates": [ 5.962238666549238, 50.428705528682841 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 15, "Turn_Name": "Curve Paul Frere" }, "geometry": { "type": "Point", "coordinates": [ 5.959264147841799, 50.429924827769277 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 16, "Turn_Name": "Blanchimont" }, "geometry": { "type": "Point", "coordinates": [ 5.965702472029567, 50.433928521501016 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 17, "Turn_Name": "Blanchimont" }, "geometry": { "type": "Point", "coordinates": [ 5.968254522862615, 50.436715529527625 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 18, "Turn_Name": "Chicane" }, "geometry": { "type": "Point", "coordinates": [ 5.966413769981341, 50.441545039609736 ] } },
+{ "type": "Feature", "properties": { "Turn_No": 19, "Turn_Name": "Chicane" }, "geometry": { "type": "Point", "coordinates": [ 5.967362167250379, 50.441696039655135 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "PIT_IN" }, "geometry": { "type": "Point", "coordinates": [ 5.966974186549409, 50.441455812083731 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "PIT_OUT" }, "geometry": { "type": "Point", "coordinates": [ 5.965219651601688, 50.445683639224377 ] } },
+{ "type": "Feature", "properties": { "Turn_No": null, "Turn_Name": "PIT_STOP" }, "geometry": { "type": "Point", "coordinates": [ 5.965527880714122, 50.444059813928583 ] } }
+]
+}
