@@ -1,5 +1,6 @@
 import { RaceRenderer } from './render.js';
 import { VehicleSelector } from './vehicle-selector.js';
+import { runFrontendSimulation } from './sim-physics.js';
 
 // ==================== CONFIGURATION ====================
 // Use CONFIG for API URL (defined in config.js)
@@ -428,29 +429,41 @@ async function startSimulation() {
         };
 
         console.log('Starting simulation with params:', params);
-        
-        // Log physics config status
-        if (params.physics_config) {
-            console.log('✅ Custom physics config detected:');
-            console.log('  - Tire grip:', params.physics_config.tires?.base_friction_coefficient);
-            console.log('  - Turbo enabled:', params.physics_config.turbo?.enabled);
-            console.log('  - Fuel enabled:', params.physics_config.fuel?.enabled);
-            console.log('  - Weather:', params.physics_config.weather?.track_condition);
-        } else {
-            console.log('ℹ️ Using default physics (no custom config)');
+
+        let results = null;
+
+        // Try backend first; fall back to frontend physics engine for F1 cars
+        // or when the server is unavailable
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+
+            const response = await fetch(`${API_URL}/api/simulate/drag`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params),
+                signal: controller.signal,
+            });
+            clearTimeout(timeout);
+
+            if (response.ok) {
+                results = await response.json();
+                console.log('✅ Backend simulation complete');
+            } else {
+                throw new Error(`HTTP ${response.status}`);
+            }
+        } catch (backendErr) {
+            console.warn(`⚠️ Backend unavailable or vehicle not found (${backendErr.message}) — using frontend physics engine`);
+            results = runFrontendSimulation(
+                params.vehicle_ids,
+                params.environment,
+                params.max_time,
+                params.target_distance,
+                params.start_velocity ?? 0
+            );
+            console.log('✅ Frontend physics simulation complete');
         }
 
-        const response = await fetch(`${API_URL}/api/simulate/drag`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(params)
-        });
-
-        if (!response.ok) {
-            throw new Error(`Simulation failed: ${response.statusText}`);
-        }
-
-        const results = await response.json();
         state.simulationResults = results;
 
         console.log('Simulation complete:', results);

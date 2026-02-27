@@ -218,6 +218,14 @@ if frontend_path.exists():
     @app.get("/home.html")
     async def serve_home():
         return FileResponse(str(frontend_path / "home.html"))
+
+    @app.get("/simulator.html")
+    async def serve_simulator():
+        return FileResponse(str(frontend_path / "simulator.html"))
+
+    @app.get("/circuits.html")
+    async def serve_circuits():
+        return FileResponse(str(frontend_path / "circuits.html"))
     
     @app.get("/about.html")
     async def serve_about():

@@ -1051,3 +1051,38 @@ select#car-select option {
 
 /* Map loading overlay */
 #map-loading.hidden { display:none !important; }
+
+/* ---- Car Category Toggle (Circuits page) ---- */
+.circuits-cat-toggle {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    padding: 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+.circuits-cat-btn {
+    flex: 1;
+    padding: 8px 10px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 7px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Rajdhani', 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.circuits-cat-btn:hover {
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.05);
+}
+.circuits-cat-btn.active {
+    background: rgba(0,255,157,0.12);
+    border-color: rgba(0,255,157,0.5);
+    color: #00ff9d;
+    box-shadow: 0 0 10px rgba(0,255,157,0.15);
+}

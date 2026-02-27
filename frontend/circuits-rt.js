@@ -52,6 +52,20 @@ const VEHICLE_SPECS = {
     dodge_viper_acr:           { power_kw: 477, weight_kg:1521, drag_coefficient:0.420, top_speed_kmh:330, cornering_grip:1.38, downforce_factor:1.18, transmission_efficiency:0.92 },
     acura_nsx_type_s:          { power_kw: 447, weight_kg:1725, drag_coefficient:0.330, top_speed_kmh:307, cornering_grip:1.20, downforce_factor:1.00, transmission_efficiency:0.94 },
     nissan_gtr_nismo:          { power_kw: 441, weight_kg:1720, drag_coefficient:0.350, top_speed_kmh:315, cornering_grip:1.22, downforce_factor:1.02, transmission_efficiency:0.93 },
+
+    // ---- Formula 1 2020 ----
+    // F1 cars have exceptional cornering grip (slick tyres + massive downforce)
+    // and moderate top speed limited by high-downforce aero configuration
+    f1_mercedes_w11:     { power_kw:950, weight_kg:746, drag_coefficient:1.20, top_speed_kmh:372, cornering_grip:2.85, downforce_factor:3.50, transmission_efficiency:0.98 },
+    f1_redbull_rb16:     { power_kw:940, weight_kg:744, drag_coefficient:1.22, top_speed_kmh:368, cornering_grip:2.80, downforce_factor:3.45, transmission_efficiency:0.98 },
+    f1_ferrari_sf1000:   { power_kw:920, weight_kg:746, drag_coefficient:1.25, top_speed_kmh:360, cornering_grip:2.72, downforce_factor:3.38, transmission_efficiency:0.98 },
+    f1_mclaren_mcl35:    { power_kw:915, weight_kg:748, drag_coefficient:1.24, top_speed_kmh:358, cornering_grip:2.70, downforce_factor:3.35, transmission_efficiency:0.98 },
+    f1_renault_rs20:     { power_kw:910, weight_kg:746, drag_coefficient:1.25, top_speed_kmh:356, cornering_grip:2.68, downforce_factor:3.32, transmission_efficiency:0.98 },
+    f1_alphatauri_at01:  { power_kw:938, weight_kg:745, drag_coefficient:1.23, top_speed_kmh:365, cornering_grip:2.78, downforce_factor:3.42, transmission_efficiency:0.98 },
+    f1_racingpoint_rp20: { power_kw:945, weight_kg:743, drag_coefficient:1.21, top_speed_kmh:369, cornering_grip:2.82, downforce_factor:3.48, transmission_efficiency:0.98 },
+    f1_alfaromeo_c39:    { power_kw:918, weight_kg:747, drag_coefficient:1.26, top_speed_kmh:357, cornering_grip:2.65, downforce_factor:3.30, transmission_efficiency:0.98 },
+    f1_haas_vf20:        { power_kw:916, weight_kg:748, drag_coefficient:1.27, top_speed_kmh:355, cornering_grip:2.62, downforce_factor:3.28, transmission_efficiency:0.98 },
+    f1_williams_fw43:    { power_kw:943, weight_kg:745, drag_coefficient:1.24, top_speed_kmh:363, cornering_grip:2.68, downforce_factor:3.35, transmission_efficiency:0.98 },
 };
 
 // ==========================================
@@ -511,30 +525,110 @@ async function loadTrackOnMap(trackId) {
 // ==========================================
 // VEHICLE DROPDOWN
 // ==========================================
+
+// F1 display names for the circuits dropdown
+const F1_DISPLAY_NAMES = {
+    f1_mercedes_w11:     'Mercedes W11 (2020)',
+    f1_redbull_rb16:     'Red Bull RB16 (2020)',
+    f1_ferrari_sf1000:   'Ferrari SF1000 (2020)',
+    f1_mclaren_mcl35:    'McLaren MCL35 (2020)',
+    f1_renault_rs20:     'Renault R.S.20 (2020)',
+    f1_alphatauri_at01:  'AlphaTauri AT01 (2020)',
+    f1_racingpoint_rp20: 'Racing Point RP20 (2020)',
+    f1_alfaromeo_c39:    'Alfa Romeo C39 (2020)',
+    f1_haas_vf20:        'Haas VF-20 (2020)',
+    f1_williams_fw43:    'Williams FW43 (2020)',
+};
+
+let _activeCarCategory = 'hypercars'; // 'hypercars' | 'f1'
+
 async function initVehicleDropdown() {
     const select = document.getElementById('car-select');
-    let vehicles = [];
+    let hypercars = [];
+
+    // Try backend for hypercar names
     try {
         const apiBase = window.CONFIG ? window.CONFIG.API_BASE_URL : 'http://localhost:8000';
         const resp = await fetch(`${apiBase}/api/vehicles`);
-        if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
-        if(data && typeof data === 'object' && !Array.isArray(data)) {
-            vehicles = Object.entries(data).map(([id,name]) => ({ id, name, ...(VEHICLE_SPECS[id]||{}) }));
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+            hypercars = Object.entries(data).map(([id, name]) => ({ id, name, ...(VEHICLE_SPECS[id] || {}) }));
         }
     } catch {
-        vehicles = Object.entries(VEHICLE_SPECS).map(([id,specs]) => ({
-            id, name: id.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), ...specs
-        }));
+        // Backend unavailable — build from VEHICLE_SPECS (hypercars only)
+        hypercars = Object.entries(VEHICLE_SPECS)
+            .filter(([id]) => !id.startsWith('f1_'))
+            .map(([id, specs]) => ({
+                id, name: id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), ...specs
+            }));
     }
-    vehicles.sort((a,b)=>a.name.localeCompare(b.name));
+    hypercars.sort((a, b) => a.name.localeCompare(b.name));
+
+    const f1cars = Object.entries(F1_DISPLAY_NAMES).map(([id, name]) => ({
+        id, name, ...VEHICLE_SPECS[id]
+    }));
+
+    // Store both lists on state
+    state._hypercars = hypercars;
+    state._f1cars = f1cars;
+    state.vehicles = hypercars; // default to hypercars
+
+    // Inject category toggle buttons above the select
+    const wrap = select.closest('.car-select-wrap') || select.parentElement;
+    if (!document.getElementById('circuits-cat-toggle')) {
+        const toggle = document.createElement('div');
+        toggle.id = 'circuits-cat-toggle';
+        toggle.className = 'circuits-cat-toggle';
+        toggle.innerHTML = `
+            <button class="circuits-cat-btn active" data-cat="hypercars">&#127950; Hypercars</button>
+            <button class="circuits-cat-btn"        data-cat="f1">&#127937; Formula 1</button>
+        `;
+        wrap.insertBefore(toggle, select);
+
+        toggle.querySelectorAll('.circuits-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggle.querySelectorAll('.circuits-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                _activeCarCategory = btn.dataset.cat;
+
+                // Reset selection
+                state.selectedVehicle = null;
+                document.getElementById('car-preview').innerHTML = '';
+                document.getElementById('car-preview').classList.remove('visible');
+                document.getElementById('customization-panel').style.display = 'none';
+
+                _populateCarSelect();
+            });
+        });
+    }
+
+    // Update panel title
+    _updateCarPanelTitle();
+    _populateCarSelect();
+}
+
+function _updateCarPanelTitle() {
+    const titleEl = document.querySelector('.panel-card .panel-title');
+    if (titleEl && (titleEl.textContent === 'Hypercar' || titleEl.textContent === 'Formula 1')) {
+        titleEl.textContent = _activeCarCategory === 'f1' ? 'Formula 1' : 'Hypercar';
+    }
+}
+
+function _populateCarSelect() {
+    const select = document.getElementById('car-select');
+    const vehicles = _activeCarCategory === 'f1' ? state._f1cars : state._hypercars;
     state.vehicles = vehicles;
-    select.innerHTML = '<option value="">— Select Hypercar —</option>';
-    vehicles.forEach((v,i) => {
+
+    select.innerHTML = `<option value="">— Select ${_activeCarCategory === 'f1' ? 'F1 Car' : 'Hypercar'} —</option>`;
+    vehicles.forEach((v, i) => {
         const o = document.createElement('option');
-        o.value = i; o.textContent = v.name;
+        o.value = i;
+        o.textContent = v.name;
         select.appendChild(o);
     });
+
+    _updateCarPanelTitle();
 }
 
 // ==========================================
@@ -673,7 +767,7 @@ function updateRainEffect() {
 // REALTIME SIMULATION
 // ==========================================
 async function runRealtimeSim() {
-    if(!state.selectedVehicle) { showError('Select a hypercar first.'); return; }
+    if(!state.selectedVehicle) { showError('Select a car first.'); return; }
     if(state.isRunning) return;
 
     const car = state.selectedVehicle;
