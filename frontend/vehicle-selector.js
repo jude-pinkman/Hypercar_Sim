@@ -7,13 +7,13 @@
 import { CAR_CATALOGUE } from './car-data.js';
 
 // ---- Static catalogue split by category ----
-const HYPERCAR_CATALOGUE = CAR_CATALOGUE.filter(c => c.carCategory === 'hypercar');
-const F1_CATALOGUE       = CAR_CATALOGUE.filter(c => c.carCategory === 'f1');
+const HYPERCAR_CATALOGUE = CAR_CATALOGUE.filter(c => c.carCategory === 'hypercars');
+const F1_CATALOGUE = CAR_CATALOGUE.filter(c => c.carCategory === 'f1');
 
 export class VehicleSelector {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
-        this.selectedVehicles  = [];
+        this.selectedVehicles = [];
         this.availableVehicles = {}; // { id: displayName } — kept for legacy compat
         this.maxVehicles = 3;
         this.activeCategory = 'hypercars'; // 'hypercars' | 'f1'
@@ -131,7 +131,7 @@ export class VehicleSelector {
         select.appendChild(placeholder);
 
         const catalogue = this.activeCategory === 'f1' ? F1_CATALOGUE : HYPERCAR_CATALOGUE;
-        const grouped   = this._groupByTeam(catalogue);
+        const grouped = this._groupByTeam(catalogue);
 
         for (const [team, cars] of Object.entries(grouped)) {
             const og = document.createElement('optgroup');
