@@ -10,7 +10,7 @@ const CONFIG = {
 
         // Local development
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://localhost:8000';
+            return 'http://localhost:8080';
         }
 
         // Production on Render

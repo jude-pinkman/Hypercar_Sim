@@ -21,3 +21,5 @@ Thumbs.db
 .env
 
 /hypercar
+/app/.pytest_cache
+test_*.py

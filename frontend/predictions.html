@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Predictions - HYPERCAR Simulator</title>
+    <link rel="stylesheet" href="predictions-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Syncopate:wght@400;700&family=Barlow:wght@100;300;400;600&display=swap"
+        rel="stylesheet">
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">HYPERCAR</span>
+            </div>
+            <div class="nav-links">
+                <a href="home.html" class="nav-link">HOME</a>
+                <a href="simulator.html" class="nav-link">SIMULATOR</a>
+                <a href="circuits.html" class="nav-link">CIRCUITS</a>
+                <a href="predictions.html" class="nav-link active">PREDICTIONS</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="hero-background">
+        <div class="grid-lines"></div>
+        <div class="speed-lines"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="predictions-container">
+        <!-- Header Section -->
+        <section class="predictions-header">
+            <div class="header-badge">
+                <span class="badge-text">AI-POWERED RACE PREDICTION</span>
+            </div>
+            <h1 class="page-title">
+                <span class="title-line">GRAND PRIX</span>
+                <span class="title-line title-highlight">PREDICTOR</span>
+            </h1>
+            <p class="page-description">
+                Select a circuit and simulate the full F1 Grand Prix. Our physics engine
+                predicts race outcomes based on circuit characteristics, driver stats, and racing dynamics.
+            </p>
+        </section>
+
+        <!-- Circuit Selection -->
+        <section class="circuit-selection">
+            <h2 class="section-title">SELECT CIRCUIT</h2>
+            <div class="circuits-grid" id="circuitsGrid">
+                <!-- Circuit cards will be dynamically loaded -->
+                <div class="circuit-loading">
+                    <div class="spinner"></div>
+                    <p>Loading circuits...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simulation Controls -->
+        <section class="simulation-controls">
+            <button id="simulateBtn" class="btn-simulate" disabled>
+                <span class="btn-icon">🏁</span>
+                <span class="btn-text">SIMULATE GRAND PRIX</span>
+            </button>
+            <div id="simulationStatus" class="simulation-status"></div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <!-- Race Winner -->
+            <div class="winner-card">
+                <div class="winner-label">🏆 RACE WINNER</div>
+                <div class="winner-name" id="winnerName">-</div>
+                <div class="winner-team" id="winnerTeam">-</div>
+                <div class="winner-time" id="winnerTime">-</div>
+            </div>
+
+            <!-- Top 10 Finishers -->
+            <div class="results-card">
+                <h3 class="results-card-title">
+                    <span class="title-icon">🏁</span>
+                    TOP 10 FINISHERS
+                </h3>
+                <div class="results-table-container">
+                    <table class="results-table" id="top10Table">
+                        <thead>
+                            <tr>
+                                <th>POS</th>
+                                <th>DRIVER</th>
+                                <th>TEAM</th>
+                                <th>TIME</th>
+                                <th>GAP</th>
+                                <th>FASTEST LAP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lap Times Analysis -->
+            <div class="results-card">
+                <h3 class="results-card-title">
+                    <span class="title-icon">⏱️</span>
+                    LAP TIMES ANALYSIS
+                </h3>
+                <div class="lap-times-container" id="lapTimesContainer">
+                    <div class="driver-selector">
+                        <label for="driverSelect">Select Driver:</label>
+                        <select id="driverSelect" class="driver-select">
+                            <option value="">Choose a driver...</option>
+                        </select>
+                    </div>
+                    <div class="lap-times-chart" id="lapTimesChart">
+                        <p class="no-data">Select a driver to view lap times</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pit Stops -->
+            <div class="results-card">
+                <h3 class="results-card-title">
+                    <span class="title-icon">🔧</span>
+                    PIT STOP STRATEGY
+                </h3>
+                <div class="pitstops-container">
+                    <table class="pitstops-table" id="pitstopsTable">
+                        <thead>
+                            <tr>
+                                <th>DRIVER</th>
+                                <th>LAP</th>
+                                <th>RACE TIME</th>
+                                <th>SERVICE TIME</th>
+                                <th>COMPOUND CHANGE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Pit stops will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Race Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="totalLaps">-</div>
+                    <div class="stat-label">Total Laps</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏎️</div>
+                    <div class="stat-value" id="raceDistance">-</div>
+                    <div class="stat-label">Race Distance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value" id="fastestLap">-</div>
+                    <div class="stat-label">Fastest Lap</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔧</div>
+                    <div class="stat-value" id="totalPitStops">-</div>
+                    <div class="stat-label">Total Pit Stops</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">HYPERCAR</span>
+                </div>
+                <p class="footer-tagline">Ultimate Performance Simulator v2.0</p>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">NAVIGATION</h4>
+                <a href="home.html" class="footer-link">Home</a>
+                <a href="simulator.html" class="footer-link">Simulator</a>
+                <a href="circuits.html" class="footer-link">Circuits</a>
+                <a href="predictions.html" class="footer-link">Predictions</a>
+                <a href="about.html" class="footer-link">About</a>
+            </div>
+            <div class="footer-section">
+                <h4 class="footer-heading">FEATURES</h4>
+                <div class="footer-text">AI Race Predictions</div>
+                <div class="footer-text">Real-time Simulation</div>
+                <div class="footer-text">Circuit Analysis</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Hypercar Simulator v2.0 | Physics-Based Performance Analysis</p>
+        </div>
+    </footer>
+
+    <script src="predictions.js"></script>
+</body>
+
+</html>

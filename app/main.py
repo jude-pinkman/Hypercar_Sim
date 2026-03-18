@@ -13,6 +13,9 @@ from app.physics_improved import ImprovedPhysicsEngine
 from app.physics_customizable import ConfigurablePhysicsEngine
 from app.physics_config import PhysicsConfig, PRESET_CONFIGS
 from app.tuning import apply_tuning_to_vehicles, TuningSystem
+from app.ml.predict import router as ml_router
+from app.circuit_race_simulator import RaceSimulator, create_f1_grid
+from app.circuit_registry import get_circuit, list_circuits as get_circuit_list
 
 app = FastAPI(
     title="Hypercar Performance Simulation API",
@@ -36,6 +39,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ML prediction router
+app.include_router(ml_router)
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -51,13 +57,9 @@ async def startup_event():
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
-    return {
-        "message": "Hypercar Performance Simulation API",
-        "version": "2.0.0",
-        "database": "CSV-based (hypercar_data.csv)",
-        "note": "Use /api/ endpoints or visit /docs for API documentation"
-    }
+    """Root endpoint - redirect to home page"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/home.html")
 
 
 @app.get("/api")
@@ -206,10 +208,92 @@ async def simulate_drag_race(params: SimulationParams) -> SimulationResponse:
     )
 
 
+@app.post("/api/predict/race")
+async def predict_race(circuit_name: str):
+    """
+    Predict race results for a given circuit
+    
+    Runs a full F1 race simulation and returns:
+    - Race winner
+    - Top 10 finishers
+    - Lap times for all drivers
+    - Pit stop information
+    """
+    try:
+        # Get the circuit
+        circuit = get_circuit(circuit_name)
+        if not circuit:
+            raise HTTPException(status_code=404, detail=f"Circuit '{circuit_name}' not found")
+        
+        # Create simulator
+        simulator = RaceSimulator(
+            circuit=circuit,
+            timestep=0.1,
+            enable_tyre_degradation=True
+        )
+        
+        # Add F1 grid
+        f1_grid = create_f1_grid()
+        for car_spec in f1_grid:
+            simulator.add_car(**car_spec)
+        
+        # Run simulation silently
+        results = simulator.run_simulation(verbose=False)
+        
+        # Extract lap times for each driver from results
+        lap_times = {}
+        for result in results:
+            driver_name = result['driver']
+            lap_times[driver_name] = result.get('lap_times', [])
+        
+        # Extract pit stop information from tyre stints
+        pit_stops = []
+        for result in results:
+            driver_name = result['driver']
+            tyre_stints = result.get('tyre_stints', [])
+            
+            # Each stint in pit_history has: lap, race_time, old, new
+            for stint in tyre_stints:
+                pit_stops.append({
+                    'driver': driver_name,
+                    'lap': stint.get('lap', 0),
+                    'race_time': stint.get('race_time', 0.0),
+                    'service_time': 2.5,  # Default pit stop service time
+                    'compound_change': f"{stint.get('old', 'SOFT').upper()} → {stint.get('new', 'MEDIUM').upper()}"
+                })
+        
+        # Format top 10 results
+        top_10 = results[:10] if len(results) >= 10 else results
+        
+        return {
+            'circuit': circuit_name,
+            'winner': results[0] if results else None,
+            'top_10': top_10,
+            'lap_times': lap_times,
+            'pit_stops': pit_stops,
+            'total_laps': circuit.number_of_laps,
+            'circuit_length_km': circuit.lap_length_km
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Race simulation error: {str(e)}")
+
+
+@app.get("/api/circuits/list")
+async def list_circuits():
+    """List all available circuits"""
+    circuits = get_circuit_list()
+    return {
+        'circuits': circuits,
+        'count': len(circuits)
+    }
+
+
 # Serve frontend static files (optional - only if frontend is in same repo)
 frontend_path = Path(__file__).parent.parent / "frontend"
 if frontend_path.exists():
-    app.mount("/static", StaticFiles(directory=str(frontend_path), html=True), name="static")
+    # Mount static files - this will serve CSS, JS, images, etc.
+    app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
     
     @app.get("/index.html")
     async def serve_index():
@@ -230,6 +314,34 @@ if frontend_path.exists():
     @app.get("/about.html")
     async def serve_about():
         return FileResponse(str(frontend_path / "about.html"))
+    
+    @app.get("/predictions.html")
+    async def serve_predictions():
+        return FileResponse(str(frontend_path / "predictions.html"))
+    
+    # Serve CSS files
+    @app.get("/{filename}.css")
+    async def serve_css(filename: str):
+        file_path = frontend_path / f"{filename}.css"
+        if file_path.exists():
+            return FileResponse(str(file_path))
+        raise HTTPException(status_code=404, detail="CSS file not found")
+    
+    # Serve JS files
+    @app.get("/{filename}.js")
+    async def serve_js(filename: str):
+        file_path = frontend_path / f"{filename}.js"
+        if file_path.exists():
+            return FileResponse(str(file_path))
+        raise HTTPException(status_code=404, detail="JS file not found")
+    
+    # Serve data files
+    @app.get("/data/{filename}")
+    async def serve_data(filename: str):
+        file_path = frontend_path / "data" / filename
+        if file_path.exists():
+            return FileResponse(str(file_path))
+        raise HTTPException(status_code=404, detail="Data file not found")
 
 
 if __name__ == "__main__":
