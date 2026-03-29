@@ -1,0 +1,1986 @@
+/* ==========================================
+   F1 2026 RACE SIMULATOR STYLES
+   Consistent with Hypercar Design System
+   ========================================== */
+
+:root {
+    /* Color Palette - Matching Hypercar design */
+    --primary: #00FF9D;
+    --primary-dim: #00CC7D;
+    --secondary: #FFD700;
+    --accent: #FF0066;
+    --bg-dark: #0A0A0A;
+    --bg-darker: #050505;
+    --surface: #151515;
+    --surface-light: #1F1F1F;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0A0A0;
+    --border: rgba(255, 255, 255, 0.1);
+    
+    /* Typography - Match Hypercar design system */
+    --font-display: 'Syncopate', sans-serif;
+    --font-title: 'Teko', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: var(--bg-darker);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   HEADER & NAVIGATION
+   ============================================================================ */
+
+.main-header {
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    width: 100%;
+    height: 100%;
+    gap: 2rem;
+}
+
+.nav-left {
+    flex: 0 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+}
+
+.logo i {
+    font-size: 18px;
+    -webkit-text-fill-color: var(--primary);
+}
+
+.nav-right {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-link {
+    font-family: var(--font-display);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--primary);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--primary); }
+    50% { opacity: 0.3; box-shadow: 0 0 5px var(--primary); }
+}
+
+.status-text {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* ============================================================================
+   MAIN LAYOUT
+   ============================================================================ */
+
+.f1-race-container {
+    display: grid;
+    grid-template-columns: 340px 1fr 340px;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+}
+
+/* ============================================================================
+   SIDEBARS
+   ============================================================================ */
+
+.f1-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.5rem;
+}
+
+.f1-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.f1-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.f1-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 157, 0.3);
+    border-radius: 4px;
+}
+
+.left-sidebar {
+    grid-column: 1;
+}
+
+.right-sidebar {
+    grid-column: 3;
+}
+
+/* ============================================================================
+   PANEL CARDS
+   ============================================================================ */
+
+.panel-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.panel-card:hover {
+    border-color: var(--primary);
+    background: rgba(0, 255, 157, 0.02);
+}
+
+.panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+}
+
+/* ============================================================================
+   INPUTS & CONTROLS
+   ============================================================================ */
+
+.circuit-select,
+.grid-select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: var(--font-body);
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.circuit-select:hover,
+.grid-select:hover,
+.circuit-select:focus,
+.grid-select:focus {
+    border-color: var(--primary);
+    background: rgba(0, 255, 157, 0.05);
+    outline: none;
+}
+
+.circuit-info {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding: 1rem;
+    background: var(--bg-dark);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border-left: 2px solid var(--primary);
+}
+
+/* ============================================================================
+   WEATHER & SPEED BUTTONS
+   ============================================================================ */
+
+.config-row {
+    margin-bottom: 1rem;
+}
+
+.config-row label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    font-family: var(--font-display);
+}
+
+.weather-buttons,
+.speed-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.weather-btn,
+.speed-btn {
+    padding: 0.7rem;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+    letter-spacing: 0.05em;
+}
+
+.weather-btn:hover,
+.speed-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.weather-btn.active,
+.speed-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color: var(--bg-dark);
+    border-color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+}
+
+/* ============================================================================
+   PREDICTIONS PANEL
+   ============================================================================ */
+
+.predictions-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.prediction-item {
+    padding: 0.8rem;
+    background: var(--bg-dark);
+    border-left: 2px solid var(--secondary);
+    border-radius: 4px;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.prediction-item:hover {
+    background: rgba(255, 215, 0, 0.05);
+    border-left-color: var(--primary);
+}
+
+.prediction-item .driver {
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-display);
+}
+
+.prediction-item .probability {
+    color: var(--secondary);
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.prediction-loading {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 1.5rem;
+    font-family: var(--font-display);
+    letter-spacing: 0.1em;
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn-primary {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    margin-bottom: 0.8rem;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+    letter-spacing: 0.05em;
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(0, 255, 157, 0.05);
+}
+
+/* ============================================================================
+   ERROR MESSAGE
+   ============================================================================ */
+
+.error-message {
+    background: rgba(255, 0, 102, 0.1);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0.9rem;
+    color: var(--accent);
+    font-size: 11px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================================================
+   CENTER AREA - TRACK MAP
+   ============================================================================ */
+
+.f1-main {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.map-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0A0A0A;  /* Darker background like broadcast */
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.track-map {
+    width: 100%;
+    height: 100%;
+}
+
+.track-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.race-hud {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    padding: 1.5rem;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.1);
+}
+
+.hud-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+.hud-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    margin-top: 0.4rem;
+    font-family: var(--font-title);
+}
+
+.hud-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+}
+
+/* ============================================================================
+   POSITIONS TABLE
+   ============================================================================ */
+
+.positions-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.positions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.positions-table thead {
+    background: rgba(0, 255, 157, 0.1);
+    border-bottom: 2px solid var(--primary);
+}
+
+.positions-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    font-family: var(--font-display);
+}
+
+.positions-table tbody {
+    overflow-y: auto;
+}
+
+.positions-table tr {
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.positions-table tr:hover {
+    background: rgba(0, 255, 157, 0.05);
+}
+
+.positions-table td {
+    padding: 1rem;
+    color: var(--text-primary);
+}
+
+.positions-table .pos {
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-display);
+}
+
+.positions-table .gap {
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+}
+
+.position-gained {
+    background: rgba(0, 255, 157, 0.1) !important;
+}
+
+.position-lost {
+    background: rgba(255, 0, 102, 0.1) !important;
+}
+
+/* Tyre indicators */
+.tyre-soft {
+    color: #FF1A1A;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.tyre-medium {
+    color: #FFD700;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.tyre-hard {
+    color: #FFFFFF;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.tyre-wet {
+    color: #00FFFF;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+/* ============================================================================
+   TELEMETRY PANEL
+   ============================================================================ */
+
+.telemetry-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 12px;
+    overflow-y: auto;
+    max-height: 250px;
+}
+
+.telemetry-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem;
+    background: var(--bg-dark);
+    border-radius: 4px;
+    border-left: 2px solid var(--primary);
+    transition: all 0.3s ease;
+}
+
+.telemetry-item:hover {
+    background: rgba(0, 255, 157, 0.05);
+}
+
+.telemetry-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.telemetry-value {
+    color: var(--primary);
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1400px) {
+    .f1-race-container {
+        grid-template-columns: 320px 1fr 320px;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .f1-race-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .f1-sidebar {
+        display: none;
+    }
+
+    .f1-main {
+        grid-column: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 1rem;
+    }
+
+    .nav-right {
+        gap: 1rem;
+    }
+
+    .nav-link {
+        font-size: 10px;
+    }
+
+    .race-hud {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        bottom: 15px;
+        padding: 1rem;
+    }
+}
+
+/* ============================================================================
+   CALENDAR TAB INTERFACE
+   ============================================================================ */
+
+.panel-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    padding: 0.6rem 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-family: var(--font-title);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: var(--bg-dark);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ============================================================================
+   SEASON CALENDAR STYLES
+   ============================================================================ */
+
+.calendar-panel {
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.calendar-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.calendar-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.calendar-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 157, 0.2);
+    border-radius: 3px;
+}
+
+.calendar-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 157, 0.4);
+}
+
+.calendar-content {
+    padding: 0 8px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.8rem;
+}
+
+.calendar-season {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+.calendar-progress {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-family: 'Courier New', monospace;
+    text-align: right;
+}
+
+.calendar-races {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.race-item {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.01);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.race-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.race-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--primary);
+    transform: translateX(4px);
+}
+
+.race-item.completed {
+    opacity: 0.5;
+}
+
+.race-item.completed::before {
+    background: var(--primary);
+}
+
+.race-item.current {
+    background: rgba(0, 255, 157, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+}
+
+.race-item.current::before {
+    background: var(--primary);
+}
+
+.race-item.upcoming::before {
+    background: var(--secondary);
+}
+
+.race-round {
+    font-family: var(--font-display);
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.race-name {
+    font-family: var(--font-title);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.race-circuit {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.race-circuit i {
+    color: var(--primary);
+    font-size: 10px;
+}
+
+.race-date {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.race-status {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--primary);
+}
+
+.race-item.upcoming .race-status {
+    color: var(--secondary);
+    animation: pulse-race 2s ease-in-out infinite;
+}
+
+@keyframes pulse-race {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ==========================================================================
+   F1 MANAGER ENGINE — UI ADDITIONS (2026 update)
+   ========================================================================== */
+
+/* ── Positions Table ──────────────────────────────────────────────────────── */
+
+#positions-tbody tr {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+#positions-tbody tr:hover { background: rgba(255,255,255,0.04); }
+#positions-tbody tr.row-selected { background: rgba(0,255,157,0.08); }
+#positions-tbody tr.row-dnf { opacity: 0.45; }
+
+.pos-cell { width: 36px; }
+.pos-num {
+    padding: 2px 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.driver-cell { max-width: 140px; }
+.driver-abbr { font-weight: 700; font-size: 0.9rem; display: block; }
+.driver-team { font-size: 0.7rem; color: #666; display: block; }
+.gap-cell { font-size: 0.82rem; color: #ccc; white-space: nowrap; }
+.tyre-cell { white-space: nowrap; font-size: 0.8rem; }
+.tyre-age  { color: #666; font-size: 0.72rem; margin-left: 2px; }
+
+/* ── Tyre Compounds ───────────────────────────────────────────────────────── */
+.tyre-dot { font-size: 0.85rem; }
+.tyre-s  { color: #E8002D; }
+.tyre-m  { color: #FFD700; }
+.tyre-h  { color: #E0E0E0; }
+.tyre-i  { color: #39B54A; }
+.tyre-w  { color: #0082FA; }
+
+/* ── Pit / DRS badges ─────────────────────────────────────────────────────── */
+.pit-badge {
+    display: inline-block;
+    background: #FF8800;
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+.drs-icon {
+    display: inline-block;
+    background: #00FF9D22;
+    color: #00FF9D;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 2px;
+    margin-left: 4px;
+    border: 1px solid #00FF9D55;
+    vertical-align: middle;
+}
+
+/* ── Telemetry Panel ──────────────────────────────────────────────────────── */
+.telem-header { margin-bottom: 8px; }
+.telem-name   { font-weight: 700; font-size: 1rem; }
+.telem-team   { font-size: 0.78rem; font-weight: 600; }
+.telem-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 8px; }
+.telem-item   { background: #1a1a1a; border-radius: 4px; padding: 5px 8px; }
+.tl { display: block; font-size: 0.68rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+.tv { display: block; font-size: 0.85rem; font-weight: 600; margin-top: 1px; }
+
+/* ── SC / FL banners ──────────────────────────────────────────────────────── */
+.sc-banner {
+    display: none;
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #FFD700;
+    border-radius: 4px;
+    margin: 6px 12px;
+}
+.fl-banner {
+    display: none;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #A855F7;
+    padding: 5px 10px;
+    background: rgba(168,85,247,0.12);
+    border: 1px solid #A855F755;
+    border-radius: 4px;
+    margin: 4px 12px;
+    animation: fadeIn 0.3s ease;
+}
+.status-banner {
+    display: none;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    grid-column: 1 / -1;
+}
+
+/* ── Results Modal ────────────────────────────────────────────────────────── */
+#results-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+}
+.modal-box {
+    position: relative;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 24px 28px;
+    max-width: 640px;
+    width: 92vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+}
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #00FF9D;
+    margin-bottom: 4px;
+}
+.modal-weather {
+    font-size: 0.78rem;
+    color: #666;
+    margin-bottom: 16px;
+}
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+.results-table th {
+    text-align: left;
+    color: #555;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    border-bottom: 1px solid #222;
+}
+.results-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #1a1a1a;
+}
+.results-table tr:hover td { background: #1a1a1a; }
+.modal-close-btn {
+    margin-top: 18px;
+    width: 100%;
+    padding: 10px;
+    background: #00FF9D;
+    color: #000;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-close-btn:hover { background: #00CC7D; }
+
+/* ── Position gain/loss flash ─────────────────────────────────────────────── */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.position-gained { animation: flashGreen 0.8s ease; }
+.position-lost   { animation: flashRed   0.8s ease; }
+@keyframes flashGreen {
+    0%   { background: rgba(0,255,157,0.25); }
+    100% { background: transparent; }
+}
+@keyframes flashRed {
+    0%   { background: rgba(255,26,26,0.2); }
+    100% { background: transparent; }
+}
+
+/* ==========================================================================
+   ALBERT PARK MAP + SECTOR TELEMETRY — 2026 update
+   ========================================================================== */
+
+/* ── Map container: allow overlay elements ───────────────────────────────── */
+.map-container {
+    position: relative;
+    overflow: hidden;
+}
+.track-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Grip level bar (bottom-left of map) ─────────────────────────────────── */
+.grip-bar-container {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 5px 9px;
+    pointer-events: none;
+    z-index: 10;
+}
+.grip-label {
+    font-size: 0.62rem;
+    color: #666;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.grip-track {
+    width: 72px;
+    height: 4px;
+    background: #222;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.grip-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FF8000, #00FF9D);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+.grip-pct {
+    font-size: 0.7rem;
+    color: #00FF9D;
+    font-weight: 700;
+    width: 32px;
+    text-align: right;
+}
+
+/* ── Sector times display ────────────────────────────────────────────────── */
+.telem-sector-header {
+    font-size: 0.65rem;
+    color: #555;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 10px 0 5px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #222;
+}
+.telem-sectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+}
+.telem-sector {
+    background: #1a1a1a;
+    border-radius: 4px;
+    padding: 5px 6px;
+    text-align: center;
+}
+.telem-sector.s1 { border-top: 2px solid #E8002D; }
+.telem-sector.s2 { border-top: 2px solid #FFD700; }
+.telem-sector.s3 { border-top: 2px solid #00FF9D; }
+.sl {
+    display: block;
+    font-size: 0.60rem;
+    color: #555;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+.sv {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Map legend (top-right of canvas) ───────────────────────────────────── */
+.map-legend {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.68rem;
+    color: #aaa;
+    pointer-events: none;
+    line-height: 1.7;
+    z-index: 10;
+}
+.map-legend .leg-drs  { color: #FFD700; }
+.map-legend .leg-s1   { color: #E8002D; }
+.map-legend .leg-s2   { color: #FFD700; }
+.map-legend .leg-s3   { color: #00FF9D; }
+
+/* ── Sector indicator in HUD ─────────────────────────────────────────────── */
+.hud-sector {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+.hud-sector-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #333;
+}
+.hud-sector-dot.active { background: #00FF9D; }
+
+/* ── Backend badge ────────────────────────────────────────────────────────── */
+#backend-badge {
+    font-size: 0.72rem;
+    margin-top: 6px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #222;
+    letter-spacing: 0.3px;
+}
+
+/* ── Calendar (offline-first redesign) ───────────────────────────────────── */
+.cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px 10px;
+    font-size: 0.75rem;
+}
+.cal-season   { color: #00FF9D; font-weight: 700; letter-spacing: 1px; }
+.cal-progress { color: #555; }
+
+.cal-list { display: flex; flex-direction: column; gap: 2px; }
+
+.cal-race {
+    display: grid;
+    grid-template-columns: 28px 20px 1fr auto 16px;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px;
+    border-radius: 3px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    font-size: 0.78rem;
+    transition: background 0.15s;
+}
+.cal-race:hover      { background: #1a1a1a; }
+.cal-race.cal-done   { opacity: 0.45; }
+.cal-race.cal-next   {
+    background: #0a1a0a;
+    border-color: #00FF9D44;
+    color: #fff;
+}
+.cal-rnd   { color: #555; font-size: 0.68rem; }
+.cal-flag  { font-size: 0.9rem; }
+.cal-name  { color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-date  { color: #666; font-size: 0.7rem; white-space: nowrap; }
+.cal-tick  { color: #444; font-size: 0.7rem; text-align: right; }
+.cal-race.cal-done .cal-tick  { color: #00FF9D; }
+.cal-race.cal-next .cal-tick  { color: #FFD700; }
+
+/* ── Formation lap + Lights sequence ────────────────────────────────────── */
+.lights-panel {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,0,0,0.92);
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 20px 32px;
+    z-index: 50;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
+
+.lights-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.light-bulb {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid #444;
+    background: #1a0000;
+    transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.light-bulb.lit {
+    background: #CC0000;
+    border-color: #FF2222;
+    box-shadow: 0 0 16px #FF0000, 0 0 32px #CC000088;
+}
+
+.lights-out-text {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #00FF9D;
+    letter-spacing: 4px;
+    animation: lightsOutFlash 0.3s ease;
+    text-shadow: 0 0 20px #00FF9D;
+}
+
+@keyframes lightsOutFlash {
+    0%   { opacity: 0; transform: scale(0.8); }
+    50%  { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1.0); }
+}
+
+/* Phase banner (formation lap etc.) */
+.phase-banner {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    padding: 14px 28px;
+    background: rgba(0,0,0,0.88);
+    border: 2px solid #555;
+    border-radius: 6px;
+    z-index: 50;
+    text-align: center;
+}
+
+
+/* ── Inline Race HUD (inside positions panel) ────────────────────────────── */
+.race-hud-inline {
+    display: flex;
+    align-items: stretch;
+    background: #060606;
+    border: 1px solid #1e1e1e;
+    border-radius: 6px 6px 0 0;
+    margin: -12px -12px 0 -12px;   /* bleed to panel edges */
+    overflow: hidden;
+}
+
+.hud-cell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    border-right: 1px solid #1a1a1a;
+    min-width: 0;
+}
+.hud-cell:last-child { border-right: none; }
+
+.hud-cell-leader { flex: 1.4; }
+
+.race-hud-inline .hud-label {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    color: #555;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.race-hud-inline .hud-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #00FF9D;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* ── Live Speed Bar ──────────────────────────────────────────────────────── */
+.live-speed-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 4px;
+    background: #080808;
+    border-bottom: 1px solid #1a1a1a;
+    margin: 0 -12px;
+}
+
+.live-speed-label {
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+
+.live-speed-btn {
+    flex: 1;
+    padding: 3px 0;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 3px;
+    color: #555;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+}
+
+.live-speed-btn:hover { background: #1a1a1a; color: #888; border-color: #333; }
+
+.live-speed-btn.active {
+    background: #00FF9D22;
+    border-color: #00FF9D;
+    color: #00FF9D;
+}
+
+/* ── Interval / delta display in positions table ─────────────────────────── */
+.gap-main   { font-size: 0.82rem; color: #ccc; }
+.gap-delta  { font-size: 0.68rem; color: #555; margin-top: 1px; }
+.gap-delta.close  { color: #FFD700; }   /* < 1s: danger close */
+.gap-delta.drs    { color: #00FF9D; }   /* < 0.5s: DRS range  */
+
+/* ── Navbar speed control ────────────────────────────────────────────────── */
+.nav-speed {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 4px 0 12px;
+    border-left: 1px solid #1e1e1e;
+    margin-left: 8px;
+}
+
+.nav-speed-label {
+    font-size: 0.62rem;
+    color: #444;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-right: 4px;
+    text-transform: uppercase;
+}
+
+.nav-speed-btn {
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    border-radius: 3px;
+    color: #555;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.12s;
+    letter-spacing: 0.5px;
+    font-family: inherit;
+}
+
+.nav-speed-btn:hover {
+    background: #1a1a1a;
+    color: #aaa;
+    border-color: #444;
+}
+
+.nav-speed-btn.active {
+    background: #00FF9D18;
+    border-color: #00FF9D;
+    color: #00FF9D;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DRIVER TELEMETRY PANEL  (td- prefix = telemetry-driver)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.telemetry-panel {
+    padding: 0;
+    overflow-y: auto;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.td-header {
+    padding: 10px 10px 10px 12px;
+    background: #0a0a0a;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 8px;
+}
+.td-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.td-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+}
+.td-num  { color: #555; }
+.td-drs  { background: #00FF9D22; border: 1px solid #00FF9D; color: #00FF9D;
+            padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: 700; }
+.td-dnf  { background: #FF444422; border: 1px solid #FF4444; color: #FF4444;
+            padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: 700; }
+
+/* ── Position + gap row ──────────────────────────────────────────────────── */
+.td-pos-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 0 4px 8px;
+}
+.td-pos-box {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #333;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #0d0d0d;
+}
+.td-pos-label { font-size: 0.58rem; color: #555; letter-spacing: 1px; }
+.td-pos-num   { font-size: 1.4rem; font-weight: 900; line-height: 1; }
+
+.td-stat-col  { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.td-stat-row  { display: flex; justify-content: space-between; align-items: center; }
+.td-lbl { font-size: 0.68rem; color: #555; letter-spacing: 0.5px; }
+.td-val { font-size: 0.78rem; color: #ccc; font-weight: 600; }
+
+/* ── Section titles ──────────────────────────────────────────────────────── */
+.td-section-title {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: #444;
+    font-weight: 700;
+    padding: 6px 4px 3px;
+    border-top: 1px solid #141414;
+    margin-top: 4px;
+    text-transform: uppercase;
+}
+
+/* ── Lap times ───────────────────────────────────────────────────────────── */
+.td-laptimes-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 0 4px 6px;
+}
+.td-lt-box {
+    background: #111;
+    border-radius: 4px;
+    padding: 6px 8px;
+    border: 1px solid #1a1a1a;
+}
+.td-lt-label { font-size: 0.65rem; color: #555; margin-bottom: 2px; }
+.td-lt-val   { font-size: 0.9rem; font-weight: 700; color: #ddd; font-family: monospace; }
+.td-lt-best  { border-color: #c080ff44; }
+
+/* ── Sectors ─────────────────────────────────────────────────────────────── */
+.td-sectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    padding: 0 4px 6px;
+}
+.td-sector {
+    background: #111;
+    border-radius: 4px;
+    padding: 5px 6px;
+    text-align: center;
+}
+.td-sec-lbl { display: block; font-size: 0.6rem; color: #555; margin-bottom: 2px; }
+.td-sec-val { display: block; font-size: 0.82rem; font-weight: 700; color: #ddd; font-family: monospace; }
+
+/* ── Tyre block ──────────────────────────────────────────────────────────── */
+.td-tyre-block { padding: 0 4px 6px; }
+.td-tyre-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.td-tyre-icon { font-size: 1.1rem; }
+.td-tyre-name { font-size: 0.82rem; font-weight: 700; color: #ccc; }
+.td-tyre-age  { font-size: 0.72rem; color: #666; margin-left: auto; }
+.td-tyre-deg  { font-size: 0.72rem; color: #f84; }
+
+.td-wear-bar-bg {
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.td-wear-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+.td-wear-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+}
+
+/* ── Pit stops ───────────────────────────────────────────────────────────── */
+.td-pits-row {
+    padding: 0 4px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.telem-cmp-badge {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: #000;
+    margin-right: 3px;
+}
+
+/* ── Performance ratings ─────────────────────────────────────────────────── */
+.td-ratings { padding: 0 4px 8px; display: flex; flex-direction: column; gap: 5px; }
+.td-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.td-rating-row .td-lbl { width: 38px; flex-shrink: 0; }
+.td-rating-bar-bg {
+    flex: 1;
+    height: 5px;
+    background: #1a1a1a;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.td-rating-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+.td-rating-val { font-size: 0.7rem; color: #666; width: 24px; text-align: right; }
+
+/* ── Click prompt when no driver selected ────────────────────────────────── */
+.td-empty {
+    text-align: center;
+    padding: 24px 12px;
+    color: #333;
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+.td-empty-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; opacity: 0.5; }
+
+/* ── Row click highlight ─────────────────────────────────────────────────── */
+#positions-tbody tr { cursor: pointer; }
+#positions-tbody tr:hover { background: #141414; }
+#positions-tbody tr.row-selected { background: #0d1a0d; outline: 1px solid #00FF9D33; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SETUP PAGE  (f1-setup.html)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.setup-body   { background:#050508; color:#e0e0e0; min-height:100vh; }
+.setup-main   {
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    gap: 0;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+}
+
+.setup-col {
+    padding: 20px 16px;
+    overflow-y: auto;
+    border-right: 1px solid #0f0f0f;
+}
+.setup-col:last-child { border-right: none; }
+
+.setup-section-title {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: #00FF9D;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #141414;
+}
+
+/* ── Circuit list ──────────────────────────────────────────────────────────── */
+.circuit-search-wrap { margin-bottom: 10px; }
+.circuit-search {
+    width: 100%; padding: 8px 10px;
+    background: #111; border: 1px solid #1e1e1e; border-radius: 4px;
+    color: #ccc; font-size: 0.82rem; outline: none;
+    box-sizing: border-box;
+}
+.circuit-search:focus { border-color: #00FF9D44; }
+
+.circuit-list { display: flex; flex-direction: column; gap: 2px; }
+.circuit-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 4px; cursor: pointer;
+    background: #0d0d0d; border: 1px solid transparent;
+    transition: all 0.12s;
+}
+.circuit-row:hover { background: #141414; border-color: #1e1e1e; }
+.circuit-row.active { background: #0a1a0a; border-color: #00FF9D44; }
+.circuit-row-flag { font-size: 1rem; width: 22px; text-align: center; }
+.circuit-row-name { flex: 1; font-size: 0.8rem; color: #ccc; }
+.circuit-row.active .circuit-row-name { color: #00FF9D; }
+.circuit-row-type  { font-size: 0.85rem; }
+
+/* ── Circuit detail ────────────────────────────────────────────────────────── */
+.circuit-detail-placeholder {
+    text-align: center; padding: 48px 16px;
+    color: #2a2a2a; font-size: 0.85rem;
+}
+.cd-hero {
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 0 16px; margin-bottom: 16px;
+    border-bottom: 1px solid #141414;
+}
+.cd-flag  { font-size: 2.8rem; }
+.cd-name  { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.cd-country { font-size: 0.75rem; color: #555; }
+
+.cd-stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px; margin-bottom: 16px;
+}
+.cd-stat {
+    background: #0d0d0d; border: 1px solid #141414;
+    border-radius: 6px; padding: 10px 8px; text-align: center;
+}
+.cd-stat-label { font-size: 0.6rem; color: #444; letter-spacing: 1px; margin-bottom: 4px; }
+.cd-stat-value { font-size: 1rem; font-weight: 800; color: #00FF9D; }
+
+.cd-record-block {
+    background: #0a0a14; border: 1px solid #1e1e2e;
+    border-radius: 6px; padding: 12px 14px;
+}
+.cd-record-label { font-size: 0.62rem; color: #555; letter-spacing: 1.5px; margin-bottom: 4px; }
+.cd-record-value { font-size: 1.1rem; font-weight: 800; color: #c080ff; font-family: monospace; }
+
+/* ── Weather ───────────────────────────────────────────────────────────────── */
+.setup-weather-block { margin-top: 20px; }
+.setup-weather-row   { display: flex; gap: 6px; }
+.setup-wx-btn {
+    flex: 1; padding: 10px 4px; border: 1px solid #1e1e1e;
+    background: #0d0d0d; border-radius: 5px; color: #666;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.12s; font-family: inherit;
+}
+.setup-wx-btn:hover { background: #141414; color: #aaa; }
+.setup-wx-btn.active { background: #0a1a0a; border-color: #00FF9D; color: #00FF9D; }
+
+/* ── Simulate button ───────────────────────────────────────────────────────── */
+.simulate-btn {
+    display: block; width: 100%; margin-top: 24px;
+    padding: 16px; background: #00FF9D; border: none;
+    border-radius: 6px; color: #000; font-size: 1rem;
+    font-weight: 900; letter-spacing: 2px; cursor: pointer;
+    transition: all 0.15s; font-family: inherit;
+}
+.simulate-btn:hover:not(:disabled) { background: #00e88d; transform: translateY(-1px); }
+.simulate-btn:disabled { background: #0a2a1a; color: #1a5a3a; cursor: not-allowed; }
+
+.setup-error { margin-top: 10px; color: #FF5555; font-size: 0.78rem; text-align: center; }
+
+/* ── Predictions list ──────────────────────────────────────────────────────── */
+.predictions-list  { display: flex; flex-direction: column; gap: 8px; }
+.pred-row          { display: flex; align-items: center; gap: 8px; }
+.pred-rank         { width: 20px; font-size: 0.9rem; text-align: center; }
+.pred-info         { min-width: 90px; }
+.pred-driver       { font-size: 0.8rem; font-weight: 700; color: #ccc; }
+.pred-team         { font-size: 0.68rem; color: #444; }
+.pred-bar-col      { flex: 1; }
+.pred-bar-bg       { height: 5px; background: #141414; border-radius: 3px; margin-bottom: 2px; }
+.pred-bar-fill     { height: 5px; background: #00FF9D; border-radius: 3px; }
+.pred-pct          { font-size: 0.68rem; color: #00FF9D; text-align: right; }
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RACE PAGE  (f1-race.html) — new layout
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.race-body    { background:#050508; color:#e0e0e0; height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+
+/* ── Race header ───────────────────────────────────────────────────────────── */
+.race-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; height: 52px; flex-shrink: 0;
+    background: #070709; border-bottom: 1px solid #0f0f0f;
+    gap: 12px;
+}
+.race-header-left  { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.race-header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+.back-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border: 1px solid #1e1e1e; border-radius: 4px;
+    color: #555; font-size: 0.72rem; text-decoration: none;
+    transition: all 0.12s; white-space: nowrap;
+}
+.back-btn:hover { color: #aaa; border-color: #333; }
+
+.race-header-circuit {
+    font-size: 0.88rem; font-weight: 800; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.race-header-weather { font-size: 0.75rem; color: #555; white-space: nowrap; }
+
+/* ── Central HUD ──────────────────────────────────────────────────────────── */
+.race-header-hud {
+    display: flex; align-items: center; gap: 0;
+    background: #0a0a0a; border: 1px solid #141414;
+    border-radius: 6px; overflow: hidden;
+    transition: opacity 0.3s;
+}
+.rhud-cell {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 6px 18px;
+}
+.rhud-divider { width: 1px; background: #141414; align-self: stretch; }
+.rhud-label { font-size: 0.55rem; color: #444; letter-spacing: 1.5px; text-transform: uppercase; }
+.rhud-value { font-size: 0.95rem; font-weight: 800; color: #00FF9D; font-family: monospace; }
+.rhud-leader .rhud-value { color: #fff; }
+
+.race-stop-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px; background: #2a0808; border: 1px solid #5a1010;
+    border-radius: 4px; color: #FF6666; font-size: 0.75rem;
+    font-weight: 700; cursor: pointer; transition: all 0.12s; font-family: inherit;
+}
+.race-stop-btn:hover { background: #3a0808; }
+
+/* ── 3-column race layout ─────────────────────────────────────────────────── */
+.race-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.race-panel {
+    background: #070709;
+    border-right: 1px solid #0f0f0f;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+.race-panel:last-child { border-right: none; border-left: 1px solid #0f0f0f; }
+
+.panel-title-bar {
+    padding: 10px 14px; font-size: 0.65rem; letter-spacing: 2px;
+    color: #00FF9D; font-weight: 800; text-transform: uppercase;
+    border-bottom: 1px solid #0f0f0f; flex-shrink: 0;
+    background: #070709;
+}
+
+/* ── Positions panel ──────────────────────────────────────────────────────── */
+.race-panel-left  { overflow-y: auto; }
+.race-panel-left .panel-tabs { flex-shrink: 0; }
+.race-panel-left .tab-content { overflow-y: auto; flex: 1; }
+
+/* ── Map ──────────────────────────────────────────────────────────────────── */
+.race-map-wrap {
+    flex: 1; overflow: hidden; position: relative;
+    background: #050508;
+}
+.race-map-wrap .map-container {
+    width: 100%; height: 100%; position: relative;
+}
+
+/* ── Fastest lap toast — centred over map ─────────────────────────────────── */
+.fl-toast {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 24px;
+    background: rgba(5,5,8,0.95);
+    border: 2px solid #c080ff;
+    border-radius: 8px;
+    font-size: 0.9rem; font-weight: 700;
+    color: #fff;
+    z-index: 100;
+    animation: toastIn 0.3s ease;
+    box-shadow: 0 0 30px #c080ff44;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.fl-icon { font-size: 1.2rem; }
+@keyframes toastIn {
+    from { opacity: 0; transform: translate(-50%, calc(-50% - 10px)); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* ── Telemetry panel ──────────────────────────────────────────────────────── */
+.race-panel-right  { overflow-y: auto; }
+.race-panel-right .telemetry-panel { padding: 8px 10px; overflow-y: auto; flex: 1; }
+
+/* ── Grip bar (fixed in map container) ───────────────────────────────────── */
+.grip-bar-container {
+    position: absolute; bottom: 10px; left: 10px;
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(5,5,8,0.88); border: 1px solid #141414;
+    border-radius: 4px; padding: 4px 8px;
+    font-size: 0.65rem; pointer-events: none;
+}
+.grip-label { color: #444; letter-spacing: 1px; font-weight: 700; }
+.grip-track { width: 80px; height: 5px; background: #141414; border-radius: 3px; }
+.grip-fill  { height: 5px; background: #00FF9D; border-radius: 3px; transition: width 1s ease; }
+.grip-pct   { color: #00FF9D; font-weight: 700; min-width: 28px; text-align: right; }
+
+/* ── Race error bar ──────────────────────────────────────────────────────── */
+.race-error-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #2a0808; border-top: 1px solid #5a1010;
+    color: #FF6666; text-align: center; padding: 8px;
+    font-size: 0.8rem; z-index: 200;
+}
+
+/* ── Waiting cell ────────────────────────────────────────────────────────── */
+.waiting-cell { text-align:center; padding: 24px; color: #333; font-size: 0.8rem; }
+
+/* ── SC banner (inside map) ──────────────────────────────────────────────── */
+.sc-banner {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    padding: 7px 20px; border-radius: 4px; font-size: 0.78rem;
+    font-weight: 800; letter-spacing: 1px; z-index: 50;
+    pointer-events: none; white-space: nowrap;
+    border: 1px solid #FFD700;
+}

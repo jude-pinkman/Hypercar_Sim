@@ -1,0 +1,635 @@
+/**
+ * F1 Race HUD Enhanced - Broadcast-Style CSS
+ * Styling for real-time race graphics overlay
+ */
+
+/* ============================================
+   BROADCAST HUD CONTAINER
+   ============================================ */
+
+.broadcast-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+/* ============================================
+   RACE INFO BAR (TOP)
+   ============================================ */
+
+.race-info-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 20, 0.85) 100%);
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: 2px solid #e10600;
+    box-shadow: 0 4px 20px rgba(225, 6, 0, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.circuit-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.circuit-flag {
+    font-size: 22px;
+}
+
+.circuit-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lap-counter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.lap-label, .clock-label {
+    font-size: 10px;
+    color: #999;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.lap-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00FF9D;
+}
+
+.race-clock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.clock-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-family: 'Courier New', monospace;
+}
+
+.weather-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.weather-icon {
+    font-size: 20px;
+}
+
+.weather-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* ============================================
+   HUD LEADERBOARD (LEFT SIDE)
+   ============================================ */
+
+.hud-leaderboard {
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    min-width: 300px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.9) 100%);
+    border-radius: 10px;
+    border: 2px solid #00FF9D;
+    box-shadow: 0 8px 32px rgba(0, 255, 157, 0.3);
+    backdrop-filter: blur(15px);
+    overflow: hidden;
+}
+
+.leaderboard-title {
+    background: linear-gradient(90deg, #e10600 0%, #b00500 100%);
+    color: #FFFFFF;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+
+.leaderboard-items {
+    padding: 8px 0;
+}
+
+.leaderboard-item {
+    display: grid;
+    grid-template-columns: 35px 4px 1fr 70px 30px;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 10px;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-item.pos-leader {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+}
+
+.lb-position {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.pos-leader .lb-position {
+    color: #FFD700;
+}
+
+.lb-team-color {
+    width: 4px;
+    height: 100%;
+    border-radius: 2px;
+}
+
+.lb-driver {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lb-driver-abbr {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+}
+
+.lb-driver-name {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.lb-gap {
+    font-size: 12px;
+    font-weight: 600;
+    color: #00FF9D;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+.pos-leader .lb-gap {
+    color: #FFD700;
+    font-weight: 700;
+}
+
+.lb-status {
+    font-size: 14px;
+    text-align: center;
+}
+
+/* ============================================
+   INTERVAL TOWER (RIGHT SIDE)
+   ============================================ */
+
+.interval-tower {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    min-width: 200px;
+    max-height: 500px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(15, 15, 15, 0.9) 100%);
+    border-radius: 10px;
+    border: 2px solid #00D2FF;
+    box-shadow: 0 8px 32px rgba(0, 210, 255, 0.3);
+    backdrop-filter: blur(15px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tower-title {
+    background: linear-gradient(90deg, #00D2FF 0%, #0099CC 100%);
+    color: #000000;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.tower-items {
+    padding: 5px 0;
+}
+
+.tower-item {
+    display: grid;
+    grid-template-columns: 30px 80px 1fr;
+    align-items: center;
+    padding: 6px 10px;
+    gap: 8px;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tower-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tower-pos {
+    font-size: 14px;
+    font-weight: 700;
+    color: #999;
+    text-align: center;
+}
+
+.tower-abbr {
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    padding-left: 8px;
+}
+
+.tower-interval {
+    font-size: 11px;
+    font-weight: 600;
+    color: #00D2FF;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   SECTOR DISPLAY (BOTTOM)
+   ============================================ */
+
+.sector-display {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 20, 0.85) 100%);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.sector-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFD700;
+    letter-spacing: 1px;
+    align-self: center;
+}
+
+.sector-items {
+    display: flex;
+    gap: 12px;
+}
+
+.sector-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.sector-item.sector-fastest {
+    background: rgba(138, 43, 226, 0.3);
+    border: 1px solid #8A2BE2;
+}
+
+.sector-item.sector-pb {
+    background: rgba(0, 255, 0, 0.2);
+    border: 1px solid #00FF00;
+}
+
+.sector-number {
+    font-size: 10px;
+    font-weight: 700;
+    color: #999;
+}
+
+.sector-driver {
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.sector-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: #00FF9D;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   ANIMATED OVERLAYS
+   ============================================ */
+
+.position-change-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.9) 100%);
+    padding: 20px 30px;
+    border-radius: 12px;
+    border: 3px solid #00FF9D;
+    box-shadow: 0 8px 40px rgba(0, 255, 157, 0.5);
+    animation: slideInScale 0.3s ease-out;
+    z-index: 200;
+}
+
+.position-change-overlay.up {
+    border-color: #00FF00;
+}
+
+.position-change-overlay.down {
+    border-color: #FF0000;
+}
+
+.pc-driver {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.pc-arrow {
+    font-size: 32px;
+}
+
+.position-change-overlay.up .pc-arrow {
+    color: #00FF00;
+}
+
+.position-change-overlay.down .pc-arrow {
+    color: #FF0000;
+}
+
+.pc-positions {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+/* DRS Indicator */
+.drs-indicator {
+    position: absolute;
+    top: 80px;
+    right: 240px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, rgba(0, 255, 0, 0.3) 0%, rgba(0, 200, 0, 0.3) 100%);
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 2px solid #00FF00;
+    box-shadow: 0 4px 20px rgba(0, 255, 0, 0.4);
+    animation: pulseGlow 1s ease-in-out infinite;
+}
+
+.drs-driver {
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.drs-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #00FF00;
+    letter-spacing: 1px;
+}
+
+/* Pit Stop Graphic */
+.pitstop-graphic {
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(255, 170, 0, 0.3) 0%, rgba(200, 130, 0, 0.3) 100%);
+    padding: 15px 25px;
+    border-radius: 10px;
+    border: 2px solid #FFAA00;
+    box-shadow: 0 8px 30px rgba(255, 170, 0, 0.5);
+    animation: slideInRight 0.4s ease-out;
+}
+
+.ps-icon {
+    font-size: 28px;
+}
+
+.ps-driver {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.ps-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #FFAA00;
+    letter-spacing: 1px;
+}
+
+.ps-duration {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-family: 'Courier New', monospace;
+}
+
+/* Fastest Lap Graphic */
+.fastest-lap-graphic {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.4) 0%, rgba(100, 20, 180, 0.4) 100%);
+    padding: 15px 30px;
+    border-radius: 10px;
+    border: 2px solid #8A2BE2;
+    box-shadow: 0 8px 30px rgba(138, 43, 226, 0.6);
+    animation: slideInUp 0.4s ease-out;
+}
+
+.fl-icon {
+    font-size: 28px;
+}
+
+.fl-driver {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.fl-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8A2BE2;
+    letter-spacing: 1px;
+}
+
+.fl-time {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFD700;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slideInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 255, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(0, 255, 0, 0.7);
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+.interval-tower::-webkit-scrollbar {
+    width: 6px;
+}
+
+.interval-tower::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.interval-tower::-webkit-scrollbar-thumb {
+    background: rgba(0, 210, 255, 0.5);
+    border-radius: 3px;
+}
+
+.interval-tower::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 210, 255, 0.8);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 1400px) {
+    .interval-tower {
+        max-height: 400px;
+    }
+    
+    .hud-leaderboard {
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .race-info-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 15px;
+    }
+    
+    .interval-tower {
+        display: none; /* Hide on smaller screens */
+    }
+    
+    .sector-display {
+        flex-wrap: wrap;
+        max-width: 90%;
+    }
+}

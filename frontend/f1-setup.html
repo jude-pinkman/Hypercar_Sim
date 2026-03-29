@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>F1 2026 — Race Setup | Hypercar Sim</title>
+  <link rel="stylesheet" href="f1-race-style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="setup-body">
+
+  <header class="main-header">
+    <nav class="navbar">
+      <div class="nav-left">
+        <div class="logo"><i class="fas fa-flag-checkered"></i><span>F1 2026 SIMULATOR</span></div>
+      </div>
+      <div class="nav-right">
+        <a href="index.html" class="nav-link">HOME</a>
+        <a href="circuits.html" class="nav-link">CIRCUITS</a>
+        <a href="f1-setup.html" class="nav-link active">F1 RACE</a>
+        <a href="about.html" class="nav-link">ABOUT</a>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot"></span><span class="status-text" id="backend-status-text">Checking…</span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="setup-main">
+
+    <!-- ── LEFT: Circuit selector ──────────────────────────────────────────── -->
+    <section class="setup-col setup-col-left">
+      <div class="setup-section-title"><i class="fas fa-map-marker-alt"></i> SELECT CIRCUIT</div>
+
+      <div class="circuit-search-wrap">
+        <input id="circuit-search" class="circuit-search" placeholder="Search circuit…" autocomplete="off">
+      </div>
+
+      <div id="circuit-list" class="circuit-list"></div>
+    </section>
+
+    <!-- ── CENTRE: Circuit info + weather ─────────────────────────────────── -->
+    <section class="setup-col setup-col-centre">
+      <div id="circuit-detail" class="circuit-detail">
+        <div class="circuit-detail-placeholder">
+          <i class="fas fa-flag-checkered" style="font-size:3rem;color:#222;margin-bottom:12px;display:block"></i>
+          Select a circuit to see race data
+        </div>
+      </div>
+
+      <!-- Weather -->
+      <div class="setup-weather-block">
+        <div class="setup-section-title"><i class="fas fa-cloud-sun"></i> WEATHER</div>
+        <div class="setup-weather-row">
+          <button class="setup-wx-btn active" data-weather="dry">☀️ Dry</button>
+          <button class="setup-wx-btn" data-weather="damp">🌦 Damp</button>
+          <button class="setup-wx-btn" data-weather="wet">🌧 Wet</button>
+        </div>
+      </div>
+
+      <!-- Simulate button -->
+      <button id="simulate-btn" class="simulate-btn" disabled>
+        <i class="fas fa-play-circle"></i> SIMULATE RACE
+      </button>
+      <div id="setup-error" class="setup-error" style="display:none"></div>
+    </section>
+
+    <!-- ── RIGHT: Predictions ─────────────────────────────────────────────── -->
+    <section class="setup-col setup-col-right">
+      <div class="setup-section-title"><i class="fas fa-chart-bar"></i> WIN PREDICTIONS</div>
+      <div id="predictions-list" class="predictions-list">
+        <div style="color:#333;text-align:center;padding:32px;font-size:0.85rem">
+          Select a circuit and weather to see predictions
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="f1-setup.js"></script>
+</body>
+</html>

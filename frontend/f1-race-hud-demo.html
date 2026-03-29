@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Race Tracker - Enhanced HUD Demo</title>
+    <link rel="stylesheet" href="f1-race-style.css">
+    <link rel="stylesheet" href="f1-race-hud-enhanced.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional demo styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .demo-container {
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .demo-sidebar {
+            width: 280px;
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #00FF9D;
+        }
+
+        .demo-main {
+            flex: 1;
+            position: relative;
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .track-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .control-panel {
+            margin-bottom: 20px;
+        }
+
+        .control-title {
+            color: #00FF9D;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .control-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #e10600 0%, #b00500 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(225, 6, 0, 0.5);
+        }
+
+        .control-btn.secondary {
+            background: linear-gradient(135deg, #333 0%, #222 100%);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .demo-info {
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid #00FF9D;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .demo-info-title {
+            color: #00FF9D;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .demo-info-text {
+            color: #ccc;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            color: #ccc;
+            font-size: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "✓ ";
+            color: #00FF9D;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Control Sidebar -->
+        <div class="demo-sidebar">
+            <h2 style="color: #fff; margin-bottom: 20px; font-size: 18px;">
+                🏁 F1 Race Tracker
+            </h2>
+
+            <div class="demo-info">
+                <div class="demo-info-title">ENHANCED FEATURES</div>
+                <div class="demo-info-text">
+                    This demo showcases broadcast-style F1 race tracking with real-time graphics.
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">CONTROLS</div>
+                <button class="control-btn" id="btn-start-demo">
+                    <i class="fas fa-play"></i> START DEMO RACE
+                </button>
+                <button class="control-btn secondary" id="btn-stop-demo" disabled>
+                    <i class="fas fa-stop"></i> STOP RACE
+                </button>
+                <button class="control-btn secondary" id="btn-toggle-hud">
+                    <i class="fas fa-eye"></i> TOGGLE HUD
+                </button>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">TEST FEATURES</div>
+                <button class="control-btn secondary" id="btn-test-position">
+                    <i class="fas fa-arrow-up"></i> Position Change
+                </button>
+                <button class="control-btn secondary" id="btn-test-drs">
+                    <i class="fas fa-wind"></i> DRS Activation
+                </button>
+                <button class="control-btn secondary" id="btn-test-pit">
+                    <i class="fas fa-wrench"></i> Pit Stop
+                </button>
+                <button class="control-btn secondary" id="btn-test-fastest">
+                    <i class="fas fa-bolt"></i> Fastest Lap
+                </button>
+            </div>
+
+            <div class="control-panel">
+                <div class="control-title">FEATURES INCLUDED</div>
+                <ul class="feature-list">
+                    <li>Real-time position tracking</li>
+                    <li>Live leaderboard with gaps</li>
+                    <li>Interval tower display</li>
+                    <li>Sector time tracking</li>
+                    <li>DRS indicators</li>
+                    <li>Pit stop graphics</li>
+                    <li>Fastest lap notifications</li>
+                    <li>Position change animations</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Track Display -->
+        <div class="demo-main">
+            <div class="map-container" id="map-container">
+                <canvas id="track-canvas" class="track-canvas"></canvas>
+                <!-- HUD will be injected here by f1-race-hud-enhanced.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="Car.js"></script>
+    <script src="TrackRenderer.js"></script>
+    <script src="f1-race-hud-enhanced.js"></script>
+    
+    <script>
+        // Demo Implementation
+        let trackRenderer;
+        let raceHUD;
+        let demoInterval;
+        let isRaceRunning = false;
+
+        // Sample race data
+        const sampleDrivers = [
+            { position: 1, driverAbbr: 'VER', driverName: 'M. Verstappen', teamColor: '#0600ef', gap: '', gapToAhead: '', status: 'racing', lapProgress: 0.0 },
+            { position: 2, driverAbbr: 'HAM', driverName: 'L. Hamilton', teamColor: '#00d2be', gap: '+2.451', gapToAhead: '+2.451', status: 'racing', lapProgress: 0.95 },
+            { position: 3, driverAbbr: 'LEC', driverName: 'C. Leclerc', teamColor: '#dc0000', gap: '+5.123', gapToAhead: '+2.672', status: 'racing', lapProgress: 0.92 },
+            { position: 4, driverAbbr: 'NOR', driverName: 'L. Norris', teamColor: '#ff8700', gap: '+8.901', gapToAhead: '+3.778', status: 'racing', lapProgress: 0.88 },
+            { position: 5, driverAbbr: 'SAI', driverName: 'C. Sainz', teamColor: '#dc0000', gap: '+12.334', gapToAhead: '+3.433', status: 'racing', lapProgress: 0.84 },
+            { position: 6, driverAbbr: 'PER', driverName: 'S. Perez', teamColor: '#0600ef', gap: '+15.678', gapToAhead: '+3.344', status: 'racing', lapProgress: 0.80 },
+            { position: 7, driverAbbr: 'RUS', driverName: 'G. Russell', teamColor: '#00d2be', gap: '+18.234', gapToAhead: '+2.556', status: 'racing', lapProgress: 0.76 },
+            { position: 8, driverAbbr: 'ALO', driverName: 'F. Alonso', teamColor: '#006f62', gap: '+22.456', gapToAhead: '+4.222', status: 'racing', lapProgress: 0.72 }
+        ];
+
+        const sampleCircuit = {
+            name: 'Australian Grand Prix',
+            coordinates: generateAustralianGPTrack()
+        };
+
+        let currentLap = 5;
+        let totalLaps = 58;
+        let raceTime = 300; // seconds
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeDemo();
+            setupControls();
+        });
+
+        function initializeDemo() {
+            // Initialize Track Renderer
+            trackRenderer = new TrackRenderer('track-canvas');
+            trackRenderer.loadCircuit(sampleCircuit);
+            trackRenderer.drawTrack();
+
+            // Initialize Race HUD
+            raceHUD = new F1RaceHUD();
+            raceHUD.show();
+
+            // Update initial HUD data
+            updateHUD();
+        }
+
+        function setupControls() {
+            document.getElementById('btn-start-demo').addEventListener('click', startDemo);
+            document.getElementById('btn-stop-demo').addEventListener('click', stopDemo);
+            document.getElementById('btn-toggle-hud').addEventListener('click', toggleHUD);
+            document.getElementById('btn-test-position').addEventListener('click', testPositionChange);
+            document.getElementById('btn-test-drs').addEventListener('click', testDRS);
+            document.getElementById('btn-test-pit').addEventListener('click', testPitStop);
+            document.getElementById('btn-test-fastest').addEventListener('click', testFastestLap);
+        }
+
+        function startDemo() {
+            if (isRaceRunning) return;
+            
+            isRaceRunning = true;
+            document.getElementById('btn-start-demo').disabled = true;
+            document.getElementById('btn-stop-demo').disabled = false;
+
+            // Simulate race progression
+            demoInterval = setInterval(() => {
+                // Update lap progress
+                sampleDrivers.forEach(driver => {
+                    driver.lapProgress += 0.005 + Math.random() * 0.003;
+                    if (driver.lapProgress >= 1.0) {
+                        driver.lapProgress = 0.0;
+                    }
+                });
+
+                // Update race time
+                raceTime += 0.1;
+
+                // Render cars on track
+                const cars = sampleDrivers.map(d => ({
+                    getDisplayData: () => d
+                }));
+                trackRenderer.renderCars(cars);
+
+                // Update HUD
+                updateHUD();
+            }, 100);
+        }
+
+        function stopDemo() {
+            if (!isRaceRunning) return;
+            
+            isRaceRunning = false;
+            document.getElementById('btn-start-demo').disabled = false;
+            document.getElementById('btn-stop-demo').disabled = true;
+            
+            if (demoInterval) {
+                clearInterval(demoInterval);
+            }
+        }
+
+        function toggleHUD() {
+            const container = document.querySelector('.broadcast-hud');
+            if (container.style.display === 'none') {
+                raceHUD.show();
+            } else {
+                raceHUD.hide();
+            }
+        }
+
+        function updateHUD() {
+            // Update race info bar
+            raceHUD.updateRaceInfo(
+                sampleCircuit.name,
+                currentLap,
+                totalLaps,
+                raceTime,
+                'dry'
+            );
+
+            // Update leaderboard
+            raceHUD.updateLeaderBoard(sampleDrivers, 5);
+
+            // Update interval tower
+            raceHUD.updateIntervalTower(sampleDrivers);
+
+            // Update sector display (example data)
+            const sectorData = [
+                { number: 1, driverAbbr: 'VER', time: '24.123', isFastest: true },
+                { number: 2, driverAbbr: 'HAM', time: '38.456', isPersonalBest: true },
+                { number: 3, driverAbbr: 'LEC', time: '29.789', isFastest: false }
+            ];
+            raceHUD.updateSectorDisplay(sectorData);
+        }
+
+        // Test feature functions
+        function testPositionChange() {
+            raceHUD.animatePositionChange(sampleDrivers[2], 3, 1);
+        }
+
+        function testDRS() {
+            raceHUD.showDRSIndicator('HAM', true);
+            setTimeout(() => raceHUD.showDRSIndicator('HAM', false), 3000);
+        }
+
+        function testPitStop() {
+            raceHUD.showPitStopGraphic(sampleDrivers[1], 2.4);
+        }
+
+        function testFastestLap() {
+            raceHUD.showFastestLapGraphic(sampleDrivers[0], '1:24.123');
+        }
+
+        // Generate Australian GP track coordinates (simplified)
+        function generateAustralianGPTrack() {
+            const coords = [];
+            const centerX = 400;
+            const centerY = 300;
+            
+            // Create a more complex track shape (Australian GP-like)
+            for (let i = 0; i < 360; i += 2) {
+                const angle = (i / 360) * Math.PI * 2;
+                let radius = 200;
+                
+                // Add variations for different sections
+                if (i >= 0 && i < 60) radius = 220; // Straight
+                else if (i >= 60 && i < 90) radius = 180; // Tight corner
+                else if (i >= 90 && i < 150) radius = 190; // Medium corner
+                else if (i >= 150 && i < 210) radius = 230; // Long straight
+                else if (i >= 210 && i < 270) radius = 170; // Chicane
+                else if (i >= 270 && i < 330) radius = 200; // Flowing corner
+                
+                const x = centerX + Math.cos(angle) * radius;
+                const y = centerY + Math.sin(angle) * radius * 0.7;
+                
+                const sector = Math.floor((i / 360) * 3) + 1;
+                const drsZone = (i >= 150 && i < 210);
+                
+                coords.push({
+                    x: x,
+                    y: y,
+                    sector: sector,
+                    drsZone: drsZone,
+                    corner: i % 60 === 0 ? Math.floor(i / 60) + 1 : 0
+                });
+            }
+            
+            return coords;
+        }
+    </script>
+</body>
+</html>

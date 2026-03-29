@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>F1 2026 — Live Telemetry | Hypercar Sim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="f1-dash.css">
+  <script src="config.js"></script>
+</head>
+<body class="dash-body">
+
+  <!-- Animated Background -->
+  <div class="background-grid"></div>
+  <div class="background-gradient"></div>
+
+  <!-- MAIN NAVIGATION HEADER -->
+  <header class="main-navigation">
+    <nav class="primary-nav">
+      <div class="logo-container">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <h1>HYPERCAR</h1>
+          <span>F1 2026 Telemetry</span>
+        </div>
+      </div>
+      <div class="nav-menu">
+        <a href="home.html" class="nav-link">HOME</a>
+        <a href="simulator.html" class="nav-link">SIMULATOR</a>
+        <a href="circuits.html" class="nav-link">CIRCUITS</a>
+        <a href="f1-setup.html" class="nav-link">F1 RACE SETUP</a>
+        <a href="about.html" class="nav-link">ABOUT</a>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span class="status-text" id="nav-status">Live</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- TOP BAR (Race-specific info) -->
+  <header class="dash-topbar">
+    <div class="dash-tb-left">
+      <a href="f1-setup.html" class="dash-back">&#8592; SETUP</a>
+      <div class="dash-circuit-badge">
+        <span class="dash-flag" id="hdr-flag">🇦🇺</span>
+        <div>
+          <div class="dash-circuit-name" id="header-circuit-name">Albert Park Circuit</div>
+          <div class="dash-circuit-sub"  id="header-weather">DRY · AUSTRALIA · 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-tb-right">
+      <div class="dash-speed-group">
+        <span class="dash-speed-lbl">SPEED</span>
+        <button class="dash-spd active" data-speed="1">1x</button>
+        <button class="dash-spd" data-speed="5">5x</button>
+        <button class="dash-spd" data-speed="15">15x</button>
+        <button class="dash-spd" data-speed="30">30x</button>
+      </div>
+      <button id="stop-race-btn" class="dash-stop-btn" style="display:none">&#9632; STOP</button>
+    </div>
+  </header>
+
+  <!-- MCLAREN-STYLE 3-COLUMN DASHBOARD -->
+  <div class="mclaren-dash">
+
+    <div class="mld-panel mld-left" id="left-driver-panel" style="display:none">
+      <div class="mld-table-wrap">
+        <div id="tab-positions" class="tab-content active">
+          <table class="dash-pos-table" id="positions-table">
+            <thead><tr>
+              <th>P</th><th>DRIVER</th><th>GAP / &#916;</th><th>TYRE</th><th>SPD</th>
+            </tr></thead>
+            <tbody id="positions-tbody">
+              <tr><td colspan="5" class="waiting-cell">Simulating&hellip;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTRE COLUMN: Map + Race Table -->
+    <div class="mld-centre">
+
+      <!-- CIRCUIT MAP -->
+      <div class="mld-map-wrap">
+        <div class="dash-map-container" id="map-container">
+          <canvas id="track-canvas" class="track-canvas"></canvas>
+          <div id="sc-banner"    class="sc-banner"    style="display:none"></div>
+          <div id="fl-toast"     class="fl-toast"     style="display:none">
+            <span class="fl-icon">&#9889;</span>
+            <span id="fl-toast-text">FASTEST LAP</span>
+          </div>
+          <div id="phase-banner" class="phase-banner" style="display:none"></div>
+          <div id="lights-panel" class="lights-panel" style="display:none"></div>
+        </div>
+        <div class="mld-map-footer">
+          <div class="dash-grip-row">
+            <span class="dash-grip-lbl">TRACK GRIP</span>
+            <div class="dash-grip-track"><div id="grip-fill" class="dash-grip-fill"></div></div>
+            <span id="grip-pct" class="dash-grip-pct">—</span>
+          </div>
+          <div class="dash-sector-legend">
+            <span class="sl-s1">&#9632; S1</span>
+            <span class="sl-s2">&#9632; S2</span>
+            <span class="sl-s3">&#9632; S3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: TELEMETRY -->
+    <div class="mld-panel mld-right" id="right-driver-panel">
+      <div class="mld-team-banner right-align" id="right-team-banner">SELECT DRIVER</div>
+      <div class="right-driver-selector-wrap">
+        <label class="right-driver-selector-lbl" for="right-driver-select">Track Driver</label>
+        <select id="right-driver-select" class="right-driver-select"></select>
+      </div>
+      <div class="mld-driver-block right-align">
+        <div class="mld-pos-huge" id="right-position">—</div>
+        <div>
+          <div class="mld-driver-name" id="right-driver-name">—</div>
+          <div class="mld-num-badge right-align" id="right-driver-num">—</div>
+        </div>
+      </div>
+      <div class="mld-gap-val right-align" id="right-gap">—</div>
+
+      <div class="mld-divider"></div>
+
+      <div class="mld-stat-grid">
+        <div class="mld-stat">
+          <div class="mld-stat-lbl">CURRENT LAP</div>
+          <div class="mld-stat-val mono" id="right-cur-lap">—</div>
+        </div>
+        <div class="mld-stat">
+          <div class="mld-stat-lbl">BEST LAP &#9889;</div>
+          <div class="mld-stat-val mono purple" id="right-best-lap">—</div>
+        </div>
+      </div>
+
+      <div class="mld-speed-block">
+        <div class="mld-speed-lbl">LIVE SPEED</div>
+        <div class="mld-speed-row">
+          <span class="mld-speed-big" id="right-speed">—</span>
+          <span class="mld-speed-unit">km/h</span>
+        </div>
+        <div class="mld-speed-extra">
+          <span id="right-gear">GEAR —</span>
+          <span id="right-rpm">RPM —</span>
+        </div>
+      </div>
+
+      <div class="mld-pedals">
+        <div class="mld-pedal-row">
+          <span class="mld-pedal-lbl">BRAKES</span>
+          <div class="mld-pedal-bg"><div class="mld-pedal-fill brake-fill" id="right-brake" style="width:0%"></div></div>
+        </div>
+        <div class="mld-pedal-row">
+          <span class="mld-pedal-lbl thr">THROTTLE</span>
+          <div class="mld-pedal-bg"><div class="mld-pedal-fill thr-fill" id="right-throttle" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="mld-divider"></div>
+
+      <div class="mld-tyre-block">
+        <div class="mld-tyre-row right-align">
+          <div class="mld-tyre-laps-badge">
+            <div class="mld-tlb-num" id="right-tyre-laps">—</div>
+            <div class="mld-tlb-lbl">LAPS</div>
+          </div>
+          <div class="mld-tyre-info right-align">
+            <div class="mld-tyre-name" id="right-tyre-name">MEDIUM</div>
+            <div class="mld-tyre-age" id="right-tyre-age">0 laps</div>
+          </div>
+          <span class="mld-tyre-icon" id="right-tyre-icon">🟡</span>
+        </div>
+        <div class="mld-wear-label">TYRE WEAR</div>
+        <div class="mld-wear-bg"><div class="mld-wear-fill" id="right-wear" style="width:0%"></div></div>
+        <div class="mld-wear-nums"><span id="right-wear-pct" class="green">0%</span><span>worn</span></div>
+      </div>
+
+      <div class="mld-divider"></div>
+
+      <div class="mld-sectors">
+        <div class="mld-sec-title">SECTOR TIMES</div>
+        <div class="mld-sec-row">
+          <div class="mld-sec mld-s1"><div class="mld-sec-lbl">S1</div><div class="mld-sec-val mono" id="right-s1">—</div></div>
+          <div class="mld-sec mld-s2"><div class="mld-sec-lbl">S2</div><div class="mld-sec-val mono" id="right-s2">—</div></div>
+          <div class="mld-sec mld-s3"><div class="mld-sec-lbl">S3</div><div class="mld-sec-val mono" id="right-s3">—</div></div>
+        </div>
+      </div>
+
+      <div class="mld-divider"></div>
+
+      <div class="mld-pit-info">
+        <div class="mld-pi-row"><span class="mld-pi-lbl">STOPS</span><span class="mld-pi-val" id="right-pit-count">0</span></div>
+        <div class="mld-pi-row"><span class="mld-pi-lbl">PIT LAPS</span><span class="mld-pi-val" id="right-pit-laps">—</span></div>
+        <div class="mld-pi-row"><span class="mld-pi-lbl">COMPOUNDS</span><span class="mld-pi-val" id="right-compounds">—</span></div>
+      </div>
+
+      <div class="mld-badges-row">
+        <span class="mld-badge drs" id="right-drs" style="display:none">DRS ON</span>
+        <span class="mld-badge pit" id="right-pit-badge" style="display:none">IN PIT</span>
+        <span class="mld-badge dnf" id="right-dnf" style="display:none">DNF</span>
+      </div>
+
+      <div class="mld-prompt" id="right-prompt">Click any driver to track them here</div>
+    </div>
+
+  </div><!-- .mclaren-dash -->
+
+  <div id="race-error" class="race-error-bar" style="display:none"></div>
+
+  <script src="TrackRenderer.js"></script>
+  <script src="f1-race-main.js"></script>
+  <script src="f1-race-config.js"></script>
+  <script src="f1-race-calendar.js"></script>
+</body>
+</html>
