@@ -5,13 +5,18 @@ Includes realistic corner and straight simulation
 
 import random
 import numpy as np
+import uuid
 from dataclasses import dataclass, field
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Callable
 from enum import Enum
 
 from app.tyre import (
     Tyre, TyreCompound, TyreStrategy, TyreDegradationModel,
     COMPOUND_SPECS,
+)
+from app.race_events import (
+    RaceEvent, RaceStartedEvent, LapCompletedEvent, PositionChangeEvent,
+    RaceFinishedEvent, get_broadcaster, get_event_log
 )
 
 
@@ -166,6 +171,8 @@ class RaceSimulator:
         circuit: Circuit,
         timestep: float = 0.1,
         enable_tyre_degradation: bool = True,
+        race_id: Optional[str] = None,
+        emit_events: bool = True,
     ):
         """
         Initialize race simulator with circuit
@@ -174,6 +181,8 @@ class RaceSimulator:
             circuit: Circuit object with track layout
             timestep: Simulation time step in seconds
             enable_tyre_degradation: Apply compound grip/wear to physics
+            race_id: Unique race identifier for event broadcasting; auto-generated if None
+            emit_events: Whether to emit WebSocket events during simulation
         """
         self.circuit = circuit
         self.timestep = timestep
@@ -183,6 +192,14 @@ class RaceSimulator:
         self.race_active = False
         self.results: List[Dict] = []
         self._pit_events: List[Dict] = []
+        
+        # Event tracking for live WebSocket broadcasting
+        self.race_id = race_id or str(uuid.uuid4())
+        self.emit_events = emit_events
+        self._event_log = get_event_log(self.race_id)
+        self._broadcaster = get_broadcaster() if emit_events else None
+        self._previous_positions: Dict[str, int] = {}
+        self._lap_times: Dict[str, List[float]] = {}
 
     def add_car(
         self,
@@ -232,7 +249,99 @@ class RaceSimulator:
             car.tyre_strategy = tyre_strategy
 
         self.cars.append(car)
+        self._lap_times[driver_name] = []
         return car
+    
+    # ========================================================================
+    # Event Emission Methods (for live WebSocket tracking)
+    # ========================================================================
+    
+    async def _emit_race_started(self) -> None:
+        """Emit race start event"""
+        if not self.emit_events:
+            return
+        
+        grid_positions = []
+        for idx, car in enumerate(self.cars):
+            grid_positions.append({
+                "position": idx + 1,
+                "driver": car.driver_name,
+                "team": car.team,
+                "number": idx + 1,
+            })
+        
+        event = RaceStartedEvent(
+            race_id=self.race_id,
+            circuit_name=self.circuit.name,
+            grid_positions=grid_positions,
+            laps=self.circuit.number_of_laps,
+        )
+        
+        self._event_log.add_event(event)
+        if self._broadcaster:
+            await self._broadcaster.broadcast(event)
+    
+    async def _emit_lap_completed(self, driver_name: str, lap: int, 
+                                  lap_time: float, car: Car) -> None:
+        """Emit lap completion event"""
+        if not self.emit_events:
+            return
+        
+        positions = self.get_race_positions()
+        position = next((p[0] for p in positions if p[1] == driver_name), 0)
+        gap_to_leader = 0.0
+        if positions:
+            leader_pos = positions[0][5]  # Leader's distance
+            car_pos = car.position
+            gap_to_leader = max(0, (leader_pos - car_pos) / self.circuit.lap_length)
+        
+        event = LapCompletedEvent(
+            race_id=self.race_id,
+            timestamp=self.race_time,
+            driver_name=driver_name,
+            lap=lap,
+            lap_time=lap_time,
+            sector_times=[],  # Simplified; could break into sectors
+            position=position,
+            gap_to_leader=gap_to_leader,
+        )
+        
+        self._event_log.add_event(event)
+        if self._broadcaster:
+            await self._broadcaster.broadcast(event)
+    
+    async def _emit_position_change(self, driver_name: str, old_pos: int, new_pos: int, lap: int) -> None:
+        """Emit position change event"""
+        if not self.emit_events:
+            return
+        
+        event = PositionChangeEvent(
+            race_id=self.race_id,
+            timestamp=self.race_time,
+            driver_name=driver_name,
+            old_position=old_pos,
+            new_position=new_pos,
+            lap=lap,
+        )
+        
+        self._event_log.add_event(event)
+        if self._broadcaster:
+            await self._broadcaster.broadcast(event)
+    
+    async def _emit_race_finished(self, results: List[Dict]) -> None:
+        """Emit race finish event"""
+        if not self.emit_events:
+            return
+        
+        event = RaceFinishedEvent(
+            race_id=self.race_id,
+            timestamp=self.race_time,
+            results=results,
+        )
+        
+        self._event_log.add_event(event)
+        if self._broadcaster:
+            await self._broadcaster.broadcast(event)
     
     def _calculate_target_speed(self, car: Car, section: TrackSection) -> float:
         """
@@ -417,7 +526,7 @@ class RaceSimulator:
     
     def run_simulation(self, verbose: bool = True, update_interval: float = 5.0) -> List[Dict]:
         """
-        Run complete race simulation
+        Run complete race simulation (synchronous version - for backward compatibility)
         
         Args:
             verbose: Print progress updates
@@ -426,6 +535,7 @@ class RaceSimulator:
         Returns:
             List of results dictionaries with finishing positions
         """
+        # For async event emission, use run_race_async() instead
         self.race_active = True
         self.race_time = 0.0
         self.results = []
@@ -449,6 +559,52 @@ class RaceSimulator:
             if verbose and (self.race_time - last_update) >= update_interval:
                 self._print_race_status()
                 last_update = self.race_time
+        
+        if verbose:
+            print(f"\n{'='*90}")
+            print("🏁 RACE COMPLETE")
+            print(f"{'='*90}\n")
+            self._print_final_results()
+        
+        return self.results
+    
+    async def run_race_async(self, verbose: bool = True, update_interval: float = 5.0) -> List[Dict]:
+        """
+        Run complete race simulation with async event emission for live WebSocket updates
+        
+        Args:
+            verbose: Print progress updates
+            update_interval: How often to print updates (seconds of race time)
+            
+        Returns:
+            List of results dictionaries with finishing positions
+        """
+        self.race_active = True
+        self.race_time = 0.0
+        self.results = []
+        
+        # Emit race started event
+        await self._emit_race_started()
+        
+        if verbose:
+            print(f"\n{'='*90}")
+            print(f"🏁 RACE START - {self.circuit.name}")
+            print(f"{'='*90}")
+            print(f"Circuit: {self.circuit.lap_length_km}km | "
+                  f"Laps: {self.circuit.number_of_laps}")
+            print(f"Cars: {len(self.cars)} | Race ID: {self.race_id}")
+            print(f"{'='*90}\n")
+        
+        last_update = 0.0
+        
+        while self.simulate_step():
+            # Print periodic updates
+            if verbose and (self.race_time - last_update) >= update_interval:
+                self._print_race_status()
+                last_update = self.race_time
+        
+        # Emit race finished event with final results
+        await self._emit_race_finished(self.results)
         
         if verbose:
             print(f"\n{'='*90}")

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # ---------------------------------------------------------------------------
@@ -99,12 +99,12 @@ class DriverPrediction(BaseModel):
 
 class PredictResponse(BaseModel):
     """Ranked predictions for a full race grid."""
-    model_config = {"protected_namespaces": ()}
-    
     rankings:   List[DriverPrediction]
-    model_name: str
-    model_auc:  Optional[float]
+    model_name: str = Field(..., serialization_alias="model_name")
+    model_auc:  Optional[float] = Field(None, serialization_alias="model_auc")
     n_drivers:  int
+    
+    model_config = ConfigDict(protected_namespaces=())
 
 
 # ---------------------------------------------------------------------------

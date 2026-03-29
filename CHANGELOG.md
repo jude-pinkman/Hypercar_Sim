@@ -376,3 +376,42 @@ This update transforms the simulator from "advertised as customizable" to **actu
 **Parameters exposed:** 50+
 
 🎉 **The simulator is now truly "Fully Customizable"!**
+
+## [2026-03-19] — F1 Manager Engine + Grid Corrections
+
+### Added
+- `app/f1_manager_engine.py` — Full F1 Manager-style lap-by-lap race simulation engine
+  - `F1ManagerEngine` class: simulate any 2026 circuit with 22 cars
+  - Lap time model: driver skill + car + tyre compound + fuel load + weather + consistency noise
+  - Tyre degradation system: Soft / Medium / Hard / Inter / Wet compounds with per-lap wear
+  - Pit stop strategy planner: 1 or 2 stops, circuit-type aware, team pit_efficiency applied
+  - Overtake model: gap + DRS + skill delta + street circuit penalty
+  - Safety Car & Virtual Safety Car: triggered by DNF or random incidents
+  - DNF model: per-lap probability modified by team reliability
+  - Points system: 25-18-15-12-10-8-6-4-2-1 + fastest lap bonus
+  - `simulate_race()` → final results list
+  - `simulate_race_live()` → generator yielding `RaceLapData` per lap (for live UI)
+  - `quick_race()` helper for CLI testing
+
+- Four new API endpoints in `app/routes_f1_race.py`:
+  - `POST /api/f1/manager/start-race` — full race with complete lap history
+  - `POST /api/f1/manager/quick-race` — fast simulation, top-10 + DNFs only
+  - `GET  /api/f1/manager/drivers`    — all 22 drivers with skill profiles
+  - `GET  /api/f1/manager/teams`      — all 11 constructors with car ratings
+
+### Fixed — `app/f1_data_2026.py` (2026 grid corrections)
+- Corrected all 11 teams and 22 driver assignments to match the actual 2026 lineup:
+  - **Red Bull Racing**: Verstappen + **Isack Hadjar** (was Russell)
+  - **Mercedes**: Russell + **Andrea Kimi Antonelli** (was Bottas)
+  - **Ferrari**: **Lewis Hamilton** + Leclerc (Hamilton moved from Mercedes)
+  - **Alpine**: Gasly + **Franco Colapinto** (was Ocon)
+  - **Williams**: Albon + **Carlos Sainz Jr.** (was placeholder)
+  - **Haas**: **Esteban Ocon** + **Oliver Bearman** (was Hülkenberg/Magnussen)
+  - **Kick Sauber → Audi**: **Hülkenberg** + **Gabriel Bortoleto** (full rebrand)
+  - **Racing Bulls**: **Liam Lawson** + **Arvid Lindblad** (updated)
+  - **Cadillac F1 Team**: **Valtteri Bottas** + **Sergio Pérez** (NEW team, was missing)
+- Fixed driver numbers (Hadjar #6, Antonelli #12, Bearman #87, Bortoleto #5, etc.)
+- Updated team count from 10 → 11 (Cadillac addition)
+- Added `status` field to calendar entries ("completed" / "upcoming")
+- `get_driver_grid_spec()` now returns additional fields: `driver_id`, `number`,
+  `nationality`, `wet_weather`, `consistency`, `reliability`, `pit_efficiency`, `skill_rating`
