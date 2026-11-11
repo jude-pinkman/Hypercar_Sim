@@ -1,24 +1,23 @@
 // ==========================================
 // API CONFIGURATION
-// Automatically detects environment
 // ==========================================
 
 const CONFIG = {
-    // Determine API base URL based on environment
+    // Same-origin is the secure default when the frontend is served by FastAPI.
+    // Set API_BASE_URL only when the API is hosted separately.
     API_BASE_URL: (() => {
-        const hostname = window.location.hostname;
-
-        // Local development
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://localhost:8080';
+        const configured = window.__HYPERCAR_API_BASE_URL__;
+        if (typeof configured === 'string' && configured.trim()) {
+            return configured.trim().replace(/\/$/, '');
         }
 
-        // Production on Render
-        // Your actual backend URL
-        return 'https://hypercar-sim.onrender.com';
+        if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+            return window.location.origin;
+        }
+
+        return 'http://localhost:8000';
     })(),
 
-    // API endpoints
     endpoints: {
         vehicles: '/api/vehicles',
         simulate: '/api/simulate/drag',
@@ -26,46 +25,45 @@ const CONFIG = {
         reload: '/api/reload'
     },
 
-    // Helper method to build full URL
     getEndpoint(endpoint) {
-        return `${this.API_BASE_URL}${this.endpoints[endpoint]}`;
+        const path = this.endpoints[endpoint];
+        if (!path) {
+            throw new Error(`Unknown API endpoint: ${endpoint}`);
+        }
+        return `${this.API_BASE_URL}${path}`;
     },
 
-    // Helper to make API calls
     async fetchAPI(endpoint, options = {}) {
         const url = this.getEndpoint(endpoint);
-        try {
-            const response = await fetch(url, {
-                ...options,
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...options.headers
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
             }
+        });
 
-            return await response.json();
-        } catch (error) {
-            console.error(`API Error (${endpoint}):`, error);
+        if (!response.ok) {
+            let detail = `HTTP error! status: ${response.status}`;
+            try {
+                const body = await response.json();
+                if (typeof body.detail === 'string') {
+                    detail = body.detail;
+                }
+            } catch (_) {
+                // Preserve the status-based error when the response is not JSON.
+            }
+            const error = new Error(detail);
+            error.status = response.status;
             throw error;
         }
+
+        return response.json();
     }
 };
 
-// Log configuration for debugging
-console.log('🔧 API Configuration:', {
-    baseURL: CONFIG.API_BASE_URL,
-    environment: window.location.hostname === 'localhost' ? 'development' : 'production',
-    endpoints: CONFIG.endpoints
-});
-
-// Make available globally
 window.CONFIG = CONFIG;
 
-// Export for ES6 modules
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONFIG;
 }
