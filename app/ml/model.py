@@ -3,7 +3,7 @@ WinnerPredictor — trains and serves the race-winner prediction model.
 
 Model architecture
 ------------------
-Two candidates are trained and compared by 5-fold stratified cross-validation
+Two candidates are trained and compared by 5-fold race-grouped cross-validation
 ROC-AUC.  The better model is wrapped in a CalibratedClassifierCV (isotonic
 regression) so predicted probabilities are well-calibrated.
 
@@ -52,7 +52,11 @@ from sklearn.metrics import (
     roc_auc_score, brier_score_loss,
     precision_recall_fscore_support, classification_report,
 )
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import (
+    StratifiedGroupKFold,
+    cross_val_predict,
+    cross_val_score,
+)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -92,6 +96,8 @@ class ModelMeta:
     top1_accuracy:  float     # fraction of races where argmax(prob) = winner
     feature_names:  List[str]
     sklearn_version: str
+    cv_strategy:    str = "StratifiedGroupKFold"
+    evaluation:     str = "out_of_fold"
 
     def to_dict(self) -> Dict:
         return asdict(self)
@@ -228,11 +234,17 @@ class WinnerPredictor:
             ("RandomForest",     rf_clf),
         ]
 
-        # ── cross-validation ─────────────────────────────────────────
-        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        # ── race-grouped cross-validation ─────────────────────────────
+        # Each race contributes one positive and many negative rows. Keeping
+        # all rows from a race in the same fold prevents driver rows from the
+        # same race leaking between training and validation.
+        if n_races < 5:
+            raise ValueError("At least 5 races are required for cross-validation")
+        groups = np.array([record.race_id for record in records])
+        cv = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)
         best_name, best_clf, best_auc = None, None, -1.0
 
-        print("\n📊 Cross-validation (5-fold stratified ROC-AUC):")
+        print("\n📊 Cross-validation (5-fold race-grouped ROC-AUC):")
         for name, clf in candidates:
             pipe = Pipeline([
                 ("scaler", StandardScaler()),
@@ -240,7 +252,8 @@ class WinnerPredictor:
             ])
             aucs = cross_val_score(
                 pipe, X, y,
-                cv      = skf,
+                groups  = groups,
+                cv      = cv,
                 scoring = "roc_auc",
                 n_jobs  = -1,
             )
@@ -253,6 +266,24 @@ class WinnerPredictor:
 
         print(f"\n✅ Selected: {best_name} (CV AUC = {best_auc:.4f})")
 
+        # Evaluate using out-of-fold predictions, not predictions from the
+        # final model fitted on the same rows.
+        selected_pipeline = Pipeline([
+            ("scaler", StandardScaler()),
+            ("clf", best_clf),
+        ])
+        oof_probas = cross_val_predict(
+            selected_pipeline,
+            X,
+            y,
+            groups=groups,
+            cv=cv,
+            method="predict_proba",
+            n_jobs=-1,
+        )[:, 1]
+        brier = float(brier_score_loss(y, oof_probas))
+        top1 = _top1_accuracy(records, oof_probas)
+
         # ── final fit with calibration ────────────────────────────────
         print("\n🔧 Fitting final model with isotonic calibration…")
         t0   = time.time()
@@ -263,12 +294,7 @@ class WinnerPredictor:
         pipe.fit(X, y)
         print(f"   Done in {time.time() - t0:.1f}s")
 
-        # ── evaluation on full training set ──────────────────────────
-        probas = pipe.predict_proba(X)[:, 1]
-        brier  = float(brier_score_loss(y, probas))
-        top1   = _top1_accuracy(records, probas)
-
-        print(f"\n📈 Full-data evaluation:")
+        print(f"\n📈 Out-of-fold evaluation:")
         print(f"   Brier score     = {brier:.4f}  (lower is better)")
         print(f"   Top-1 accuracy  = {top1:.3f}  "
               f"(model correctly identifies winner in {top1*100:.1f}% of races)")
@@ -290,6 +316,8 @@ class WinnerPredictor:
             top1_accuracy   = round(top1, 6),
             feature_names   = feat_names,
             sklearn_version = sklearn.__version__,
+            cv_strategy     = "StratifiedGroupKFold",
+            evaluation      = "out_of_fold",
         )
         return self.meta
 
